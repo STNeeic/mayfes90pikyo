@@ -1,3 +1,3 @@
 [submodule "phina.js"]
-	path = phina.js
+	path = phinajs
 	url = https://github.com/phi-jp/phina.js.git
