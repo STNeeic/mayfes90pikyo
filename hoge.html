@@ -1,0 +1,58 @@
+<script src="blockly-master/blockly_compressed.js"></script>
+<script src="blockly-master/msg/js/en.js"></script>
+<script src="d3.js"></script>
+<script src="blockly-master/blocks_compressed.js"></script>
+<script src="blockly-master/javascript_compressed.js"></script>
+<script src="blockly-master/generators/javascript/logic.js"></script>
+<script src="blockly-master/generators/javascript/math.js"></script>
+<script src="blockly-master/generators/javascript/text.js"></script>
+
+<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+<div id="button" style="height: 100px; width:200px; fill: black"></div>
+<xml id="toolbox" style="display: none; trashcan: true">
+    <block type="controls_if"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="logic_compare"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+    <block type="string_length"></block>
+</xml>
+
+<script type="text/javascript">
+ Blockly.Blocks['string_length'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": 'length of %1',
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "VALUE",
+          "check": "String"
+        }
+      ],
+      "output": "Number",
+      "colour": 160,
+      "tooltip": "Returns number of letters in the provided text.",
+      "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
+    });
+  }
+ };
+ Blockly.JavaScript['string_length'] = function(block){
+     //return the length of valiables.
+     var word = block.getFieldValue("VALUE");
+     var code =  + word + ".length";
+     return [code, Blockly.JavaScript.ORDER_ATOMIC];
+ };
+
+ var workspace = Blockly.inject('blocklyDiv',
+				{toolbox: document.getElementById('toolbox')});
+
+ var button = d3.select("#button");
+
+ button.on("click", function(e) {
+     eval(Blockly.JavaScript.workspaceToCode(workspace));
+ });
+</script>
+
