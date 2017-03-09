@@ -1,89 +1,4 @@
-<script src="blockly-master/blockly_compressed.js"></script>
-<script src="blockly-master/msg/js/en.js"></script>
-<script src="blockly-master/blocks_compressed.js"></script>
-<script src="blockly-master/javascript_compressed.js"></script>
-<script src="d3.js"></script>
-<script src="phinajs/build/phina.js"></script>
-
-<div id="contents" style="float:left">
-    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-    <canvas id="phinaDiv" style="height: 600px; width: 480px;"></canvas>
-</div>
-<div id="button" style="height: 100px; width:200px; fill: black"></div>
-<xml id="toolbox" style="display: none; trashcan: true">
-    <block type="controls_if"></block>
-    <block type="controls_repeat_ext"></block>
-    <block type="logic_compare"></block>
-    <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="text_print"></block>
-    <block type="string_length"></block>
-    <block type="jump"></block>
-</xml>
-
-<script type="text/javascript">
- Blockly.Blocks['string_length'] = {
-     init: function() {
-         this.jsonInit({
-             "message0": 'length of %1',
-             "args0": [
-                 {
-                     "type": "input_value",
-                     "name": "VALUE",
-                     "check": "String"
-                 }
-             ],
-             "output": "Number",
-             "colour": 160,
-             "tooltip": "Returns number of letters in the provided text.",
-             "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
-         });
-     }
- };
-
- Blockly.Blocks['jump'] = {
-     init: function() {
-         this.jsonInit({
-             "message0": 'jump',
-             "colour": 200,
-             "type": "Action",
-             "previousStatement": "Action",
-             "nextStatement": "Action"
-         });
-     }
- };
- Blockly.JavaScript['string_length'] = function(block){
-     //return the length of valiables.
-     var word = Blockly.JavaScript.valueToCode(block,"VALUE",Blockly.JavaScript.ORDER_ATOMIC) || '\'\'';
-     console.log(block);
-     var code = word + ".length\n";
-     return [code, Blockly.JavaScript.ORDER_ATOMIC];
- };
-
- Blockly.JavaScript['jump'] = function(block){
-     //Call jump()
-     var code = 'jump = true;\n';
-     return code;
- };
-
- var workspace = Blockly.inject('blocklyDiv',
-				                        {toolbox: document.getElementById('toolbox')});
-
- var button = d3.select("#button");
-
- var jump = function(){
-     window.alert("jumping...");
- };
-
- button.on("click", function(e) {
-     console.log(Blockly.JavaScript.workspaceToCode(workspace));
-     var code = Blockly.JavaScript.workspaceToCode(workspace);
-
-     eval(Blockly.JavaScript.workspaceToCode(workspace));
- });
-
- // phina.js をグローバル領域に展開
+// phina.js をグローバル領域に展開
  phina.globalize();
 
  var ASSETS = {
@@ -254,21 +169,29 @@
      }
  });
 
+
  // メイン処理
  phina.main(function() {
      // アプリケーション生成
      var app = GameApp({
          startLabel: 'main', // メインシーンから開始する
          assets: ASSETS,
-         domElement: document.getElementById("phinaDiv"),
-         width:960,
-         height:640,
-         fit: false
+         domElement: document.getElementById("phinaCanvas"),
+         width:500,
+         height:400,
+         fit: false 
      });
 
+     //appをinitした時点でwidthとheightが決まってしまうので書き換える
+     //widthとheightを書かない場合default値になってしまう
+     var s = app.canvas.domElement.style;
+     s.width = "100%";
+     //高さ方向は，アスペクト比を揃える為に，
+     //after擬似要素のpaddingを使って調整する
+     //よって(?)ここではautoにしている
+     s.height = "auto";
+     
      app.enableStats();
      // アプリケーション実行
      app.run();
  });
-</script>
-

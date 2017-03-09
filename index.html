@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Programming game with Blockly">
+    <meta name="keywords" content="Blockly,phina.js">
+    <meta name="author" content="EEIC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="Lib/blockly_compressed.js"></script>
+<script src="blockly-master/msg/js/en.js"></script>
+<script src="Lib/blocks_compressed.js"></script>
+<script src="Lib/javascript_compressed.js"></script>
+<script src="Lib/d3.js"></script>
+<script src="Lib/phina.min.js"></script>
+<xml id="toolbox" style="display: none; trashcan: true">
+    <block type="controls_if"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="logic_compare"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+    <block type="string_length"></block>
+    <block type="jump"></block>
+</xml>
+
+
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="my-blockly-def.js"></script>
+</head>
+<body>
+<div id="contents" class="mainRow" style="height:800px; width: 100%">
+    <div id="blocklyDiv" class="mainContents" style="height: 480px; width: 600px;"></div>
+    <div id="phinaDiv" class="mainContents">
+        <canvas id="phinaCanvas" class="mainContents"></canvas>
+    </div>
+</div>
+<div id="button" style="height: 100px; width:200px; fill: black"></div>
+<script type="text/javascript">
+ var workspace = Blockly.inject('blocklyDiv',
+				                        {toolbox: document.getElementById('toolbox')});
+
+ var button = d3.select("#button");
+
+  button.on("click", function(e) {
+     console.log(Blockly.JavaScript.workspaceToCode(workspace));
+     var code = Blockly.JavaScript.workspaceToCode(workspace);
+
+     eval(Blockly.JavaScript.workspaceToCode(workspace));
+ });
+
+</script>
+
+<script src="my-phina-app.js"></script>
+</body>
