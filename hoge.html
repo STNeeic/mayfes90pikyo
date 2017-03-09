@@ -150,7 +150,10 @@
  phina.define('MainScene', {
      superClass: 'DisplayScene',
      init: function() {
-         this.superInit();
+         this.superInit({
+             width:960,
+             height:640
+         });
          // 背景色を指定
          this.backgroundColor = '#444';
          // ラベルを生成
@@ -158,30 +161,30 @@
          this.label.x = this.gridX.center(); // x 座標
          this.label.y = this.gridY.center(); // y 座標
          this.label.fill = 'white'; // 塗りつぶし色
-         
+
          this.group = BlockManager().addChildTo(this);
          console.log(this.group.totalx);
          var block = Block().addChildTo(this.group);
          block.setPosition(400,700);
          Block().addChildTo(this.group).setPosition(300,200);
-         
+
          var tomapiko = Player().addChildTo(this);
-         
+
          var day = new Date();
          this.random = Random(day.getTime());
          var rand = this.random;
          var star = StarShape().addChildTo(this).setPosition(rand.randint(50,this.width - 50),rand.randint(50,this.height - 150));
          this.star = star;
-         
+
          tomapiko.setPosition(400,400);
          this.player = tomapiko;
          this.player.pastVector = {x:0.0,y:0.0};
          this.score = 0;
      },
-     
+
      update: function(app) {
          var keyboard = app.keyboard;
-         
+
          var gravity = 9.8;
          var vector = this.player.pastVector;
          var groundPos = 100;
@@ -206,10 +209,10 @@
          if(keyboard.getKey('down')){
              vector.y += 8;
          }
-         
+
          var pos = this.player.position;
          var group = this.group;
-         
+
          vector.x /= 1.3;
 
          var totalmove = false;
@@ -219,11 +222,11 @@
          else if(pos.x + vector.x > this.width - 100){
              totalmove = true;
          }
-         
+
          if(pos.y + vector.y > this.height - groundPos) {
              vector.y = this.height - groundPos - pos.y;
          }
-         
+
          this.player.moveBy(0,vector.y);
          if(totalmove === true){
              this.group.totalx = -vector.x;
@@ -247,7 +250,7 @@
              this.score += 1;
              this.label.text = "score is: " + this.score + "\n";
          }
-         
+
      }
  });
 
@@ -257,9 +260,12 @@
      var app = GameApp({
          startLabel: 'main', // メインシーンから開始する
          assets: ASSETS,
-         domElement: document.getElementById("phinaDiv")
+         domElement: document.getElementById("phinaDiv"),
+         width:960,
+         height:640,
+         fit: false
      });
-     
+
      app.enableStats();
      // アプリケーション実行
      app.run();
