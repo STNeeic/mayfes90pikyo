@@ -1,7 +1,7 @@
 // phina.js をグローバル領域に展開
  phina.globalize();
 
- var ASSETS = {
+ const ASSETS = {
      image: {
          'tomapiko': 'http://cdn.rawgit.com/phi-jp/phina.js/v0.1.1/assets/images/tomapiko.png',
      },
@@ -38,30 +38,125 @@
      }
  });
 
- phina.define('BlockManager',{
-     superClass: 'DisplayElement',
-     init: function(){
-         this.superInit();
-         this._totalx = 0;
-     },
-     _accessor:{
-         totalx:{
-             get:function(){
-                 return this._totalx;
-             },
-             set:function(v){
-                 this._totalx = v;
-                 var po = this._totalx;
-                 this.children.forEach(function(block,index){
-                     block.x = block.x + po;
-                 });
+phina.define('ItemBuilder',{
+    //stageに配置されるitemを数字に応じて出力するbuilder
+    //もっとうまく書けるかもしれない
+    init: function(){
+    },
+    build: function(num){
+        switch(num){
+        case 0: return null;
+        case 1: return Block();
+        default: return null;
+        }
+    }
+})
 
-             }
-         }
-     }
- });
+//ステージ上の，ブロックや敵キャラ等を管理するクラス
+//ステージ上のアイテムの当たり判定と画像の位置を揃える為に
+//このクラスのオブジェクトの位置は*絶対に*(0,0)で固定する．
+phina.define('StageManager', {
+    superClass: 'DisplayElement',
+    init: function(options){
+        this.superInit();
+        //item全体のずれの初期位置（0になる）
+        this._totalx = 0;
+        this._totaly = 0;
+        //こいつの位置は絶対に(0,0)で固定する（理由は上述）
+        this.x = 0;
+        this.y = 0;
+    },
+    addItem: function(v) {
+        //子供に登録する際は，最初の位置を覚える必要があるので
+        //この関数を用いる．
+        v.origX = v.x;
+        v.origY = v.y;
+        this.addChild(v);
+    },
+    loadStage: function(stageData) {
+        //stageDataを用いて
+        const height = stageData.height;
+        const width = stageData.width;
+        const block_size = stageData.blockSize;
+        //データは，data[x][y]という形で入ってる
+        const data = stageData.data;
 
- // MainScene クラスを定義
+        const x_columns = Math.floor(width / block_size);
+        const y_columns = Math.floor(height / block_size);
+        //gridについては http://qiita.com/alkn203/items/d176a10d4e38d15e4062 参照のこと
+        this.gridX = Grid({
+            width: width,
+            columns: x_columns,
+            offset: Math.ceil(block_size / 2)
+        });
+        this.gridY = Grid({
+            width: height,
+            columns: y_columns,
+            offset: Math.ceil(block_size / 2)
+        });
+
+        const builder = ItemBuilder();
+        console.log(x_columns + " " + y_columns);
+        //dataに基づいてステージを作成
+        for(let y = 0; y < y_columns; y++) {
+            for(let x = 0; x < x_columns; x++){
+                var item = builder.build(data[x][y]);
+                if(item == null) continue;
+
+                item.x = this.gridX.span(x);
+                item.y = this.gridY.span(y);
+                this.addItem(item);
+            }
+        }
+
+    },
+    _accessor:{
+        //子供の位置を全部動かす為のaccesor
+        itemX:{
+            get:function(){
+                return this._totalx;
+            },
+            set:function(v){
+                this._totalx = v;
+                this.children.forEach(function(block,index){
+                    block.x = block.origX + v;
+                });
+
+            }
+        },
+        itemY:{
+            get:function(){
+                return this._totalx;
+            },
+            set:function(v){
+                this._totaly = v;
+                this.children.forEach(function(block,index){
+                    block.y = block.origY + v;
+                });
+
+            }
+        }
+    }
+});
+
+const testStage = {
+    height: 960,
+    width: 640,
+    blockSize: 64,
+    data: [
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,1,0,0,0,0,0,0,0,0,1,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
+    ]
+}
+// MainScene クラスを定義
  phina.define('MainScene', {
      superClass: 'DisplayScene',
      init: function() {
@@ -77,14 +172,12 @@
          this.label.y = this.gridY.center(); // y 座標
          this.label.fill = 'white'; // 塗りつぶし色
 
-         this.group = BlockManager().addChildTo(this);
-         console.log(this.group.totalx);
-         var block = Block().addChildTo(this.group);
-         block.setPosition(400,700);
-         Block().addChildTo(this.group).setPosition(300,200);
+         this.stage = StageManager().addChildTo(this);
+         this.stage.loadStage(testStage);
 
          var tomapiko = Player().addChildTo(this);
 
+         //ランダムに星を配置する部分
          var day = new Date();
          this.random = Random(day.getTime());
          var rand = this.random;
@@ -126,7 +219,7 @@
          }
 
          var pos = this.player.position;
-         var group = this.group;
+         var stage = this.stage;
 
          vector.x /= 1.3;
 
@@ -144,12 +237,12 @@
 
          this.player.moveBy(0,vector.y);
          if(totalmove === true){
-             this.group.totalx = -vector.x;
+             this.stage.itemX -= vector.x;
          }else {
              this.player.moveBy(vector.x,0);
          }
          var player = this.player;
-         this.group.children.some(function(block){
+         this.stage.children.some(function(block){
              let flg = false;
              while(player.hitTestElement(block)){
                  flg = true;
