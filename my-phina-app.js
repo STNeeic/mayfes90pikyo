@@ -66,8 +66,8 @@
      superClass: 'DisplayScene',
      init: function() {
          this.superInit({
-             width:960,
-             height:640
+             width:640,
+             height:960
          });
          // 背景色を指定
          this.backgroundColor = '#444';
@@ -177,8 +177,8 @@
          startLabel: 'main', // メインシーンから開始する
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
-         width:500,
-         height:400,
+         width:640,
+         height:960,
          fit: false 
      });
 
@@ -186,9 +186,10 @@
      //widthとheightを書かない場合default値になってしまう
      var s = app.canvas.domElement.style;
      s.width = "100%";
-     //高さ方向は，アスペクト比を揃える為に，
-     //after擬似要素のpaddingを使って調整する
-     //よって(?)ここではautoにしている
+     //高さ方向は，アスペクト比を揃える為に，autoを使っている．
+     //なんか知らんけどautoを指定すると内在サイズという概念にのっとって
+     //アス比一定で大きさが変わるらしい
+     //kwsk -> http://www6.plala.or.jp/go_west/nextcss/ref/article/calc_v.htm
      s.height = "auto";
      
      app.enableStats();

@@ -7,11 +7,3 @@
     width: 40%;
 }
 
-/* canvasのアス比を固定させる為の技*/
-/* paddingで高さ方向に%を指定するとwidthから取ってくるから出来るらしい*/
-/*今回はキャンバスを上の方に寄せたかったのでafter擬似要素にした*/
-#phinaDiv::after {
-    content: "";
-    display: block;
-    padding-top: 100%;
-}
