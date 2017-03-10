@@ -139,7 +139,7 @@ phina.define('StageManager', {
     }
 });
 
-const testStage = {
+const TEST_STAGE = {
     height: 960,
     width: 640,
     blockSize: 64,
@@ -173,14 +173,14 @@ const testStage = {
          this.label.fill = 'white'; // 塗りつぶし色
 
          this.stage = StageManager().addChildTo(this);
-         this.stage.loadStage(testStage);
+         this.stage.loadStage(TEST_STAGE);
 
          var tomapiko = Player().addChildTo(this);
 
          //ランダムに星を配置する部分
-         var day = new Date();
+         const day = new Date();
          this.random = Random(day.getTime());
-         var rand = this.random;
+         const rand = this.random;
          var star = StarShape().addChildTo(this).setPosition(rand.randint(50,this.width - 50),rand.randint(50,this.height - 150));
          this.star = star;
 
@@ -191,14 +191,14 @@ const testStage = {
      },
 
      update: function(app) {
-         var keyboard = app.keyboard;
+         const keyboard = app.keyboard;
 
-         var gravity = 9.8;
-         var vector = this.player.pastVector;
-         var groundPos = 100;
+         const gravity = 9.8;
+         let vector = this.player.pastVector;
+         let groundPos = 100;
          vector.y += 9.8;
 
-         var jump = false;
+         let jump = false;
 
          if(app.frame % 5 === 0) {
              eval(Blockly.JavaScript.workspaceToCode(workspace));
@@ -218,8 +218,8 @@ const testStage = {
              vector.y += 8;
          }
 
-         var pos = this.player.position;
-         var stage = this.stage;
+         let pos = this.player.position;
+         let stage = this.stage;
 
          vector.x /= 1.3;
 
@@ -241,7 +241,9 @@ const testStage = {
          }else {
              this.player.moveBy(vector.x,0);
          }
-         var player = this.player;
+
+
+         let player = this.player;
          this.stage.children.some(function(block){
              let flg = false;
              while(player.hitTestElement(block)){
@@ -266,7 +268,7 @@ const testStage = {
  // メイン処理
  phina.main(function() {
      // アプリケーション生成
-     var app = GameApp({
+     let app = GameApp({
          startLabel: 'main', // メインシーンから開始する
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
@@ -277,7 +279,7 @@ const testStage = {
 
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
      //widthとheightを書かない場合default値になってしまう
-     var s = app.canvas.domElement.style;
+     let s = app.canvas.domElement.style;
      s.width = "100%";
      //高さ方向は，アスペクト比を揃える為に，autoを使っている．
      //なんか知らんけどautoを指定すると内在サイズという概念にのっとって
