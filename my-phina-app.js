@@ -155,7 +155,8 @@ const TEST_STAGE = {
         [0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
     ]
-}
+};
+
 // MainScene クラスを定義
  phina.define('MainScene', {
      superClass: 'DisplayScene',
@@ -175,13 +176,13 @@ const TEST_STAGE = {
          this.stage = StageManager().addChildTo(this);
          this.stage.loadStage(TEST_STAGE);
 
-         var tomapiko = Player().addChildTo(this);
+         let tomapiko = Player().addChildTo(this);
 
          //ランダムに星を配置する部分
          const day = new Date();
          this.random = Random(day.getTime());
          const rand = this.random;
-         var star = StarShape().addChildTo(this).setPosition(rand.randint(50,this.width - 50),rand.randint(50,this.height - 150));
+         let star = StarShape().addChildTo(this).setPosition(rand.randint(50,this.width - 50),rand.randint(50,this.height - 150));
          this.star = star;
 
          tomapiko.setPosition(400,400);
