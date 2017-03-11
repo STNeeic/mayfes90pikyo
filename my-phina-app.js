@@ -9,7 +9,9 @@
 
  const BLOCK_SIZE = 64;
 
- phina.define('Block', {
+phina.define('Block', {
+    //とりあえずのブロック．
+    //いい感じの画像があったら差し替えたい
      superClass: 'RectangleShape',
 
      init: function() {
@@ -23,7 +25,10 @@
      },
  });
 
- phina.define('Player',{
+phina.define('Player',{
+    //プレイヤーのクラス
+    //当たり判定用の四角形が実体で
+    //描画されるキャラクター画像を内部に持っている
      superClass: 'RectangleShape',
      init: function() {
          this.superInit({
@@ -36,7 +41,47 @@
          this.gazo = Sprite('tomapiko').addChildTo(this);
          this.gazo.width = this.gazo.height = 128;
      }
- });
+});
+
+phina.define('Camera', {
+    //画面上にplayerを納めるようにうまく調整するクラス
+    //こいつがstage_managerのitemXとかplayerの位置をいい感じに動かしてくれる．
+    superClass: 'DisplayElement',
+    init: function(options) {
+        this.superInit();
+
+        this.sceneWidth = options.scene.width || options.sceneWidth;
+        this.sceneHeight = options.scene.height || options.sceneHeight;
+        this.player = options.scene.player || options.player || null;
+        this.stageManager = options.scene.stageManager || options.stageManager || null;
+
+
+        if(this.player == null || this.stageManager == null){
+            console.log("ERROR @ Camera: Cannot set player or stageManager");
+        }
+
+        this.addChild(this.player);
+        this.addChild(this.stageManager);
+    },
+
+    follow: function() {
+        //画面中央からのズレを見て，
+        //一定範囲内に収まるようにずらす
+        var xdiff = this.player.x + this.x - this.sceneWidth / 2;
+        var ydiff = this.player.y + this.y - this.sceneHeight / 2;
+
+        //スレッショルドをどこで設定するかは未定
+        var left_threthold = 200;
+        var right_threthold = 300;
+
+        if(xdiff + left_threthold < 0){
+            this.x -= xdiff + left_threthold;
+        }
+        else if(xdiff - right_threthold > 0) {
+            this.x -= xdiff - right_threthold;
+        }
+    }
+});
 
 phina.define('ItemBuilder',{
     //stageに配置されるitemを数字に応じて出力するbuilder
@@ -50,12 +95,13 @@ phina.define('ItemBuilder',{
         default: return null;
         }
     }
-})
+});
 
-//ステージ上の，ブロックや敵キャラ等を管理するクラス
-//ステージ上のアイテムの当たり判定と画像の位置を揃える為に
-//このクラスのオブジェクトの位置は*絶対に*(0,0)で固定する．
 phina.define('StageManager', {
+    //ステージ上の，ブロックや敵キャラ等を管理するクラス
+    //ステージ上のアイテムの当たり判定と画像の位置を揃える為に
+    //このクラスのオブジェクトの位置は*絶対に*(0,0)で固定する．
+
     superClass: 'DisplayElement',
     init: function(options){
         this.superInit();
@@ -66,6 +112,7 @@ phina.define('StageManager', {
         this.x = 0;
         this.y = 0;
     },
+
     addItem: function(v) {
         //子供に登録する際は，最初の位置を覚える必要があるので
         //この関数を用いる．
@@ -73,6 +120,7 @@ phina.define('StageManager', {
         v.origY = v.y;
         this.addChild(v);
     },
+
     loadStage: function(stageData) {
         //stageDataを用いて
         const height = stageData.height;
@@ -173,10 +221,11 @@ const TEST_STAGE = {
          this.label.y = this.gridY.center(); // y 座標
          this.label.fill = 'white'; // 塗りつぶし色
 
-         this.stage = StageManager().addChildTo(this);
-         this.stage.loadStage(TEST_STAGE);
+         this.stageManager = StageManager();
+         this.stageManager.loadStage(TEST_STAGE);
 
-         let tomapiko = Player().addChildTo(this);
+         let tomapiko = Player();
+
 
          //ランダムに星を配置する部分
          const day = new Date();
@@ -189,6 +238,10 @@ const TEST_STAGE = {
          this.player = tomapiko;
          this.player.pastVector = {x:0.0,y:0.0};
          this.score = 0;
+
+         this.camera = Camera({
+             scene:this
+         }).addChildTo(this);
      },
 
      update: function(app) {
@@ -220,32 +273,20 @@ const TEST_STAGE = {
          }
 
          let pos = this.player.position;
-         let stage = this.stage;
+         let stageManager = this.stageManager;
 
          vector.x /= 1.3;
 
-         var totalmove = false;
-         if(pos.x + vector.x < 100) {
-             totalmove = true;
-         }
-         else if(pos.x + vector.x > this.width - 100){
-             totalmove = true;
-         }
 
          if(pos.y + vector.y > this.height - groundPos) {
              vector.y = this.height - groundPos - pos.y;
          }
 
-         this.player.moveBy(0,vector.y);
-         if(totalmove === true){
-             this.stage.itemX -= vector.x;
-         }else {
-             this.player.moveBy(vector.x,0);
-         }
+         this.player.moveBy(vector.x ,vector.y);
 
 
          let player = this.player;
-         this.stage.children.some(function(block){
+         this.stageManager.children.some(function(block){
              let flg = false;
              while(player.hitTestElement(block)){
                  flg = true;
@@ -256,6 +297,9 @@ const TEST_STAGE = {
              }
          });
          this.player.pastVector = vector;
+
+         this.camera.follow();
+
          if(this.player.hitTestElement(this.star)){
              this.star.setPosition(this.random.randint(50,this.width - 50),this.random.randint(50,this.height - 150));
              this.score += 1;
