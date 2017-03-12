@@ -249,8 +249,7 @@ const TEST_STAGE = {
 
          const gravity = 9.8;
          let vector = this.player.pastVector;
-         let groundPos = 100;
-         vector.y += 9.8;
+         vector.y += gravity;
 
          let jump = false;
 
@@ -258,12 +257,12 @@ const TEST_STAGE = {
              eval(Blockly.JavaScript.workspaceToCode(workspace));
          }
 
-
+         vector.x = 0;
          if(keyboard.getKey('left')){
-             vector.x -= 8;
+             vector.x = -20;
          }
          if(keyboard.getKey('right')){
-             vector.x += 8;
+             vector.x = 20;
          }
          if(keyboard.getKeyDown('up') || jump === true){
              vector.y = -100;
@@ -275,12 +274,8 @@ const TEST_STAGE = {
          let pos = this.player.position;
          let stageManager = this.stageManager;
 
-         vector.x /= 1.3;
 
 
-         if(pos.y + vector.y > this.height - groundPos) {
-             vector.y = this.height - groundPos - pos.y;
-         }
 
          this.player.moveBy(vector.x ,vector.y);
 
@@ -300,6 +295,8 @@ const TEST_STAGE = {
 
          this.camera.follow();
 
+         //今は星がランダムに出てきて取るゲームになってるけど
+         //最終的には星をとったらゴールというゲームになる
          if(this.player.hitTestElement(this.star)){
              this.star.setPosition(this.random.randint(50,this.width - 50),this.random.randint(50,this.height - 150));
              this.score += 1;
