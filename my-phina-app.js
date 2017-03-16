@@ -20,9 +20,33 @@ phina.define('Block', {
              height: BLOCK_SIZE,
              fill: 'hsl(100, 80%, 60%)',
              stroke: null,
-             cornerRadius: 8,
+             cornerRadius: 8
          });
+
+         //接地可能か
+         this.canBeTouched = true;
      },
+    reactTo : function(obj){
+        //ブロックは接触したオブジェクトに対して反発する．
+        //現実にはありえない物理挙動であるが，
+        //y方向の速度を完全に吸収し，オブジェクトをy軸方向にどかす．
+        //y方向の速度を吸収する都合上，ジャンプする時に「ホップ」する
+        //必要がある．（地面が粘着している??）
+
+        //当たってないならすぐ抜ける．
+        if(this.hitTestElement(obj) == false) return this;
+
+        //押し出し
+        const dy = this.y - obj.y < 0 ? 0.01 : -0.01;
+        while(this.hitTestElement(obj)){
+            obj.y += dy;
+        }
+        
+        //y軸の速度を無くす
+        obj.dy = 0;
+        
+        return this;
+    }
  });
 
 phina.define('Player',{
@@ -33,15 +57,50 @@ phina.define('Player',{
      init: function() {
          this.superInit({
              width: 80,
-             height: 100,
+             height: 118,
              fill: 'rgba(0, 0, 0,0)',
              stroke: null,
              cornerRadius: 0,
          });
          this.gazo = Sprite('tomapiko').addChildTo(this);
          this.gazo.width = this.gazo.height = 128;
-     }
+
+         //物理演算もどきをつける
+         this.physicalBody = phina.accessory.Physical().attachTo(this);
+         this.mass = 1.0;
+     },
+    setVelocity: function(x, y){
+        //forceがvelocityをセットする関数である
+        this.physicalBody.force(x, y);
+        return this;
+    },
+    addForce: function(x, y){
+        this.physicalBody.addForce(x/this.mass, y/this.mass);
+    },
+    setGravity: function(x, y){
+        this.physicalBody.setGravity(x, y);
+    },
+    setVelocityX: function(x){
+        var y = this.physicalBody.velocity.y;
+        this.physicalBody.force(x, y);
+    },
+    setVelocityY: function(y){
+        var x = this.physicalBody.velocity.x;
+        this.physicalBody.force(x, y);
+    },
+    _accessor: {
+        dx:{
+            get: function(){return this.physicalBody.velocity.x;},
+            set: function(v){this.physicalBody.velocity.x = v;}
+        },
+        dy:{
+            get: function(){return this.physicalBody.velocity.y;},
+            set: function(v){this.physicalBody.velocity.y = v;}
+        }
+    }
 });
+
+
 
 phina.define('Camera', {
     //画面上にplayerを納めるようにうまく調整するクラス
@@ -83,6 +142,22 @@ phina.define('Camera', {
     }
 });
 
+phina.define('Goal',{
+    //ゴールとなるアイテム．
+    superClass: 'StarShape',
+    init: function(){
+        superInit();
+    },
+    reactTo: function(obj){
+        if(this.hitTestElement(obj) == ture) {
+            //ゲームクリア!!
+
+            //ゲームを終わる
+            obj.parent.exit();
+        }
+    }
+});
+
 phina.define('ItemBuilder',{
     //stageに配置されるitemを数字に応じて出力するbuilder
     //もっとうまく書けるかもしれない
@@ -92,6 +167,7 @@ phina.define('ItemBuilder',{
         switch(num){
         case 0: return null;
         case 1: return Block();
+        case 2: return Goal();
         default: return null;
         }
     }
@@ -158,6 +234,25 @@ phina.define('StageManager', {
         }
 
     },
+    getHitItems: function(element){
+        //接触しているアイテムの配列を取得する
+        var out = [];
+        this.children.forEach(function(child){
+            if(element.hitTestElement(child) == true) {
+                out.push(child);
+            }
+        });
+        return out;
+    },
+    checkEarthing: function(element){
+        //そのelementが接地してるか
+        return this.children.some(function(item){
+            if(element.hitTestElement(item)){
+                return !!item.canBeTouched;
+            };
+            return false;
+        });
+    },
     _accessor:{
         //子供の位置を全部動かす為のaccesor
         itemX:{
@@ -198,8 +293,8 @@ const TEST_STAGE = {
         [0,0,1,0,0,0,0,0,0,0,0,1,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
     ]
@@ -236,28 +331,27 @@ const TEST_STAGE = {
 
          tomapiko.setPosition(400,400);
          this.player = tomapiko;
-         this.player.pastVector = {x:0.0,y:0.0};
+         this.player.setGravity(0, 5);
          this.score = 0;
 
          this.camera = Camera({
              scene:this
          }).addChildTo(this);
+
+         console.log("GAME START");
      },
 
      update: function(app) {
          const keyboard = app.keyboard;
+         const player = this.player;
 
-         const gravity = 9.8;
-         let vector = this.player.pastVector;
-         vector.y += gravity;
-
+         let vector = phina.geom.Vector2(0, 0);
          let jump = false;
 
          if(app.frame % 5 === 0) {
              eval(Blockly.JavaScript.workspaceToCode(workspace));
          }
 
-         vector.x = 0;
          if(keyboard.getKey('left')){
              vector.x = -20;
          }
@@ -265,10 +359,16 @@ const TEST_STAGE = {
              vector.x = 20;
          }
          if(keyboard.getKeyDown('up') || jump === true){
-             vector.y = -100;
+             if(this.stageManager.checkEarthing(player) == true) {
+                 //地面と接触してると地面がねっとりしてて（yのベクトルを0にする）
+                 //ジャンプできないので
+                 //ちょっと「飛ばして」やっている
+                 player.y -= 5;
+                 player.dy = -70;
+             }
          }
          if(keyboard.getKey('down')){
-             vector.y += 8;
+             vector.y = 8;
          }
 
          let pos = this.player.position;
@@ -277,21 +377,13 @@ const TEST_STAGE = {
 
 
 
-         this.player.moveBy(vector.x ,vector.y);
+         player.dx = vector.x;
+         player.addForce(0, vector.y);
 
 
-         let player = this.player;
-         this.stageManager.children.some(function(block){
-             let flg = false;
-             while(player.hitTestElement(block)){
-                 flg = true;
-                 player.moveBy(0,-0.01 * vector.y);
-             }
-             if(flg){
-                 vector.y = 0;
-             }
+         this.stageManager.children.forEach(function(item){
+             item.reactTo(player);
          });
-         this.player.pastVector = vector;
 
          this.camera.follow();
 
