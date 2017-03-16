@@ -1,3 +1,9 @@
+.mainRow {
+    height: 800px;
+    width: 100%;
+}
+
+
 .mainContents {
     float:left;
 }
@@ -7,3 +13,7 @@
     width: 40%;
 }
 
+#blocklyDiv {
+    height: 480px;
+    width: 600px;
+}
