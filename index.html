@@ -26,6 +26,10 @@
     <block type="go_right"></block>
 </xml>
 
+<xml id="startBlock">
+    <block type="run_below" x="20" y="20" deletable="false" movable="false"></block>
+</xml>
+
 
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src="my-blockly-def.js"></script>
@@ -41,6 +45,9 @@
 <script type="text/javascript">
  var workspace = Blockly.inject('blocklyDiv',
 				                        {toolbox: document.getElementById('toolbox')});
+
+ Blockly.Xml.domToWorkspace(document.getElementById('startBlock'),
+                            workspace);
 
  var button = d3.select("#button");
 
