@@ -351,7 +351,12 @@ const TEST_STAGE = {
          let button = d3.select("#button");
 
          if(button.attr("value") == "running"){
-             eval(Blockly.JavaScript.workspaceToCode(workspace));
+             const start_block = workspace.getBlockById("START");
+             try {
+                 eval(Blockly.JavaScript.blockToCode(start_block));
+             } catch(e){
+                 console.log(e);
+             }
          }
 
          if(keyboard.getKey('left')){
