@@ -348,8 +348,11 @@ const TEST_STAGE = {
          let vector = phina.geom.Vector2(0, 0);
          let jump = false;
 
+         let button = d3.select("#button");
 
-         eval(Blockly.JavaScript.workspaceToCode(workspace));
+         if(button.attr("value") == "running"){
+             eval(Blockly.JavaScript.workspaceToCode(workspace));
+         }
 
          if(keyboard.getKey('left')){
              vector.x = -20;

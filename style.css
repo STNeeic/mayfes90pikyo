@@ -17,3 +17,13 @@
     height: 480px;
     width: 600px;
 }
+
+#button {
+    width: 200px;
+    height: 100px;
+    background-color: #000;
+}
+
+#button[value="running"] {
+    background-color: red;
+}

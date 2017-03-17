@@ -37,18 +37,19 @@
         <canvas id="phinaCanvas" class="mainContents"></canvas>
     </div>
 </div>
-<div id="button" style="height: 100px; width:200px; background-color: black"></div>
+<div id="button" value="stop"></div>
 <script type="text/javascript">
  var workspace = Blockly.inject('blocklyDiv',
 				                        {toolbox: document.getElementById('toolbox')});
 
  var button = d3.select("#button");
 
-  button.on("click", function(e) {
-     console.log(Blockly.JavaScript.workspaceToCode(workspace));
-     var code = Blockly.JavaScript.workspaceToCode(workspace);
-
-     eval(Blockly.JavaScript.workspaceToCode(workspace));
+ button.on("click", function(e) {
+      if(button.attr("value") === "running") {
+          button.attr("value", "stop");
+      } else {
+          button.attr("value", "running");
+      }
  });
 
 </script>
