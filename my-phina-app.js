@@ -26,7 +26,7 @@ phina.define('Block', {
          //接地可能か
          this.canBeTouched = true;
      },
-    reactTo : function(obj){
+    reactTo : function(obj, scene){
         //ブロックは接触したオブジェクトに対して反発する．
         //現実にはありえない物理挙動であるが，
         //y方向の速度を完全に吸収し，オブジェクトをy軸方向にどかす．
@@ -54,16 +54,18 @@ phina.define('Player',{
     //当たり判定用の四角形が実体で
     //描画されるキャラクター画像を内部に持っている
      superClass: 'RectangleShape',
-     init: function() {
+     init: function(options) {
          this.superInit({
              width: 80,
              height: 118,
              fill: 'rgba(0, 0, 0,0)',
              stroke: null,
-             cornerRadius: 0,
+             cornerRadius: 0
          });
+
          this.gazo = Sprite('tomapiko').addChildTo(this);
          this.gazo.width = this.gazo.height = 128;
+
 
          //物理演算もどきをつける
          this.physicalBody = phina.accessory.Physical().attachTo(this);
@@ -146,14 +148,14 @@ phina.define('Goal',{
     //ゴールとなるアイテム．
     superClass: 'StarShape',
     init: function(){
-        superInit();
+        this.superInit();
     },
-    reactTo: function(obj){
-        if(this.hitTestElement(obj) == ture) {
+    reactTo: function(obj, scene){
+        if(this.hitTestElement(obj) == true) {
             //ゲームクリア!!
 
-            //ゲームを終わる
-            obj.parent.exit();
+ 
+            scene.exit();
         }
     }
 });
@@ -284,19 +286,24 @@ phina.define('StageManager', {
 
 const TEST_STAGE = {
     height: 960,
-    width: 640,
+    width: 960,
     blockSize: 64,
     data: [
+        [0,0,0,0,0,0,0,0,1,1,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,1,1,0,0,0,0,1],
+        [0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,1,0,0,0,0,0,0,0,0,1,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+        [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,2,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ]
 };
 
@@ -321,14 +328,6 @@ const TEST_STAGE = {
 
          let tomapiko = Player();
 
-
-         //ランダムに星を配置する部分
-         const day = new Date();
-         this.random = Random(day.getTime());
-         const rand = this.random;
-         let star = StarShape().addChildTo(this).setPosition(rand.randint(50,this.width - 50),rand.randint(50,this.height - 150));
-         this.star = star;
-
          tomapiko.setPosition(400,400);
          this.player = tomapiko;
          this.player.setGravity(0, 5);
@@ -348,7 +347,7 @@ const TEST_STAGE = {
          let vector = phina.geom.Vector2(0, 0);
          let jump = false;
 
-         let button = d3.select("#button");
+         const button = d3.select("#button");
 
          if(button.attr("value") == "running"){
              const start_block = workspace.getBlockById("START");
@@ -378,8 +377,7 @@ const TEST_STAGE = {
              vector.y = 8;
          }
 
-         let pos = this.player.position;
-         let stageManager = this.stageManager;
+         const stageManager = this.stageManager;
 
 
 
@@ -387,20 +385,12 @@ const TEST_STAGE = {
          player.dx = vector.x;
          player.addForce(0, vector.y);
 
-
-         this.stageManager.children.forEach(function(item){
-             item.reactTo(player);
+         const scene = this;
+         stageManager.children.forEach(function(item){
+             item.reactTo(player, scene);
          });
 
          this.camera.follow();
-
-         //今は星がランダムに出てきて取るゲームになってるけど
-         //最終的には星をとったらゴールというゲームになる
-         if(this.player.hitTestElement(this.star)){
-             this.star.setPosition(this.random.randint(50,this.width - 50),this.random.randint(50,this.height - 150));
-             this.score += 1;
-             this.label.text = "score is: " + this.score + "\n";
-         }
 
      }
  });
@@ -410,7 +400,7 @@ const TEST_STAGE = {
  phina.main(function() {
      // アプリケーション生成
      let app = GameApp({
-         startLabel: 'main', // メインシーンから開始する
+         startLabel: 'title', // メインシーンから開始する
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
          width:640,
