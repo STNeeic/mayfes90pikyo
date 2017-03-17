@@ -28,6 +28,31 @@
          });
      }
  };
+
+Blockly.Blocks['go_left'] = {
+    init: function() {
+        this.jsonInit({
+            "message0": 'go_left',
+            "colour": 200,
+            "type": "Action",
+            "previousStatement": "Action",
+            "nextStatement": "Action"
+        });
+    }
+};
+
+Blockly.Blocks['go_right'] = {
+    init: function() {
+        this.jsonInit({
+            "message0": 'go_right',
+            "colour": 200,
+            "type": "Action",
+            "previousStatement": "Action",
+            "nextStatement": "Action"
+        });
+    }
+};
+
  Blockly.JavaScript['string_length'] = function(block){
      //return the length of valiables.
      var word = Blockly.JavaScript.valueToCode(block,"VALUE",Blockly.JavaScript.ORDER_ATOMIC) || '\'\'';
@@ -42,3 +67,14 @@
      return code;
  };
 
+Blockly.JavaScript['go_left'] = function(block){
+    //Call jump()
+    var code = 'vector.x = -20;\n';
+    return code;
+};
+
+Blockly.JavaScript['go_right'] = function(block){
+    //Call jump()
+    var code = 'vector.x = 20;\n';
+    return code;
+};

@@ -348,9 +348,8 @@ const TEST_STAGE = {
          let vector = phina.geom.Vector2(0, 0);
          let jump = false;
 
-         if(app.frame % 5 === 0) {
-             eval(Blockly.JavaScript.workspaceToCode(workspace));
-         }
+
+         eval(Blockly.JavaScript.workspaceToCode(workspace));
 
          if(keyboard.getKey('left')){
              vector.x = -20;
