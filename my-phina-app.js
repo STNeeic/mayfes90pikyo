@@ -47,7 +47,31 @@ phina.define('Block', {
         
         return this;
     }
- });
+});
+
+
+phina.define('PhysicalBody',{
+    //updateで衝突判定を呼ぶようにしたPhysicalアクセサリ
+    superClass: 'phina.accessory.Physical',
+    init: function(){
+        this.superInit();
+    },
+    update: function(){
+        //ここはPhisicalのパクリ
+        var t = this.target;
+
+        this.velocity.x *= this.friction;
+        this.velocity.y *= this.friction;
+
+        this.velocity.x += this.gravity.x;
+        this.velocity.y += this.gravity.y;
+
+        t.position.x += this.velocity.x;
+        t.position.y += this.velocity.y;
+
+        this.target.detectCollision();
+    }
+});
 
 phina.define('Player',{
     //プレイヤーのクラス
@@ -68,9 +92,21 @@ phina.define('Player',{
 
 
          //物理演算もどきをつける
-         this.physicalBody = phina.accessory.Physical().attachTo(this);
+         this.physicalBody = PhysicalBody().attachTo(this);
          this.mass = 1.0;
+
+         this.stageManager = options.stageManager || null;
+
      },
+    detectCollision: function(){
+        //衝突検知判定を行う．
+        if(this.stageManager == null){
+            console.log("ERROR: stageManager is null. Player cannot detect collisions.");
+            return;
+        }
+
+        this.stageManager.detectCollision(this);
+    },
     setVelocity: function(x, y){
         //forceがvelocityをセットする関数である
         this.physicalBody.force(x, y);
@@ -189,6 +225,7 @@ phina.define('StageManager', {
         //こいつの位置は絶対に(0,0)で固定する（理由は上述）
         this.x = 0;
         this.y = 0;
+        this.scene = options.scene || null;
     },
 
     addItem: function(v) {
@@ -254,6 +291,30 @@ phina.define('StageManager', {
             };
             return false;
         });
+    },
+    detectCollision: function(element){
+        //一個一個のアイテムは，他のアイテムのことを知らない．
+        //ただ移動の差分は
+        let d = Vector2();
+        let dummy = Object2D({
+            x: element.x,
+            y: element.y,
+            width: element.width,
+            height: element.height
+        });
+        const scene = this.scene;
+
+        this.children.forEach(function(item){
+            item.reactTo(dummy, scene);
+            //移動の差分を抽出
+            d.x += dummy.x - element.x;
+            d.y += dummy.y - element.y;
+            dummy.x = element.x;
+            dummy.y = element.y;
+        });
+
+        //差分だけ移動
+        element.moveBy(d.x, d.y);
     },
     _accessor:{
         //子供の位置を全部動かす為のaccesor
@@ -323,10 +384,14 @@ const TEST_STAGE = {
          this.label.y = this.gridY.center(); // y 座標
          this.label.fill = 'white'; // 塗りつぶし色
 
-         this.stageManager = StageManager();
+         this.stageManager = StageManager({
+             scene: this
+         });
          this.stageManager.loadStage(TEST_STAGE);
 
-         let tomapiko = Player();
+         let tomapiko = Player({
+             stageManager: this.stageManager
+         });
 
          tomapiko.setPosition(400,400);
          this.player = tomapiko;
@@ -386,10 +451,10 @@ const TEST_STAGE = {
          player.addForce(0, vector.y);
 
          const scene = this;
-         stageManager.children.forEach(function(item){
+         /*stageManager.children.forEach(function(item){
              item.reactTo(player, scene);
          });
-
+         */
          this.camera.follow();
 
      }
