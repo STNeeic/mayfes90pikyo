@@ -4,18 +4,14 @@
 }
 
 
-.mainContents {
-    float:left;
-}
+
 
 #phinaDiv {
-    height: 50%;
-    width: 40%;
+
 }
 
 #blocklyDiv {
-    height: 480px;
-    width: 600px;
+
 }
 
 #button {
