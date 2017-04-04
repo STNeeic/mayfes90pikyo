@@ -103,9 +103,9 @@ phina.define('Player',{
      superClass: 'RectangleShape',
      init: function(options) {
          this.superInit({
-             width: 80,
-             height: 118,
-             fill: 'rgba(0, 0, 0,0)',
+             width:  70,
+             height: 110,
+             fill: 'rgba(0, 0, 0,0.5)',
              stroke: null,
              cornerRadius: 0
          });
@@ -413,7 +413,7 @@ const TEST_STAGE = {
     width: 960,
     blockSize: 64,
     data: [
-        [0,0,0,0,0,0,0,0,1,1,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [0,0,0,0,0,0,0,0,1,1,0,0,0,0,1],
         [0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
