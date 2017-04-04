@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Programming game with Blockly">
@@ -12,6 +13,10 @@
 <script src="Lib/javascript_compressed.js"></script>
 <script src="Lib/d3.js"></script>
 <script src="phinajs/build/phina.js"></script>
+<!-- bootstrapがjqueryを必要としているので（d3もjqueryに変えるかも） -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
 <xml id="toolbox" style="display: none; trashcan: true">
     <block type="controls_if"></block>
     <block type="controls_repeat_ext"></block>
@@ -32,34 +37,137 @@
 
 
 <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+
 <script src="my-blockly-def.js"></script>
 </head>
+
+
 <body>
-<div id="contents" class="mainRow">
-    <div id="blocklyDiv" class="mainContents"></div>
-    <div id="phinaDiv" class="mainContents">
-        <canvas id="phinaCanvas" class="mainContents"></canvas>
+   <nav class="navbar navbar-default navbar-fixed-top">
+       <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+
+          <a class="navbar-brand" href="#">ピ教</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+
+              <li><a href="#about">About</a></li>
+
+            <li><a href="#contact">API LIST</a></li>
+            <li class="dropdown">
+
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">攻略法とか <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+
+                <li><a href="#">if文とか?</a></li>
+                <li><a href="#">forとか?</a></li>
+                <li><a href="#">HOGEHOGE</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+
+              <li><a href="../navbar/">リンクは切れてるよ</a></li>
+
+              <li><a href="../navbar-static-top/">これも切れてるよ</a></li>
+
+              <li class="active"><a href="./">ディレクトリ <span class="sr-only">(current)</span></a></li>
+
+          </ul>
+
+        </div><!--/.nav-collapse -->
+       </div>
+
+   </nav>
+
+    <div id="contents" class="container-fluid">
+        <div class="row">
+            <div id="blocklyArea" class="mainContents col-md-7">
+            </div>
+            <div id="phinaDiv" class="mainContents col-md-5">
+
+                <canvas id="phinaCanvas" class="mainContents">
+
+                </canvas>
+            </div>
+        </div>
     </div>
-</div>
-<div id="button" value="stop"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="buttonArea" class="col-md-7">
+                <div id="button" class="btn" value="stop"></div>
+            </div>
+            <div id="alert-area" class="col-md-5">
+                
+            </div>
+        </div>
+    </div>
+<div id="blocklyDiv" style="position: absolute"></div>
+
+<footer></footer>
+
 <script type="text/javascript">
- var workspace = Blockly.inject('blocklyDiv',
+ let blocklyArea = document.getElementById('blocklyArea');
+ let blocklyDiv = document.getElementById('blocklyDiv');
+ var workspace = Blockly.inject(blocklyDiv ,
 				                        {toolbox: document.getElementById('toolbox')});
 
+ //初めからstartblockがworkspaceに置いてあるようにする
  Blockly.Xml.domToWorkspace(document.getElementById('startBlock'),
                             workspace);
 
+ let onresize = function(e) {
+     //blocklyAreaの位置を計算する
+     var element = blocklyArea;
+     var x = 0;
+     var y = 0;
+     do {
+         x += element.offsetLeft;
+         y += element.offsetTop;
+         element = element.offsetParent;
+     } while (element);
+
+     // Position blocklyDiv over blocklyArea.
+     blocklyDiv.style.left = x + 'px';
+     blocklyDiv.style.top = y + 'px';
+     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+ };
+
+ //resize時に呼ばれるように
+ window.addEventListener('resize', onresize, false);
+ onresize();
+ Blockly.svgResize(workspace);
+
+
+
+ //ボタンを押したらBlocklyでゲームを動かすかどうかを切り替える
  var button = d3.select("#button");
 
  button.on("click", function(e) {
-      if(button.attr("value") === "running") {
-          button.attr("value", "stop");
-      } else {
-          button.attr("value", "running");
-      }
+     if(button.attr("value") === "running") {
+         button.attr("value", "stop");
+     } else {
+         button.attr("value", "running");
+     }
  });
 
 </script>
 
 <script src="my-phina-app.js"></script>
 </body>
+</html>

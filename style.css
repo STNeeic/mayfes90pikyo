@@ -1,23 +1,12 @@
-.mainRow {
-    height: 800px;
-    width: 100%;
-}
-
-
-.mainContents {
-    float:left;
+#blocklyArea {
+    min-height: 400px;
+    height: 53vw;
+    margin-top: 55px;
 }
 
 #phinaDiv {
-    height: 50%;
-    width: 40%;
+    max-height: 100vh;
 }
-
-#blocklyDiv {
-    height: 480px;
-    width: 600px;
-}
-
 #button {
     width: 200px;
     height: 100px;
