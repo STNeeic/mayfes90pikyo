@@ -36,15 +36,37 @@ phina.define('Block', {
         //当たってないならすぐ抜ける．
         if(this.hitTestElement(obj) == false) return this;
 
-        //押し出し
-        const dy = this.y - obj.y < 0 ? 0.01 : -0.01;
-        while(this.hitTestElement(obj)){
-            obj.y += dy;
+        const gravity_offs = 5;
+
+        obj.position.sub(obj.physicalBody.velocity);
+
+        // yだけ動かす
+        obj.y += obj.dy;
+
+        //当たったら戻してy方向の速度を0にする
+        if(this.hitTestElement(obj)){
+            if(obj.dy > 0) {
+                //top
+                obj.y = this.y - this.height / 2 - obj.height / 2 -  gravity_offs;
+            } else {
+                //bottom
+                obj.y = this.y + this.height / 2 + obj.height / 2;
+            }
+            obj.dy = 0;
         }
-        
-        //y軸の速度を無くす
-        obj.dy = 0;
-        
+
+        //xだけ動かす
+        obj.x += obj.dx;
+        //当たったら戻してx方向の速度を0にする
+        if(this.hitTestElement(obj)){
+            if(obj.dx > 0){
+                //left
+                obj.x = this.x - this.width / 2 - obj.width / 2;
+            } else {
+                obj.x = this.x + this.width / 2 + obj.width / 2;
+            }
+            obj.dx = 0;
+        }
         return this;
     }
 });
@@ -57,6 +79,9 @@ phina.define('PhysicalBody',{
         this.superInit();
     },
     update: function(){
+        //何もしないようにする
+    },
+    move: function(){
         //ここはPhisicalのパクリ
         var t = this.target;
 
@@ -68,8 +93,6 @@ phina.define('PhysicalBody',{
 
         t.position.x += this.velocity.x;
         t.position.y += this.velocity.y;
-
-        this.target.detectCollision();
     }
 });
 
@@ -94,19 +117,14 @@ phina.define('Player',{
          //物理演算もどきをつける
          this.physicalBody = PhysicalBody().attachTo(this);
          this.mass = 1.0;
+         this.x = options.x || 0;
+         this.y = options.y || 0;
+         this.dx = options.dx || 0;
+         this.dy = options.dy || 0;
 
          this.stageManager = options.stageManager || null;
 
      },
-    detectCollision: function(){
-        //衝突検知判定を行う．
-        if(this.stageManager == null){
-            console.log("ERROR: stageManager is null. Player cannot detect collisions.");
-            return;
-        }
-
-        this.stageManager.detectCollision(this);
-    },
     setVelocity: function(x, y){
         //forceがvelocityをセットする関数である
         this.physicalBody.force(x, y);
@@ -125,6 +143,18 @@ phina.define('Player',{
     setVelocityY: function(y){
         var x = this.physicalBody.velocity.x;
         this.physicalBody.force(x, y);
+    },
+    move: function(){
+        this.physicalBody.move();
+    },
+    omitOptions:function(){
+        return {
+            x: this.x,
+            y: this.y,
+            dx:this.dx,
+            dy:this.dy,
+            stageManager: this.stageManager
+        };
     },
     _accessor: {
         dx:{
@@ -285,36 +315,69 @@ phina.define('StageManager', {
     },
     checkEarthing: function(element){
         //そのelementが接地してるか
+        const y_offset =  20;
         return this.children.some(function(item){
+            element.y += y_offset;
             if(element.hitTestElement(item)){
+                element.y -= y_offset;
                 return !!item.canBeTouched;
             };
+            element.y -= y_offset;
             return false;
         });
     },
-    detectCollision: function(element){
+    calcDistance: function(elem, item){
+        //elem,itemの幅を考慮し，縦横の長い方の値を返す
+        const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);
+        //yの方は中心点を少し下にする
+        const y = Math.abs(item.y - elem.y + elem.height / 10) - (item.height / 2 + elem.height / 2);
+        return Math.abs(x) > Math.abs(y) ? x : y;
+    },
+    getNearestItem: function(element){
+        //引数のエレメントの最も近くにあるオブジェクトを返す
+        //今のところ自身も含めているけど含めない方が使い勝手が良さそう（こなみ）
+        return this.children.reduce((prev, now) => {
+            prev.fill = 'green';
+            if(this.calcDistance(prev, element) > this.calcDistance(now, element)) {
+                return now;
+            } else {
+                return prev;
+            }
+        });
+    },
+    getSecondNearestItem: function(element){
+        const nearest = this.getNearestItem(element);
+        return this.children.reduce(function(prev, now){
+            if(element.position.distance(prev) > element.position.distance(now)) {
+                if(now == nearest) return prev;
+                return now;
+            } else {
+                if(prev == nearest) return now;
+                return prev;
+            }
+        });
+    }
+    ,
+    move : function(element){
         //一個一個のアイテムは，他のアイテムのことを知らない．
-        //ただ移動の差分は
-        let d = Vector2();
-        let dummy = Object2D({
-            x: element.x,
-            y: element.y,
-            width: element.width,
-            height: element.height
-        });
         const scene = this.scene;
+        let dummy = Player(element.omitOptions());
+        let diff = {pos: Vector2(0, 0),
+                    d: Vector2(0, 0)};
 
-        this.children.forEach(function(item){
-            item.reactTo(dummy, scene);
-            //移動の差分を抽出
-            d.x += dummy.x - element.x;
-            d.y += dummy.y - element.y;
-            dummy.x = element.x;
-            dummy.y = element.y;
-        });
+        //近くにあるアイテム2つをチェックする．
+        //これは2つあればコーナーとかも見れることによる
+        //ただ大量に見ると，位置の修正が連鎖的に進み異常に動く可能性があるので
+        //増やすとしても3こまでだと思う
+        const target = this.getNearestItem(element);
+        const secondtarget = this.getSecondNearestItem(element);
 
-        //差分だけ移動
-        element.moveBy(d.x, d.y);
+        element.move();
+
+        target.fill = 'red';
+        secondtarget.fill = 'blue';
+        target.reactTo(element, scene);
+        secondtarget.reactTo(element, scene);
     },
     _accessor:{
         //子供の位置を全部動かす為のaccesor
@@ -423,13 +486,16 @@ const TEST_STAGE = {
              }
          }
 
+         player.dx = 0;
+
          if(keyboard.getKey('left')){
-             vector.x = -20;
+             player.dx = -21.1;
          }
          if(keyboard.getKey('right')){
-             vector.x = 20;
+             player.dx = 21.1;
          }
          if(keyboard.getKeyDown('up') || jump === true){
+
              if(this.stageManager.checkEarthing(player) == true) {
                  //地面と接触してると地面がねっとりしてて（yのベクトルを0にする）
                  //ジャンプできないので
@@ -439,22 +505,12 @@ const TEST_STAGE = {
              }
          }
          if(keyboard.getKey('down')){
-             vector.y = 8;
+             player.dy += 2;
          }
 
+
          const stageManager = this.stageManager;
-
-
-
-
-         player.dx = vector.x;
-         player.addForce(0, vector.y);
-
-         const scene = this;
-         /*stageManager.children.forEach(function(item){
-             item.reactTo(player, scene);
-         });
-         */
+         stageManager.move(player);
          this.camera.follow();
 
      }
