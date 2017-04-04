@@ -80,13 +80,13 @@ Blockly.Blocks['run_below'] =  {
 
 Blockly.JavaScript['go_left'] = function(block){
     //go left
-    var code = 'vector.x = -20;\n';
+    var code = 'player.dx = -20;\n';
     return code;
 };
 
 Blockly.JavaScript['go_right'] = function(block){
     //go right
-    var code = 'vector.x = 20;\n';
+    var code = 'player.dx = 20;\n';
     return code;
 };
 

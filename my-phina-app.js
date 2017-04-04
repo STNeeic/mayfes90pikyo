@@ -472,6 +472,9 @@ const TEST_STAGE = {
          const keyboard = app.keyboard;
          const player = this.player;
 
+         //initialize （滑ると操作性が悪いので止める）
+         player.dx = 0;
+
          let vector = phina.geom.Vector2(0, 0);
          let jump = false;
 
@@ -486,7 +489,6 @@ const TEST_STAGE = {
              }
          }
 
-         player.dx = 0;
 
          if(keyboard.getKey('left')){
              player.dx = -21.1;
