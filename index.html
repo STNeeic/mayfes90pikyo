@@ -93,9 +93,9 @@
        </div>
 
     </nav>
-    <div id="contents" class="container">
+    <div id="contents" class="container-fluid">
         <div class="row">
-            <div id="blocklyDiv" class="mainContents col-md-7">
+            <div id="blocklyArea" class="mainContents col-md-7">
             </div>
             <div id="phinaDiv" class="mainContents col-md-5">
 
@@ -107,23 +107,54 @@
 </div>
 <div id="button" class="btn" value="stop"></div>
 
+<div id="blocklyDiv" style="position: absolute"></div>
+
 <footer></footer>
 
 <script type="text/javascript">
- var workspace = Blockly.inject('blocklyDiv',
+ let blocklyArea = document.getElementById('blocklyArea');
+ let blocklyDiv = document.getElementById('blocklyDiv');
+ var workspace = Blockly.inject(blocklyDiv ,
 				                        {toolbox: document.getElementById('toolbox')});
 
+ //初めからstartblockがworkspaceに置いてあるようにする
  Blockly.Xml.domToWorkspace(document.getElementById('startBlock'),
                             workspace);
 
+ let onresize = function(e) {
+     //blocklyAreaの位置を計算する
+     var element = blocklyArea;
+     var x = 0;
+     var y = 0;
+     do {
+         x += element.offsetLeft;
+         y += element.offsetTop;
+         element = element.offsetParent;
+     } while (element);
+
+     // Position blocklyDiv over blocklyArea.
+     blocklyDiv.style.left = x + 'px';
+     blocklyDiv.style.top = y + 'px';
+     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+ };
+
+ //resize時に呼ばれるように
+ window.addEventListener('resize', onresize, false);
+ onresize();
+ Blockly.svgResize(workspace);
+
+
+
+ //ボタンを押したらBlocklyでゲームを動かすかどうかを切り替える
  var button = d3.select("#button");
 
  button.on("click", function(e) {
-      if(button.attr("value") === "running") {
-          button.attr("value", "stop");
-      } else {
-          button.attr("value", "running");
-      }
+     if(button.attr("value") === "running") {
+         button.attr("value", "stop");
+     } else {
+         button.attr("value", "running");
+     }
  });
 
 </script>

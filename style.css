@@ -1,17 +1,7 @@
-.mainRow {
-    height: 800px;
-    width: 100%;
-}
-
-
-
-
-#phinaDiv {
-
-}
-
-#blocklyDiv {
-
+#blocklyArea {
+    min-height: 400px;
+    height: 60vh;
+    margin-top: 55px;
 }
 
 #button {
