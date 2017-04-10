@@ -343,53 +343,30 @@ phina.define('StageManager', {
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);
         //yの方は中心点を少し下にする
         const y = Math.abs(item.y - elem.y + elem.height / 10) - (item.height / 2 + elem.height / 2);
-        return Math.abs(x) > Math.abs(y) ? x : y;
+        return x + y;
     },
-    getNearestItem: function(element){
-        //引数のエレメントの最も近くにあるオブジェクトを返す
-        //今のところ自身も含めているけど含めない方が使い勝手が良さそう（こなみ）
-        return this.children.reduce((prev, now) => {
-            prev.fill = 'green';
-            if(this.calcDistance(prev, element) > this.calcDistance(now, element)) {
-                return now;
-            } else {
-                return prev;
-            }
-        });
-    },
-    getSecondNearestItem: function(element){
-        const nearest = this.getNearestItem(element);
-        return this.children.reduce(function(prev, now){
-            if(element.position.distance(prev) > element.position.distance(now)) {
-                if(now == nearest) return prev;
-                return now;
-            } else {
-                if(prev == nearest) return now;
-                return prev;
-            }
-        });
-    }
-    ,
     move : function(element){
-        //一個一個のアイテムは，他のアイテムのことを知らない．
+        let near_items = this.children.sort((a, b) => {
+                  return this.calcDistance(element, a) - this.calcDistance(element, b);
+        });
+        const reactable_item_num = 4;
         const scene = this.scene;
-        let dummy = Player(element.omitOptions());
-        let diff = {pos: Vector2(0, 0),
-                    d: Vector2(0, 0)};
-
-        //近くにあるアイテム2つをチェックする．
-        //これは2つあればコーナーとかも見れることによる
-        //ただ大量に見ると，位置の修正が連鎖的に進み異常に動く可能性があるので
-        //増やすとしても3こまでだと思う
-        const target = this.getNearestItem(element);
-        const secondtarget = this.getSecondNearestItem(element);
-
         element.move();
 
-        target.fill = 'red';
-        secondtarget.fill = 'blue';
-        target.reactTo(element, scene);
-        secondtarget.reactTo(element, scene);
+        for(let i = 0; i < reactable_item_num; i++) {
+            near_items[i].reactTo(element, scene);
+        }
+
+        //debug用の可視化
+        near_items.forEach(function(item, i){
+            if(i == 0) {
+                item.fill = 'red';
+            }else if(i < reactable_item_num) {
+                item.fill = 'blue';
+            } else {
+                item.fill = 'green';
+            }
+        })
     },
     _accessor:{
         //子供の位置を全部動かす為のaccesor
