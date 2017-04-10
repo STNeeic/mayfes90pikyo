@@ -326,6 +326,18 @@ phina.define('StageManager', {
             return false;
         });
     },
+    checkNearCliff: function(element){
+        const dummy_left = Player(element.omitOptions());
+        const dummy_right = Player(element.omitOptions());
+
+        const left_offs = Vector2(-64, 64);
+        const right_offs = Vector2(64, 64);
+
+        dummy_left.position.add(left_offs);
+        dummy_right.position.add(right_offs);
+
+        return this.checkEarthing(element) && (this.getHitItems(dummy_left).length == 0 || this.getHitItems(dummy_right).length == 0);
+    },
     calcDistance: function(elem, item){
         //elem,itemの幅を考慮し，縦横の長い方の値を返す
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);
@@ -471,7 +483,7 @@ const TEST_STAGE = {
      update: function(app) {
          const keyboard = app.keyboard;
          const player = this.player;
-
+         const stageManager = this.stageManager;
          //initialize （滑ると操作性が悪いので止める）
          player.dx = 0;
 
@@ -511,7 +523,6 @@ const TEST_STAGE = {
          }
 
 
-         const stageManager = this.stageManager;
          stageManager.move(player);
          this.camera.follow();
 

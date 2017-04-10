@@ -64,6 +64,18 @@ Blockly.Blocks['run_below'] =  {
     }
 };
 
+Blockly.Blocks['is_cliff'] =  {
+    init: function() {
+        this.jsonInit({
+            "message0": 'is_cliff',
+            "colour": 100,
+            "type": "Check",
+            "output": "Boolean"
+        });
+    }
+};
+
+
  Blockly.JavaScript['string_length'] = function(block){
      //return the length of valiables.
      var word = Blockly.JavaScript.valueToCode(block,"VALUE",Blockly.JavaScript.ORDER_ATOMIC) || '\'\'';
@@ -71,6 +83,14 @@ Blockly.Blocks['run_below'] =  {
      var code = word + ".length\n";
      return [code, Blockly.JavaScript.ORDER_ATOMIC];
  };
+
+
+Blockly.JavaScript['is_cliff'] = function(block){
+    //崖にいるか調べる
+    var code = 'stageManager.checkNearCliff(player)';
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 
  Blockly.JavaScript['jump'] = function(block){
      //active jump flg
