@@ -4,20 +4,52 @@
  const ASSETS = {
      image: {
          'tomapiko': 'http://cdn.rawgit.com/phi-jp/phina.js/v0.1.1/assets/images/tomapiko.png',
-         'block': './pictures/Base_pack/Tiles/grassCenter.png'
+         'block': './pictures/Base_pack/Tiles/tiles_spritesheet.png'
      },
  };
 
- const BLOCK_SIZE = 64;
+const BLOCK_SIZE = 70;
+
+phina.define('SpriteSheetWithOffset',{
+    //SpriteSheetにoffsetが付いていた時用のSprite
+    superClass: 'Sprite',
+    init: function(image, width, height, offset){
+        this.superInit(image, width, height);
+        this.offset = offset || 0;
+    },
+    setFrameIndex: function(index, width, height) {
+        var tw  = width || this._width;      // tw
+        var th  = height || this._height;    // th
+        var row = ~~(this.image.domElement.width / tw);
+        var col = ~~(this.image.domElement.height / th);
+        var maxIndex = row*col;
+        index = index%maxIndex;
+        
+        var x = index%row;
+        var y = ~~(index/row);
+        this.srcRect.x = x* (tw + this.offset);
+        this.srcRect.y = y* (th + this.offset);
+
+        
+
+        this.srcRect.width  = tw;
+        this.srcRect.height = th;
+
+        this._frameIndex = index;
+
+        return this;
+
+    }
+});
 
 phina.define('Block', {
     //とりあえずのブロック．
     //いい感じの画像があったら差し替えたい
-     superClass: 'Sprite',
+     superClass: 'SpriteSheetWithOffset',
 
      init: function() {
-         this.superInit('block');
-         this.width = this.height = BLOCK_SIZE;
+         this.superInit('block', 70, 70, 2);
+         this.frameIndex = 164;
 
          //接地可能か
          this.canBeTouched = true;
@@ -64,6 +96,46 @@ phina.define('Block', {
             obj.dx = 0;
         }
         return this;
+    },
+    adjustFrameIndex: function(x, y, data) {
+        let neighbours = [[],[],[]];
+        //周囲のデータを持つ配列neighboursを作る
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+                if(x + i - 1 < 0 || y + j - 1 < 0 || x + i  > data.length || y + j > data[x + i - 1].length) {
+                    neighbours[i].push(-1);
+                    continue;
+                }
+                neighbours[i].push(data[x + i - 1][y + j - 1]);
+            }
+        }
+
+        if(neighbours[1][0] == neighbours[1][1]){
+            //上にブロックがあったらcenterを使用
+            this.frameIndex = this.frameData.center;
+        } else if (neighbours[0][1] == neighbours[1][1] && neighbours[2][1] == neighbours[1][1]) {
+            //両脇にブロックがあったらtop_centerを使用
+            this.frameIndex = this.frameData.top_center;
+        } else if(neighbours[0][1] == neighbours[1][1]) {
+            //左側にブロックがあったらtop_rightを使用
+            this.frameIndex = this.frameData.top_right;
+        } else if(neighbours[2][1] == neighbours[1][1]) {
+            //右側にブロックがあったらtop_left
+            this.frameIndex = this.frameData.top_left;
+        } else if(neighbours[1][2] == neighbours[1][1]) {
+            //下にブロックがあったらtop_center（いい画像が無いため）
+            this.frameIndex = this.frameData.top_center;
+        } else {
+            //それも無ければdot
+            this.frameIndex = this.frameData.dot;
+        }
+    },
+    frameData: {
+        center: 164,
+        top_center: 111,
+        top_left: 111,
+        top_right: 111,
+        dot: 9
     }
 });
 
@@ -285,7 +357,6 @@ phina.define('StageManager', {
         });
 
         const builder = ItemBuilder();
-        console.log(x_columns + " " + y_columns);
         //dataに基づいてステージを作成
         for(let y = 0; y < y_columns; y++) {
             for(let x = 0; x < x_columns; x++){
@@ -294,9 +365,17 @@ phina.define('StageManager', {
 
                 item.x = this.gridX.span(x);
                 item.y = this.gridY.span(y);
+                
+
+                //周囲のデータに合わせて画像を変える必要がある場合ここで変える
+                if(!!item.adjustFrameIndex){
+                    item.adjustFrameIndex( x, y, data);
+                }
+
                 this.addItem(item);
             }
         }
+
 
     },
     getHitItems: function(element){
@@ -335,13 +414,14 @@ phina.define('StageManager', {
         return this.checkEarthing(element) && (this.getHitItems(dummy_left).length == 0 || this.getHitItems(dummy_right).length == 0);
     },
     calcDistance: function(elem, item){
-        //elem,itemの幅を考慮し，縦横の長い方の値を返す
+        //大体マンハッタン距離にしている
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);
         //yの方は中心点を少し下にする
         const y = Math.abs(item.y - elem.y + elem.height / 10) - (item.height / 2 + elem.height / 2);
         return x + y;
     },
     move : function(element){
+        //あるエレメントを，当たり判定を考慮しながら動かす
         let near_items = this.children.sort((a, b) => {
                   return this.calcDistance(element, a) - this.calcDistance(element, b);
         });
@@ -384,17 +464,17 @@ phina.define('StageManager', {
 });
 
 const TEST_STAGE = {
-    height: 960,
-    width: 960,
-    blockSize: 64,
+    height: 1050,
+    width: 1050,
+    blockSize: 68,
     data: [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [0,0,0,0,0,0,0,0,1,1,0,0,0,0,1],
-        [0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,1,1,0,0,0,1,1],
+        [0,0,0,1,1,0,0,0,0,0,0,0,0,1,1],
+        [0,0,0,1,1,0,0,0,0,0,0,0,0,1,1],
+        [0,0,0,0,0,0,0,0,1,0,0,0,0,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
         [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
         [0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
@@ -411,8 +491,8 @@ const TEST_STAGE = {
      superClass: 'DisplayScene',
      init: function() {
          this.superInit({
-             width:640,
-             height:960
+             width:700,
+             height:1050
          });
          // 背景色を指定
          this.backgroundColor = '#444';
@@ -500,8 +580,8 @@ const TEST_STAGE = {
          startLabel: 'title', // メインシーンから開始する
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
-         width:640,
-         height:960,
+         width:700,
+         height:1050,
          fit: false 
      });
 
