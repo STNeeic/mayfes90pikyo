@@ -4,6 +4,7 @@
  const ASSETS = {
      image: {
          'tomapiko': 'http://cdn.rawgit.com/phi-jp/phina.js/v0.1.1/assets/images/tomapiko.png',
+         'block': './pictures/Base_pack/Tiles/grassCenter.png'
      },
  };
 
@@ -12,16 +13,11 @@
 phina.define('Block', {
     //とりあえずのブロック．
     //いい感じの画像があったら差し替えたい
-     superClass: 'RectangleShape',
+     superClass: 'Sprite',
 
      init: function() {
-         this.superInit({
-             width: BLOCK_SIZE,
-             height: BLOCK_SIZE,
-             fill: 'hsl(100, 80%, 60%)',
-             stroke: null,
-             cornerRadius: 8
-         });
+         this.superInit('block');
+         this.width = this.height = BLOCK_SIZE;
 
          //接地可能か
          this.canBeTouched = true;
@@ -357,16 +353,6 @@ phina.define('StageManager', {
             near_items[i].reactTo(element, scene);
         }
 
-        //debug用の可視化
-        near_items.forEach(function(item, i){
-            if(i == 0) {
-                item.fill = 'red';
-            }else if(i < reactable_item_num) {
-                item.fill = 'blue';
-            } else {
-                item.fill = 'green';
-            }
-        })
     },
     _accessor:{
         //子供の位置を全部動かす為のaccesor
