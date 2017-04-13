@@ -20,7 +20,7 @@
  Blockly.Blocks['jump'] = {
      init: function() {
          this.jsonInit({
-             "message0": 'jump',
+             "message0": 'ジャンプ',
              "colour": 200,
              "type": "Action",
              "previousStatement": "Action",
@@ -32,7 +32,7 @@
 Blockly.Blocks['go_left'] = {
     init: function() {
         this.jsonInit({
-            "message0": 'go_left',
+            "message0": 'ひだりに すすむ',
             "colour": 200,
             "type": "Action",
             "previousStatement": "Action",
@@ -44,7 +44,7 @@ Blockly.Blocks['go_left'] = {
 Blockly.Blocks['go_right'] = {
     init: function() {
         this.jsonInit({
-            "message0": 'go_right',
+            "message0": 'みぎに すすむ',
             "colour": 200,
             "type": "Action",
             "previousStatement": "Action",
@@ -56,7 +56,7 @@ Blockly.Blocks['go_right'] = {
 Blockly.Blocks['run_below'] =  {
     init: function() {
         this.jsonInit({
-            "message0": 'run_below',
+            "message0": 'ずっとつづける',
             "colour": 400,
             "type": "Runblock",
             "nextStatement": "Action"
@@ -67,7 +67,7 @@ Blockly.Blocks['run_below'] =  {
 Blockly.Blocks['is_cliff'] =  {
     init: function() {
         this.jsonInit({
-            "message0": 'is_cliff',
+            "message0": 'がけか しらべる',
             "colour": 100,
             "type": "Check",
             "output": "Boolean"

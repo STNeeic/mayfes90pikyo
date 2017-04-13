@@ -3,7 +3,7 @@
 
  const ASSETS = {
      image: {
-         'tomapiko': 'http://cdn.rawgit.com/phi-jp/phina.js/v0.1.1/assets/images/tomapiko.png',
+         'tomapiko': './phinajs/assets/images/tomapiko_ss.png',
          'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png'
      },
@@ -180,8 +180,9 @@ phina.define('Player',{
              cornerRadius: 0
          });
 
-         this.sprite = Sprite('tomapiko').addChildTo(this);
-         this.sprite.width = this.sprite.height = 128;
+         this.sprite = Sprite('tomapiko', 64, 64).addChildTo(this);
+         this.sprite.scaleX = this.sprite.scaleY = 2;
+         this.sprite.frameIndex = 1;
 
          this.isPlayer = true;
 
@@ -510,10 +511,11 @@ const TEST_STAGE = {
 
          // ラベルを生成
 
-         this.label = Label('Hello, phina.js!').addChildTo(this);
-         this.label.x = this.gridX.center(); // x 座標
-         this.label.y = this.gridY.center(); // y 座標
-         this.label.fill = 'white'; // 塗りつぶし色
+         this.label = Label('かかったじかん：').addChildTo(this);
+         this.label.align = 'right';
+         this.label.x = this.gridX.span(15); // x 座標
+         this.label.y = this.gridY.span(2); // y 座標
+         this.label.fill = '#444'; // 塗りつぶし色
 
          this.stageManager = StageManager({
              scene: this
