@@ -1,0 +1,38 @@
+{
+  "name": "phina.js",
+  "version": "0.2.0",
+  "description": "phina.js is a game library in javascript",
+  "main": "build/phina.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phi-jp/phina.js.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "phi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phi-jp/phina.js/issues"
+  },
+  "homepage": "http://phinajs.com",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.4.3",
+    "gulp-download": "0.0.1",
+    "gulp-header": "^1.7.1",
+    "gulp-helper": "^1.0.3",
+    "gulp-jade": "^1.0.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.5.2",
+    "gulp-shell": "^0.4.2",
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.3",
+    "gulp-webserver": "^0.9.1",
+    "ip": "^0.3.3"
+  }
+}
