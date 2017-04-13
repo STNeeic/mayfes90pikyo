@@ -12,6 +12,7 @@
     color: #f5f5f5;
     background-color: #00c8f8;
     transition: background-color 300ms 0s ease;
+    border: solid thin #c7b390;
 }
 
 #button:hover {
