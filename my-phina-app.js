@@ -4,7 +4,8 @@
  const ASSETS = {
      image: {
          'tomapiko': 'http://cdn.rawgit.com/phi-jp/phina.js/v0.1.1/assets/images/tomapiko.png',
-         'block': './pictures/Base_pack/Tiles/tiles_spritesheet.png'
+         'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
+         'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png'
      },
  };
 
@@ -48,7 +49,7 @@ phina.define('Block', {
      superClass: 'SpriteSheetWithOffset',
 
      init: function() {
-         this.superInit('block', 70, 70, 2);
+         this.superInit('tiles', 70, 70, 2);
          this.frameIndex = 164;
 
          //接地可能か
@@ -173,7 +174,7 @@ phina.define('Player',{
          this.superInit({
              width:  70,
              height: 110,
-             fill: 'rgba(0, 0, 0,0.5)',
+             fill: 'rgba(0, 0, 0, 0)',
              stroke: null,
              cornerRadius: 0
          });
@@ -495,8 +496,15 @@ const TEST_STAGE = {
              height:1050
          });
          // 背景色を指定
-         this.backgroundColor = '#444';
+         this.backgroundColor = 'transparent';
+
+         const bg = Sprite('bg-main').setPosition(this.width / 2, this.height / 2).addChildTo(this);
+         const bg_aspect = bg.height / bg.width;
+         bg.height = this.height;
+         bg.width = bg.height / bg_aspect;
+
          // ラベルを生成
+
          this.label = Label('Hello, phina.js!').addChildTo(this);
          this.label.x = this.gridX.center(); // x 座標
          this.label.y = this.gridY.center(); // y 座標
