@@ -165,6 +165,7 @@ phina.define('PhysicalBody',{
     }
 });
 
+
 phina.define('Player',{
     //プレイヤーのクラス
     //当たり判定用の四角形が実体で
@@ -179,8 +180,10 @@ phina.define('Player',{
              cornerRadius: 0
          });
 
-         this.gazo = Sprite('tomapiko').addChildTo(this);
-         this.gazo.width = this.gazo.height = 128;
+         this.sprite = Sprite('tomapiko').addChildTo(this);
+         this.sprite.width = this.sprite.height = 128;
+
+         this.isPlayer = true;
 
 
          //物理演算もどきをつける
@@ -190,8 +193,6 @@ phina.define('Player',{
          this.y = options.y || 0;
          this.dx = options.dx || 0;
          this.dy = options.dy || 0;
-
-         this.stageManager = options.stageManager || null;
 
      },
     setVelocity: function(x, y){
@@ -221,8 +222,7 @@ phina.define('Player',{
             x: this.x,
             y: this.y,
             dx:this.dx,
-            dy:this.dy,
-            stageManager: this.stageManager
+            dy:this.dy
         };
     },
     _accessor: {
@@ -305,6 +305,7 @@ phina.define('ItemBuilder',{
         case 0: return null;
         case 1: return Block();
         case 2: return Goal();
+        case 3: return Player({});
         default: return null;
         }
     }
@@ -373,7 +374,11 @@ phina.define('StageManager', {
                     item.adjustFrameIndex( x, y, data);
                 }
 
-                this.addItem(item);
+                if(!!item.isPlayer) {
+                    this.player = item;
+                } else {
+                    this.addItem(item);
+                }
             }
         }
 
@@ -471,7 +476,7 @@ const TEST_STAGE = {
     data: [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [0,0,0,0,0,0,0,0,1,1,0,0,0,1,1],
-        [0,0,0,1,1,0,0,0,0,0,0,0,0,1,1],
+        [0,0,0,1,1,0,0,0,0,0,0,0,3,1,1],
         [0,0,0,1,1,0,0,0,0,0,0,0,0,1,1],
         [0,0,0,0,0,0,0,0,1,0,0,0,0,1,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -515,12 +520,8 @@ const TEST_STAGE = {
          });
          this.stageManager.loadStage(TEST_STAGE);
 
-         let tomapiko = Player({
-             stageManager: this.stageManager
-         });
 
-         tomapiko.setPosition(400,400);
-         this.player = tomapiko;
+         this.player = this.stageManager.player;
          this.player.setGravity(0, 5);
          this.score = 0;
 
