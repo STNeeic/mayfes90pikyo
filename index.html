@@ -108,8 +108,8 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div id="buttonArea" class="col-md-7">
-                <div id="button" class="btn" value="stop"></div>
+            <div id="buttonArea" class="col-md-4 col-md-offset-3">
+                <div id="button" class="btn btn-lg" value="stop">スタート</div>
             </div>
             <div id="alert-area" class="col-md-5">
                 
@@ -160,9 +160,11 @@
 
  button.on("click", function(e) {
      if(button.attr("value") === "running") {
-         button.attr("value", "stop");
+         button.attr("value", "stop")
+         .text("スタート");
      } else {
-         button.attr("value", "running");
+         button.attr("value", "running")
+         .text("リセット");
      }
  });
 
