@@ -588,7 +588,7 @@ const TEST_STAGE = {
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
      //widthとheightを書かない場合default値になってしまう
      let s = app.canvas.domElement.style;
-     s.width = "100%";
+     s.width = "56vh";
      //高さ方向は，アスペクト比を揃える為に，autoを使っている．
      //なんか知らんけどautoを指定すると内在サイズという概念にのっとって
      //アス比一定で大きさが変わるらしい

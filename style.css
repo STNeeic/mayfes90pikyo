@@ -1,11 +1,10 @@
 #blocklyArea {
     min-height: 400px;
-    height: 53vw;
+    height: 76vh;
     margin-top: 55px;
 }
 
 #phinaDiv {
-    max-height: 100vh;
 }
 #button {
     font-size: 30px;
