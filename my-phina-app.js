@@ -217,6 +217,13 @@ phina.define('Player',{
     },
     move: function(){
         this.physicalBody.move();
+        //動いてたらその方向に体を向かせる
+        if(this.dx < 0){
+            this.sprite.scaleX = 2;
+        } else if(this.dx > 0) {
+            this.sprite.scaleX = -2;
+        }
+
     },
     omitOptions:function(){
         return {
