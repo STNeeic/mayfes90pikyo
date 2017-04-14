@@ -148,8 +148,6 @@ phina.define('Block', {
         //当たってないならすぐ抜ける．
         if(this.hitTestElement(obj) == false) return this;
 
-        const gravity_offs = 5;
-
         obj.position.sub(obj.physicalBody.velocity);
 
         // yだけ動かす
@@ -159,7 +157,7 @@ phina.define('Block', {
         if(this.hitTestElement(obj)){
             if(obj.dy > 0) {
                 //top
-                obj.y = this.y - this.height / 2 - obj.height / 2 -  gravity_offs;
+                obj.y = this.y - this.height / 2 - obj.height / 2;
             } else {
                 //bottom
                 obj.y = this.y + this.height / 2 + obj.height / 2;
@@ -257,7 +255,7 @@ phina.define('Player',{
      init: function(options) {
          this.superInit({
              width:  70,
-             height: 110,
+             height: 120,
              fill: 'rgba(0, 0, 0, 0)',
              stroke: null,
              cornerRadius: 0
@@ -529,18 +527,17 @@ phina.define('StageManager', {
         const scene = this.scene;
 
         element.move();
-        console.log(element.sprite.fa);
         if(!!element.fa || !!element.sprite.fa){
             const fa = element.fa || element.sprite.fa;
-            if(Math.abs(element.dx) > 0) {
-                if(this.checkEarthing(element)) {
-                    fa.state = "walking";
-                } else {
+                if(!this.checkEarthing(element)) {
                     fa.state = "flying";
+                } else {
+                    if(Math.abs(element.dx) > 0) {
+                        fa.state = "walking";
+                    } else {
+                        fa.state = "stand";
+                    }
                 }
-            } else {
-                fa.state = "stand";
-            }
         }
         
 
