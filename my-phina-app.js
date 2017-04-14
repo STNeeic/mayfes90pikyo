@@ -9,6 +9,89 @@
      },
  };
 
+const player_ss = {
+    "animations": {
+        "die": {
+            "frames": [5],
+            "frequency": 5,
+            "next": "die"
+        },
+        "dying": {
+            "frames": [4],
+            "frequency": 60,
+            "next": "die"
+        },
+        "flying": {
+            "frames": [1,2,3],
+            "frequency": 3,
+            "next": "flying"
+        },
+        "stand": {
+            "frames": [
+                0
+            ],
+            "frequency": 3,
+            "next": "stand"
+        },
+        "walking": {
+            "frames": [12,13,14],
+            "frequency": 3,
+            "next": "walking"
+        }
+    },
+    "frame": {
+        "cols": 6,
+        "height": 64,
+        "rows": 3,
+        "width": 64
+    }
+};
+
+phina.define('FrameAnimationWithState', {
+    superClass: 'FrameAnimation',
+    init: function(ss){
+        this.superInit(ss);
+        this._state = "";
+        this._prevState = "";
+    },
+    setup: function(params){
+        this.ss = SpriteSheet().setup(params);
+        return this;
+    },
+    _gotoAndPlay: function(string){
+        this.gotoAndPlay(string);
+        this._state = string;
+    },
+    update: function() {
+        if(this._prevState != this._state) {
+            this._gotoAndPlay(this._state);
+            this._prevState = this._state;
+        }
+
+
+        if (this.paused) return ;
+        if (!this.currentAnimation) return ;
+
+        if (this.finished) {
+            this.finished = false;
+            this.currentFrameIndex = 0;
+            return ;
+        }
+           ++this.frame;
+        if (this.frame%this.currentAnimation.frequency === 0) {
+            ++this.currentFrameIndex;
+            this._updateFrame();
+        }
+    },
+    _accessor: {
+        "state" :{
+            get: function(){ return this._state;},
+            set: function(v){ this._state = v;}
+        }
+    }
+});
+
+
 const BLOCK_SIZE = 70;
 
 phina.define('SpriteSheetWithOffset',{
@@ -195,6 +278,8 @@ phina.define('Player',{
          this.dx = options.dx || 0;
          this.dy = options.dy || 0;
 
+         this.sprite.fa = FrameAnimationWithState().setup(player_ss).attachTo(this.sprite);
+
      },
     setVelocity: function(x, y){
         //forceがvelocityをセットする関数である
@@ -223,6 +308,7 @@ phina.define('Player',{
         } else if(this.dx > 0) {
             this.sprite.scaleX = -2;
         }
+
 
     },
     omitOptions:function(){
@@ -275,8 +361,8 @@ phina.define('Camera', {
         var ydiff = this.player.y + this.y - this.sceneHeight / 2;
 
         //スレッショルドをどこで設定するかは未定
-        var left_threthold = 200;
-        var right_threthold = 300;
+        var left_threthold = 300;
+        var right_threthold = 200;
 
         if(xdiff + left_threthold < 0){
             this.x -= xdiff + left_threthold;
@@ -441,7 +527,22 @@ phina.define('StageManager', {
         });
         const reactable_item_num = 4;
         const scene = this.scene;
+
         element.move();
+        console.log(element.sprite.fa);
+        if(!!element.fa || !!element.sprite.fa){
+            const fa = element.fa || element.sprite.fa;
+            if(Math.abs(element.dx) > 0) {
+                if(this.checkEarthing(element)) {
+                    fa.state = "walking";
+                } else {
+                    fa.state = "flying";
+                }
+            } else {
+                fa.state = "stand";
+            }
+        }
+        
 
         for(let i = 0; i < reactable_item_num; i++) {
             near_items[i].reactTo(element, scene);
