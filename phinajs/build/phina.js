@@ -7458,12 +7458,24 @@ phina.namespace(function() {
 
       // adjust scale
       var elm = this.domElement;
-      if (elm.style.width) {
-        this._tempPosition.x *= elm.width / parseInt(elm.style.width);
-      }
-      if (elm.style.height) {
-        this._tempPosition.y *= elm.height / parseInt(elm.style.height);
-      }
+        if (elm.style.width) {
+            let view_width = parseInt(elm.style.width);
+            if(elm.style.width.indexOf("vh") > 0) {
+                view_width = window.innerHeight / view_width * 100;
+            }else if(elm.style.width.indexOf("vw") > 0) {
+                view_width = window.innerWidth / view_width * 100;
+            }
+            this._tempPosition.x *= elm.width / view_width;
+        }
+        if (elm.style.height) {
+            let view_height = parseInt(elm.style.height);
+            if(elm.style.height.indexOf("vh") > 0) {
+                view_height = window.innerHeight / view_height * 100;
+            }else if(elm.style.height.indexOf("vw") > 0) {
+                view_height = window.innerWidth / view_height * 100;
+            }
+            this._tempPosition.y *= elm.height / view_height;
+        }
     },
 
     _accessor: {
