@@ -7459,24 +7459,31 @@ phina.namespace(function() {
       // adjust scale
       var elm = this.domElement;
         if (elm.style.width) {
-            let view_width = parseInt(elm.style.width);
-            if(elm.style.width.indexOf("vh") > 0) {
-                view_width = window.innerHeight / view_width * 100;
-            }else if(elm.style.width.indexOf("vw") > 0) {
-                view_width = window.innerWidth / view_width * 100;
+            let view_width = this._estimateScaleCoefficientOf(elm.style.width);
+            if(elm.style.width == "auto") {
+                view_width = this._estimateScaleCoefficientOf(elm.style.height) / elm.height * elm.width;
             }
             this._tempPosition.x *= elm.width / view_width;
         }
         if (elm.style.height) {
-            let view_height = parseInt(elm.style.height);
-            if(elm.style.height.indexOf("vh") > 0) {
-                view_height = window.innerHeight / view_height * 100;
-            }else if(elm.style.height.indexOf("vw") > 0) {
-                view_height = window.innerWidth / view_height * 100;
+            let view_height = this._estimateScaleCoefficientOf(elm.style.height);
+            if(elm.style.height == "auto") {
+                view_height = this._estimateScaleCoefficientOf(elm.style.width) / elm.width * elm.height;
             }
             this._tempPosition.y *= elm.height / view_height;
         }
     },
+
+      _estimateScaleCoefficientOf: function(style){
+          let px_size = parseInt(style);
+          if(style.indexOf("vh") > 0) {
+              px_size = window.innerHeight * px_size / 100;
+          }else if(style.indexOf("vw") > 0) {
+              px_size = window.innerWidth * px_size / 100;
+          }
+
+          return px_size;
+      },
 
     _accessor: {
       /**
