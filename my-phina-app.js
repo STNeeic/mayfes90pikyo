@@ -5,7 +5,8 @@
      image: {
          'tomapiko': './phinajs/assets/images/tomapiko_ss.png',
          'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
-         'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png'
+         'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
+         'result-board': './pictures/ResultBoard.png'
      },
  };
 
@@ -265,7 +266,6 @@ phina.define('Player',{
          this.sprite.scaleX = this.sprite.scaleY = 2;
          this.sprite.frameIndex = 1;
 
-         this.isPlayer = true;
 
 
          //物理演算もどきをつける
@@ -371,18 +371,88 @@ phina.define('Camera', {
     }
 });
 
+phina.define('ResultBoard',{
+    //結果表示用のボード
+    superClass: 'DisplayElement',
+    scene: null,
+    init: function(scene) {
+        this.superInit();
+        this.scene = scene;
+        this.setPosition(scene.gridX.center(), scene.gridY.center());
+        scene.addChild(this);
+
+        const right_line = 225; //つぎへすすむの「む」の位置に揃うライン
+
+        const board = Sprite('result-board').addChildTo(this);
+        const score = Label(scene.score + " てん").addChildTo(this);
+        score.setPosition(right_line, 30);
+        score.align = 'right';
+        const time = this.timeToStr(scene.time);
+        const timelabel = Label(time).addChildTo(this);
+        timelabel.setPosition(right_line, -35);
+        timelabel.align = 'right';
+
+        //当たり判定がずれないようにsceneにaddChildしている
+        const l_button = Button({
+            text: ""
+        }).addChildTo(scene);
+        l_button.width = 220;
+        l_button.height = 70;
+        l_button.setPosition(250,630)
+        .on('push', this.retry)
+            .on('mouseover', function(e){console.log("L-BUTTON MOUSEOVER");})
+            .board = this;
+        this.l_button = l_button;
+
+        const r_button = Button({
+            text: ""
+        }).addChildTo(scene);
+        r_button.width = 220;
+        r_button.height = 70;
+        r_button.setPosition(470,630)
+        .on('push', this.next)
+            .on('mouseover', function(e){console.log("R-BUTTON MOUSEOVER");})
+            .board = this;
+        this.r_button = r_button;
+           },
+    timeToStr: function(time){
+        const millsec = Math.floor((time % 1000) / 10);
+        let sec = Math.floor((time / 1000) % 60);
+        let min = Math.floor(time / 60000);
+        min = min > 0 ? min + "ふん" : "";
+        return min + sec+ "びょう" + millsec;
+    },
+    retry: function(e){
+        console.log("RESTART");
+        const board = this.board;
+        this.remove();
+        board.r_button.remove();
+        board.scene.time = 0;
+        let player = board.scene.player;
+        player.position = player.startPos.clone();
+
+        board.scene.camera.follow();
+        board.scene.stageManager.goal.firstTime = true;
+        board.remove();
+    },
+    next: function(e){
+        console.log("GOTO NEXTSTAGE");
+    }
+})
+
+
 phina.define('Goal',{
     //ゴールとなるアイテム．
     superClass: 'StarShape',
+    firstTime: true,
     init: function(){
         this.superInit();
     },
     reactTo: function(obj, scene){
-        if(this.hitTestElement(obj) == true) {
+        if(this.hitTestElement(obj) == true && this.firstTime == true) {
             //ゲームクリア!!
-
- 
-            scene.exit();
+            ResultBoard(scene).addChildTo(scene);
+            this.firstTime = false;
         }
     }
 });
@@ -409,6 +479,8 @@ phina.define('StageManager', {
     //このクラスのオブジェクトの位置は*絶対に*(0,0)で固定する．
 
     superClass: 'DisplayElement',
+    player: null,
+    goal: null,
     init: function(options){
         this.superInit();
         //item全体のずれの初期位置（0になる）
@@ -423,8 +495,6 @@ phina.define('StageManager', {
     addItem: function(v) {
         //子供に登録する際は，最初の位置を覚える必要があるので
         //この関数を用いる．
-        v.origX = v.x;
-        v.origY = v.y;
         this.addChild(v);
     },
 
@@ -466,9 +536,13 @@ phina.define('StageManager', {
                     item.adjustFrameIndex( x, y, data);
                 }
 
-                if(!!item.isPlayer) {
+                if(item.className == "Player") {
                     this.player = item;
+                    this.player.startPos = this.player.position.clone();
                 } else {
+                    if(item.className == "Goal"){
+                        this.goal = item;
+                    }
                     this.addItem(item);
                 }
             }
@@ -601,6 +675,10 @@ const TEST_STAGE = {
 // MainScene クラスを定義
  phina.define('MainScene', {
      superClass: 'DisplayScene',
+     //得点（敵が倒せるようにならない場合は削除される）
+     score: 0,
+     //ボタンを押してからの経過時間になる予定
+     time: 0,
      init: function() {
          this.superInit({
              width:700,
@@ -630,7 +708,7 @@ const TEST_STAGE = {
 
          this.player = this.stageManager.player;
          this.player.setGravity(0, 5);
-         this.score = 0;
+         
 
          this.camera = Camera({
              scene:this
@@ -643,6 +721,10 @@ const TEST_STAGE = {
          const keyboard = app.keyboard;
          const player = this.player;
          const stageManager = this.stageManager;
+
+
+         this.time += app.ticker.deltaTime;
+
          //initialize （滑ると操作性が悪いので止める）
          player.dx = 0;
 
@@ -662,18 +744,14 @@ const TEST_STAGE = {
 
 
          if(keyboard.getKey('left')){
-             player.dx = -21.1;
+             player.dx = -20;
          }
          if(keyboard.getKey('right')){
-             player.dx = 21.1;
+             player.dx = 20;
          }
          if(keyboard.getKeyDown('up') || jump === true){
 
              if(this.stageManager.checkEarthing(player) == true) {
-                 //地面と接触してると地面がねっとりしてて（yのベクトルを0にする）
-                 //ジャンプできないので
-                 //ちょっと「飛ばして」やっている
-                 player.y -= 5;
                  player.dy = -70;
              }
          }
@@ -687,6 +765,7 @@ const TEST_STAGE = {
 
      }
  });
+
 
 
  // メイン処理
@@ -705,10 +784,6 @@ const TEST_STAGE = {
      //widthとheightを書かない場合default値になってしまう
      let s = app.canvas.domElement.style;
      s.width = "56vh";
-     //高さ方向は，アスペクト比を揃える為に，autoを使っている．
-     //なんか知らんけどautoを指定すると内在サイズという概念にのっとって
-     //アス比一定で大きさが変わるらしい
-     //kwsk -> http://www6.plala.or.jp/go_west/nextcss/ref/article/calc_v.htm
      s.height = "auto";
      
      app.enableStats();
