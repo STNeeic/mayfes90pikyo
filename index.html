@@ -126,12 +126,25 @@
      blocklyDiv.style.top = y + 'px';
      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
- };
 
+     const div_w = blocklyArea.offsetWidth;
+
+
+
+ };
+ let initsvg = function(){
+     onresize();
+     Blockly.svgResize(workspace);
+     let scrollbarDoms = [];
+     scrollbarDoms.push.apply(scrollbarDoms, document.getElementsByClassName('blocklyScrollbarVertical'));
+     scrollbarDoms.push.apply(scrollbarDoms, document.getElementsByClassName('blocklyScrollbarHorizontal'));
+     scrollbarDoms.forEach(dom => dom.setAttribute('display', 'none'));
+     scrollbarDoms.forEach(dom => dom.setAttribute('display', 'block'));
+     Blockly.svgResize(workspace);
+ }
  //resize時に呼ばれるように
  window.addEventListener('resize', onresize, false);
- onresize();
- Blockly.svgResize(workspace);
+ setTimeout(initsvg, 300);
 
 
 
