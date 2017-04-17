@@ -60,7 +60,7 @@ body a{
     height: 75px;
     width: 100%;
     position: fixed;
-    background: #ffc33c;
+    background: white;
 
 
     /*border-bottom: 1px solid gray;*/
@@ -68,10 +68,6 @@ body a{
     padding: 13px 70px 5px 90px;
     align-items: center;
     box-shadow: 0 0 15px 0 #4262a0;
-}
-
-body .header a, body .header p{
-    color: white;
 }
 
 .header_img{
@@ -133,7 +129,7 @@ body .header a, body .header p{
         content: '';
         width: 0;
         height: 1px;
-        background-color: white;
+        background-color: black;
         transition: .3s;
         -webkit-transform: translateX(-50%);
         transform: translateX(-50%);
@@ -207,7 +203,8 @@ h1{
 .factor {
     font-size: 1.6rem;
     border-bottom: 1px solid gray;
-    padding: 75px 50px 50px 50px;
+    padding: 105px 50px 50px 50px;
+    margin-top: -75px;
 }
 
 .heading{
@@ -251,7 +248,7 @@ h1{
 
     -webkit-flex-direction: row; /* Safari */
     flex-direction:         row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-around;
 }
 .contents-box{
@@ -273,6 +270,24 @@ h3{
 }
 
 
+/*##############################*/
+/*access*/
+/*##############################*/
+
+.access-box{
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+
+    flex-direction: row;
+    justify-content: center;
+
+}
+.access-text{
+    text-align: left;
+    margin: 0 20px;
+    padding-top: 20px;
+}
 
 /*##############################*/
 /*footer*/
@@ -322,6 +337,7 @@ h3{
         font-size: 1.6rem;
         border-bottom: 1px solid gray;
         padding: 105px 10px 30px 10px;
+        margin-top: -75px;
     }
 
     .mobile{
@@ -404,6 +420,25 @@ h3{
     }
 
 
+    /*##############################*/
+    /*top*/
+    /*##############################*/
+
+    .top{
+        padding: 0 10px;
+    }
+
+    .top1{
+        font-size: 2rem;
+    }
+    h1{
+        font-size: 5rem;
+    }
+    @media (max-width: 320px) {
+        h1{
+            font-size: 4rem;
+        }
+    }
 
     /*##############################*/
     /*contents*/
@@ -419,9 +454,8 @@ h3{
 
         -webkit-flex-direction: column; /* Safari */
         flex-direction:         column;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         justify-content: space-around;
-        align-items: stretch;
     }
     .contents-box{
         width: 100%;
@@ -440,7 +474,26 @@ h3{
         margin-top: 30px;
     }
 
- 
+    /*##############################*/
+    /*access*/
+    /*##############################*/
+
+    .access-box{
+        display: -webkit-flex;
+        display: flex;
+        width: 100%;
+
+        flex-direction: column;
+        justify-content: center;
+
+    }
+    .map{
+        width: 100%;
+    }
+    .access-text{
+        text-align: center;
+    }
+
     /*##############################*/
     /*footer*/
     /*##############################*/
@@ -454,65 +507,4 @@ h3{
         line-height: 2;
         padding: 5px 10px;
     }
-}
-
-#contents .row {
-    margin-top: 75px;
-}
-
-#button-and-log {
-    height: calc(28vh - 52px);
-}
-
-.mainContents {
-    padding: 0;
-}
-
-
-@media (min-width: 768px)
-{
-    #phinaCanvas {
-        margin: 0 calc(25vw - 24vh);
-    }
-
-    #blocklyArea {
-        height: 72vh;
-        width: 40%;
-    }
-
-    #phinaDiv {
-        height: 72vh;
-    }
-}
-
-@media (max-width: 768px)
-{
-    #blocklyArea {
-        height: calc(100vh - 50px);
-    }
-
-}
-
-
-#button {
-    font-size: 30px;
-    color: #f5f5f5;
-    background-color: #00acc6;
-    transition: background-color 300ms 0s ease;
-    border: solid thin #c7b390;
-}
-
-#button:hover {
-    background-color: #00c8f8;
-    transition: all 300ms 0s ease;
-}
-
-#button[value="running"] {
-    background-color: #c43a4d;
-    transition: background-color 300ms 0s ease;
-}
-
-#button[value="running"]:hover {
-    background-color: #f54961;
-    transition: all 300ms 0s ease;
 }
