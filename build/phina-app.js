@@ -10,7 +10,8 @@
 'use strict';
 
 
-phina.globalize();phina.define('Block', {
+phina.globalize();
+phina.define('Block', {
     //とりあえずのブロック．
     //いい感じの画像があったら差し替えたい
      superClass: 'SpriteSheetWithOffset',
