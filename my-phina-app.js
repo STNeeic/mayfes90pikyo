@@ -783,10 +783,10 @@ const TEST_STAGE = {
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
      //widthとheightを書かない場合default値になってしまう
      let s = app.canvas.domElement.style;
-     s.width = "56vh";
+     s.width = "48vh";
      s.height = "auto";
      
-     app.enableStats();
+     //app.enableStats();
      // アプリケーション実行
      app.run();
  });

@@ -7,7 +7,7 @@
     <meta name="author" content="EEIC">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="Lib/blockly_compressed.js"></script>
+<script src="blockly-master/blockly_compressed.js"></script>
 <script src="blockly-master/msg/js/ja.js"></script>
 <script src="Lib/blocks_compressed.js"></script>
 <script src="Lib/javascript_compressed.js"></script>
@@ -15,9 +15,9 @@
 <script src="phinajs/build/phina.js"></script>
 <!-- bootstrapがjqueryを必要としているので（d3もjqueryに変えるかも） -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
 
 <xml id="toolbox" style="display: none; trashcan: true">
+    <category name="テスト">
     <block type="controls_if"></block>
     <block type="controls_repeat_ext"></block>
     <block type="logic_compare"></block>
@@ -29,6 +29,7 @@
     <block type="jump"></block>
     <block type="go_left"></block>
     <block type="go_right"></block>
+    </category>
 </xml>
 
 <xml id="startBlock">
@@ -36,94 +37,70 @@
 </xml>
 
 
+<link rel="stylesheet" href="Lib/reset.css">
 <link rel="stylesheet" type="text/css" href="style.css">
-<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
 
 <script src="my-blockly-def.js"></script>
 </head>
 
 
 <body>
-   <nav class="navbar navbar-default navbar-fixed-top">
-       <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+ <header class="header">
+    <a href="#top" class="header-link">
+    <img class="header_img" src="./images/white_bulb.png" alt="eeic">
+    <div class="top-text">
+      <p class="up">EEIC 五月祭展示</p>
+      <p class="down">プログラミング教室</p>
+    </div>
+    </a>
 
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
+    <!--menu-triggerをglobal-navから外す作戦あり-->
+    <div class="menu-trigger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="global-nav">
+      <ul class="global-nav-list">
+        <li class="nav-item"><a href="#about" class="nav">ないよう</a></li>
+        <li class="nav-item"><a href="#contents" class="nav">ヒント</a></li>
+        <li class="nav-item"><a href="#access" class="nav">ACCESS</a></li>
+      </ul>
+    </nav>
+  </header>
 
-          <a class="navbar-brand" href="#">ピ</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-              <li class="active"><a href="#">タイトル</a></li>
-
-              <li><a href="#about">おはなし</a></li>
-
-            <li><a href="#contact">せつめいしょ</a></li>
-            <li class="dropdown">
-
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ヒント <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-
-                <li><a href="#">if文とか?</a></li>
-                <li><a href="#">forとか?</a></li>
-                <li><a href="#">HOGEHOGE</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-
-
-              <li><a href="../navbar-static-top/">ステージ せんたく</a></li>
-
-              <li class="active"><a href="./">ステージ1-1 <span class="sr-only">(current)</span></a></li>
-
-          </ul>
-
-        </div><!--/.nav-collapse -->
-       </div>
-
-   </nav>
-
-    <div id="contents" class="container-fluid">
-        <div class="row">
-            <div id="blocklyArea" class="mainContents col-md-7">
+    <div id="contents" class="factor">
+        <div class="contents-wrapper">
+            <div class="blockly-side">
+            <div id="blocklyArea" class="">
             </div>
-            <div id="phinaDiv" class="mainContents col-md-5">
+            <p>
+                ここにログが出るよ
+            </p>
+            </div>
+            <div id="phinaDiv">
 
-                <canvas id="phinaCanvas" class="mainContents">
+                <canvas id="phinaCanvas" class="">
 
                 </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div id="buttonArea" class="col-md-4 col-md-offset-3">
-                <div id="button" class="btn btn-lg" value="stop">スタート</div>
-            </div>
-            <div id="alert-area" class="col-md-5">
-                
+
+                <button type="button" id="button" class="button" value="stop">スタート</button>
             </div>
         </div>
     </div>
 <div id="blocklyDiv" style="position: absolute"></div>
 
-<footer></footer>
 
 <script type="text/javascript">
  let blocklyArea = document.getElementById('blocklyArea');
  let blocklyDiv = document.getElementById('blocklyDiv');
  var workspace = Blockly.inject(blocklyDiv ,
-				                        {toolbox: document.getElementById('toolbox')});
+				                        {toolbox: document.getElementById('toolbox'),
+                                 scrollbar: true,
+                                 trashcan: true});
+
+ var toolbox = workspace.toolbox_;
+
 
  //初めからstartblockがworkspaceに置いてあるようにする
  Blockly.Xml.domToWorkspace(document.getElementById('startBlock'),
@@ -145,12 +122,25 @@
      blocklyDiv.style.top = y + 'px';
      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
- };
 
+     const div_w = blocklyArea.offsetWidth;
+
+
+
+ };
+ let initsvg = function(){
+     onresize();
+     Blockly.svgResize(workspace);
+     let scrollbarDoms = [];
+     scrollbarDoms.push.apply(scrollbarDoms, document.getElementsByClassName('blocklyScrollbarVertical'));
+     scrollbarDoms.push.apply(scrollbarDoms, document.getElementsByClassName('blocklyScrollbarHorizontal'));
+     scrollbarDoms.forEach(dom => dom.setAttribute('display', 'none'));
+     scrollbarDoms.forEach(dom => dom.setAttribute('display', 'block'));
+     Blockly.svgResize(workspace);
+ }
  //resize時に呼ばれるように
  window.addEventListener('resize', onresize, false);
- onresize();
- Blockly.svgResize(workspace);
+ setTimeout(initsvg, 300);
 
 
 
@@ -160,15 +150,47 @@
  button.on("click", function(e) {
      if(button.attr("value") === "running") {
          button.attr("value", "stop")
-         .text("スタート");
+               .text("スタート");
      } else {
          button.attr("value", "running")
-         .text("リセット");
+               .text("リセット");
      }
  });
 
+ 
 </script>
+<script type="text/javascript">
+ $(function(){
+     $('a[href^="#"]').click(function(){
+         var speed = 300;
+         var href= $(this).attr("href");
+         var target = $(href == "#" || href == "" ? 'html' : href);
+         var position = target.offset().top;
+         $("html, body").animate({scrollTop:position}, speed, "swing");
+         return false;
+     });
+ });
 
+
+ $(function(){
+     $('div.menu-trigger').click(function(){
+         $('ul.global-nav-list').slideToggle(300);
+     })
+ });
+
+ $(function(){
+     $('a.nav').click(function(){
+         $('ul.global-nav-list').slideUp(100);
+     });
+ });
+
+ $(function(){
+     $('a.header-link').click(function(){
+         $('ul.global-nav-list').slideUp(100);
+     });
+ });
+
+</script>
 <script src="my-phina-app.js"></script>
 </body>
 </html>
