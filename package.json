@@ -1,0 +1,31 @@
+{
+  "name": "mayfes90pikyo",
+  "version": "1.0.0",
+  "description": "五月祭のプログラミング教室用のサイト",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STNeeic/mayfes_pirorirarin.git"
+  },
+  "keywords": [
+    "mayfes",
+    "pikyo"
+  ],
+  "author": "EEIC mayfes team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/STNeeic/mayfes_pirorirarin/issues"
+  },
+  "homepage": "https://github.com/STNeeic/mayfes_pirorirarin#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-helper": "^1.0.3"
+  }
+}
