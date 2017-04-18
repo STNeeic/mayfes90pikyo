@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-/*所々要素中でコメントアウトしてるのはサイトには書いてあったけどWebstormがエラー吐いたやつです。*/
-
 /*##############################*/
 /*html*/
 /*##############################*/
@@ -60,11 +58,11 @@ body a{
     height: 75px;
     width: 100%;
     position: fixed;
+
     background: #ffc33c;
 
-
     /*border-bottom: 1px solid gray;*/
-    z-index: 1;
+    z-index: 100;
     padding: 13px 70px 5px 90px;
     align-items: center;
     box-shadow: 0 0 15px 0 #4262a0;
@@ -144,70 +142,16 @@ body .header a, body .header p{
     }
 }
 /*##############################*/
-/*top*/
-/*##############################*/
-
-.top{
-    background: url("../images/top.jpg") center;
-    background-size: cover;
-    color: white;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    z-index: 0;
-
-    display: -webkit-flex;
-    display: flex;
-    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
-    align-items: center; /* 縦方向中央揃え */
-    -webkit-justify-content: center; /* 横方向中央揃え（Safari用） */
-    justify-content: center; /* 横方向中央揃え */
-    flex-direction: column;
-}
-.top:before{
-    content: '';
-    background: inherit;/*.topで設定した背景画像を継承する*/
-    -webkit-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-    position: absolute; /*ブラー効果で画像の端がボヤけた分だけ位置を調整*/
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    z-index: -1;/*重なり順序を一番下にしておく*/
-}
-
-.top-img{
-    height: 92px;
-}
-.top-text{
-    font-weight: bold;
-}
-
-.eeic{
-    letter-spacing: 13px;
-    font-size: 3.2rem;
-    margin-top: 5px;
-}
-.top1{
-    font-size: 2.5rem;
-}
-h1{
-    font-size: 8rem;
-    letter-spacing: 12px;
-    line-height: 1.2;
-    text-align: center;
-}
-
-/*##############################*/
 /*about contents footer -> factor*/
 /*##############################*/
 
 .factor {
     font-size: 1.6rem;
-    border-bottom: 1px solid gray;
-    padding: 75px 50px 50px 50px;
+    padding: 75px 0px 0px 0px;
+}
+
+.factor + .factor{
+    padding: 0px 0px 0px 0px;
 }
 
 .heading{
@@ -237,6 +181,38 @@ h1{
     margin-bottom: 20px;
 }
 
+/*button*/
+
+.button {
+    font-size: 30px;
+    color: #f5f5f5;
+    background-color: #00acc6;
+    transition: background-color 300ms 0s ease;
+    border: solid thin #c7b390;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #00c8f8;
+    transition: all 300ms 0s ease;
+}
+
+.button[value="running"] {
+    background-color: #c43a4d;
+    transition: background-color 300ms 0s ease;
+}
+
+.button[value="running"]:hover {
+    background-color: #f54961;
+    transition: all 300ms 0s ease;
+}
+
+.button:focus {
+    outline: none;
+}
+
+
 /*##############################*/
 /*contents*/
 /*##############################*/
@@ -246,12 +222,12 @@ h1{
     display: -webkit-flex;
     display: flex;
     width: 100%;
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-top: 15px;
+    margin-bottom: 0px;
 
     -webkit-flex-direction: row; /* Safari */
     flex-direction:         row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-around;
 }
 .contents-box{
@@ -320,8 +296,7 @@ h3{
     }
     .factor {
         font-size: 1.6rem;
-        border-bottom: 1px solid gray;
-        padding: 105px 10px 30px 10px;
+        padding: 75px 10px 30px 10px;
     }
 
     .mobile{
@@ -342,7 +317,7 @@ h3{
     }
 
     .menu-trigger{
-        border-left: 1px solid #cccccc;
+        border-left: 1px solid white;
         height: 56px;
         width: 56px;
         padding: 8px;
@@ -355,7 +330,7 @@ h3{
     .menu-trigger span{
         display: block;
         width: 100%;
-        background-color: #cccccc;
+        background-color: white;
         height: 4px;
     }
 
@@ -365,7 +340,7 @@ h3{
         flex-direction: column;
         flex-wrap: wrap-reverse;
 
-        width: 100%;
+        width: 100vw;
         margin-top: 9px;
         margin-left: -10px;
 
@@ -388,10 +363,10 @@ h3{
         display: block;
         height: 60px;
         width: 100%;
-        border-bottom: 1px solid gray;
-        border-left: 1px solid gray;
-        border-right: 1px solid gray;
-        background-color: white;
+        border-bottom: 1px solid white;
+        border-left: 1px solid white;
+        border-right: 1px solid white;
+        background-color: #ffc33c;
     }
 
     .global-nav .nav-item a{
@@ -414,7 +389,7 @@ h3{
         display: -webkit-flex;
         display: flex;
         width: 100%;
-        margin-top: 40px;
+        margin-top: 20px;
         margin-bottom: 30px;
 
         -webkit-flex-direction: column; /* Safari */
@@ -422,17 +397,6 @@ h3{
         flex-wrap: wrap;
         justify-content: space-around;
         align-items: stretch;
-    }
-    .contents-box{
-        width: 100%;
-        margin-bottom: 40px;
-    }
-    .contents-img{
-        width: 75%;
-    }
-
-    .contents-text{
-        width: 100%;
     }
     h3{
         font-size: 2.2rem;
@@ -456,63 +420,36 @@ h3{
     }
 }
 
-#contents .row {
-    margin-top: 75px;
-}
 
-#button-and-log {
-    height: calc(28vh - 52px);
-}
 
-.mainContents {
-    padding: 0;
+#phinaCanvas {
+    display: block;
 }
-
 
 @media (min-width: 768px)
 {
-    #phinaCanvas {
-        margin: 0 calc(25vw - 24vh);
-    }
 
     #blocklyArea {
         height: 72vh;
-        width: 40%;
+        width: 60vw;
     }
 
     #phinaDiv {
         height: 72vh;
     }
+
 }
 
 @media (max-width: 768px)
 {
     #blocklyArea {
-        height: calc(100vh - 50px);
+        height: calc(100vh - 75px);
     }
 
+    #phinaCanvas {
+        margin: 0 auto;
+        margin-bottom: 20px;
+    }
 }
 
 
-#button {
-    font-size: 30px;
-    color: #f5f5f5;
-    background-color: #00acc6;
-    transition: background-color 300ms 0s ease;
-    border: solid thin #c7b390;
-}
-
-#button:hover {
-    background-color: #00c8f8;
-    transition: all 300ms 0s ease;
-}
-
-#button[value="running"] {
-    background-color: #c43a4d;
-    transition: background-color 300ms 0s ease;
-}
-
-#button[value="running"]:hover {
-    background-color: #f54961;
-    transition: all 300ms 0s ease;
-}

@@ -37,8 +37,8 @@
 </xml>
 
 
-<link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="Lib/reset.css">
+<link rel="stylesheet" type="text/css" href="style.css">
 
 <script src="my-blockly-def.js"></script>
 </head>
@@ -71,29 +71,25 @@
 
     <div id="contents" class="factor">
         <div class="contents-wrapper">
-            <div id="blocklyArea" class="mainContents col-sm-6">
+            <div class="blockly-side">
+            <div id="blocklyArea" class="">
             </div>
-            <div id="phinaDiv" class="mainContents col-sm-6">
+            <p>
+                ここにログが出るよ
+            </p>
+            </div>
+            <div id="phinaDiv">
 
-                <canvas id="phinaCanvas" class="mainContents">
+                <canvas id="phinaCanvas" class="">
 
                 </canvas>
-            </div>
-        </div>
-    </div>
-    <div id="button-and-log" class="container-fluid">
-        <div class="row">
-            <div id="buttonArea" class="col-sm-6">
-                <div id="button" class="btn btn-lg" value="stop">スタート</div>
-            </div>
-            <div id="alert-area" class="col-sm-6">
-                
+
+                <button type="button" id="button" class="button" value="stop">スタート</button>
             </div>
         </div>
     </div>
 <div id="blocklyDiv" style="position: absolute"></div>
 
-<footer></footer>
 
 <script type="text/javascript">
  let blocklyArea = document.getElementById('blocklyArea');
@@ -161,8 +157,40 @@
      }
  });
 
+ 
 </script>
+<script type="text/javascript">
+ $(function(){
+     $('a[href^="#"]').click(function(){
+         var speed = 300;
+         var href= $(this).attr("href");
+         var target = $(href == "#" || href == "" ? 'html' : href);
+         var position = target.offset().top;
+         $("html, body").animate({scrollTop:position}, speed, "swing");
+         return false;
+     });
+ });
 
+
+ $(function(){
+     $('div.menu-trigger').click(function(){
+         $('ul.global-nav-list').slideToggle(300);
+     })
+ });
+
+ $(function(){
+     $('a.nav').click(function(){
+         $('ul.global-nav-list').slideUp(100);
+     });
+ });
+
+ $(function(){
+     $('a.header-link').click(function(){
+         $('ul.global-nav-list').slideUp(100);
+     });
+ });
+
+</script>
 <script src="my-phina-app.js"></script>
 </body>
 </html>
