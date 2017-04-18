@@ -17,15 +17,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 <xml id="toolbox" style="display: none; trashcan: true">
-    <category name="テスト">
+    <category name="ロジック">
     <block type="controls_if"></block>
     <block type="controls_repeat_ext"></block>
     <block type="logic_compare"></block>
+    </category>
+    <category name="さんすう">
     <block type="math_number"></block>
     <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="is_cliff"></block>
+    </category>
+    <category name="もじ">
+        <block type="text"></block>
     <block type="text_print"></block>
+    </category>
+    <category name="はんてい">
+        <block type="is_cliff"></block>
+    </category>
+    <category name="いどう">
     <block type="jump"></block>
     <block type="go_left"></block>
     <block type="go_right"></block>
@@ -40,7 +48,7 @@
 <link rel="stylesheet" href="Lib/reset.css">
 <link rel="stylesheet" type="text/css" href="style.css">
 
-<script src="my-blockly-def.js"></script>
+<script src="build/blockly-def.js"></script>
 </head>
 
 
@@ -75,7 +83,7 @@
             <div id="blocklyArea" class="">
             </div>
             <p>
-                ここにログが出るよ
+                ここにログが出るよ（まだ書いてないよ）
             </p>
             </div>
             <div id="phinaDiv">
@@ -90,107 +98,9 @@
     </div>
 <div id="blocklyDiv" style="position: absolute"></div>
 
-
-<script type="text/javascript">
- let blocklyArea = document.getElementById('blocklyArea');
- let blocklyDiv = document.getElementById('blocklyDiv');
- var workspace = Blockly.inject(blocklyDiv ,
-				                        {toolbox: document.getElementById('toolbox'),
-                                 scrollbar: true,
-                                 trashcan: true});
-
- var toolbox = workspace.toolbox_;
-
-
- //初めからstartblockがworkspaceに置いてあるようにする
- Blockly.Xml.domToWorkspace(document.getElementById('startBlock'),
-                            workspace);
-
- let onresize = function(e) {
-     //blocklyAreaの位置を計算する
-     var element = blocklyArea;
-     var x = 0;
-     var y = 0;
-     do {
-         x += element.offsetLeft;
-         y += element.offsetTop;
-         element = element.offsetParent;
-     } while (element);
-
-     // Position blocklyDiv over blocklyArea.
-     blocklyDiv.style.left = x + 'px';
-     blocklyDiv.style.top = y + 'px';
-     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-
-     const div_w = blocklyArea.offsetWidth;
-
-
-
- };
- let initsvg = function(){
-     onresize();
-     Blockly.svgResize(workspace);
-     let scrollbarDoms = [];
-     scrollbarDoms.push.apply(scrollbarDoms, document.getElementsByClassName('blocklyScrollbarVertical'));
-     scrollbarDoms.push.apply(scrollbarDoms, document.getElementsByClassName('blocklyScrollbarHorizontal'));
-     scrollbarDoms.forEach(dom => dom.setAttribute('display', 'none'));
-     scrollbarDoms.forEach(dom => dom.setAttribute('display', 'block'));
-     Blockly.svgResize(workspace);
- }
- //resize時に呼ばれるように
- window.addEventListener('resize', onresize, false);
- setTimeout(initsvg, 300);
-
-
-
- //ボタンを押したらBlocklyでゲームを動かすかどうかを切り替える
- var button = d3.select("#button");
-
- button.on("click", function(e) {
-     if(button.attr("value") === "running") {
-         button.attr("value", "stop")
-               .text("スタート");
-     } else {
-         button.attr("value", "running")
-               .text("リセット");
-     }
- });
-
- 
-</script>
-<script type="text/javascript">
- $(function(){
-     $('a[href^="#"]').click(function(){
-         var speed = 300;
-         var href= $(this).attr("href");
-         var target = $(href == "#" || href == "" ? 'html' : href);
-         var position = target.offset().top;
-         $("html, body").animate({scrollTop:position}, speed, "swing");
-         return false;
-     });
- });
-
-
- $(function(){
-     $('div.menu-trigger').click(function(){
-         $('ul.global-nav-list').slideToggle(300);
-     })
- });
-
- $(function(){
-     $('a.nav').click(function(){
-         $('ul.global-nav-list').slideUp(100);
-     });
- });
-
- $(function(){
-     $('a.header-link').click(function(){
-         $('ul.global-nav-list').slideUp(100);
-     });
- });
-
-</script>
-<script src="my-phina-app.js"></script>
+<!-- Domを操作する必要がある処理はここに書く -->
+<script src="build/html-behavior.js"></script>
+<!-- phina.globalize()した後に書く処理はここに書く -->
+<script src="./build/phina-app.js"></script>
 </body>
 </html>

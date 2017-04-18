@@ -93,8 +93,6 @@ phina.define('FrameAnimationWithState', {
 });
 
 
-const BLOCK_SIZE = 70;
-
 phina.define('SpriteSheetWithOffset',{
     //SpriteSheetにoffsetが付いていた時用のSprite
     superClass: 'Sprite',
@@ -438,7 +436,7 @@ phina.define('ResultBoard',{
     next: function(e){
         console.log("GOTO NEXTSTAGE");
     }
-})
+});
 
 
 phina.define('Goal',{
