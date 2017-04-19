@@ -61,13 +61,13 @@ phina.define('Player',{
 
 
     },
-    dead: function(){
+    die: function(){
         this.setInteractive(false);
         this.sprite.fa.state = "dying";
         this.setGravity(0,0);
         this.tweener.play()
-            .by({y: -600},800, "easeOutCubic")
-            .by({y: 600}, 800, "easeInQuad")
+            .by({y: -800},800, "easeOutCubic")
+            .by({y: 800}, 800, "easeInQuad")
             .wait(1000)
             .call(() => {
                 this.setInteractive(true);

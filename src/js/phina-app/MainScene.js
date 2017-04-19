@@ -100,7 +100,7 @@ const TEST_STAGE = {
          }
 
          if(keyboard.getKey('d')){
-             player.dead(); //for debbug
+             player.die(); //for debbug
          }
 
          if(keyboard.getKey('left')){
@@ -123,6 +123,10 @@ const TEST_STAGE = {
          stageManager.move(player);
          this.camera.follow();
 
+         //ステージの高さより上にいたら死亡する
+         if(player.y > stageManager.stageData.height + player.height){
+             player.die();
+         }
      }
  });
 

@@ -6,14 +6,9 @@ phina.define('StageManager', {
     superClass: 'DisplayElement',
     player: null,
     goal: null,
+    stageData: null,
     init: function(options){
         this.superInit();
-        //item全体のずれの初期位置（0になる）
-        this._totalx = 0;
-        this._totaly = 0;
-        //こいつの位置は絶対に(0,0)で固定する（理由は上述）
-        this.x = 0;
-        this.y = 0;
         this.scene = options.scene || null;
     },
 
@@ -25,7 +20,8 @@ phina.define('StageManager', {
     },
 
     loadStage: function(stageData) {
-        //stageDataを用いて
+        this.stageData = stageData;
+
         const height = stageData.height;
         const width = stageData.width;
         const block_size = stageData.blockSize;
@@ -45,6 +41,7 @@ phina.define('StageManager', {
             columns: y_columns,
             offset: Math.ceil(block_size / 2)
         });
+
 
         const builder = ItemBuilder();
         //dataに基づいてステージを作成
@@ -154,33 +151,6 @@ phina.define('StageManager', {
         this.children.forEach(item => item.position = item.startPos.clone());
         this.player.position = this.player.startPos.clone();
         this.goal.firstTime = true;
-    },
-    _accessor:{
-        //子供の位置を全部動かす為のaccesor
-        itemX:{
-            get:function(){
-                return this._totalx;
-            },
-            set:function(v){
-                this._totalx = v;
-                this.children.forEach(function(block,index){
-                    block.x = block.origX + v;
-                });
-
-            }
-        },
-        itemY:{
-            get:function(){
-                return this._totalx;
-            },
-            set:function(v){
-                this._totaly = v;
-                this.children.forEach(function(block,index){
-                    block.y = block.origY + v;
-                });
-
-            }
-        }
     }
 });
 
