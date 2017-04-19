@@ -46,7 +46,7 @@ const TEST_STAGE = {
          this.label = Label('かかったじかん：').addChildTo(this);
          this.label.align = 'right';
          this.label.x = this.gridX.span(15); // x 座標
-         this.label.y = this.gridY.span(2); // y 座標
+         this.label.y = this.gridY.span(1); // y 座標
          this.label.fill = '#444'; // 塗りつぶし色
 
          this.stageManager = StageManager({
@@ -84,10 +84,15 @@ const TEST_STAGE = {
 
          if(button.attr("value") == "running"){
              const start_block = workspace.getBlockById("START");
+             //BlocklyのNameSpaceの初期化
+             //Blockly.JavaScript.init(workspace);
+             let code = "";
              try {
-                 eval(Blockly.JavaScript.blockToCode(start_block));
+                 code = Blockly.JavaScript.blockToCode(start_block);
+                 eval(code);
              } catch(e){
                  console.log(e);
+                 $("#logArea > p").text(e.name + ":" + e.message);
              }
          }
 
