@@ -465,4 +465,15 @@ h3{
     }
 }
 
-
+.stage-input {
+    position: absolute;
+    top: 10vh;
+    left: 30vw;
+    margin: 0;
+    width: 40vw;
+    height: 30vw;
+    background-color: white;
+    border: medium solid green;
+    border-radius: 10px;
+    z-index: 114514;
+}

@@ -28,7 +28,7 @@ const TEST_STAGE = {
      score: 0,
      //ボタンを押してからの経過時間になる予定
      time: 0,
-     init: function() {
+     init: function(options) {
          this.superInit({
              width:700,
              height:1050
@@ -52,7 +52,12 @@ const TEST_STAGE = {
          this.stageManager = StageManager({
              scene: this
          });
-         this.stageManager.loadStage(TEST_STAGE);
+
+         let stageData = TEST_STAGE;
+         if( options.stageData != null) {
+             stageData = options.stageData;
+         }
+         this.stageManager.loadStage(stageData);
 
 
          this.player = this.stageManager.player;
