@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Programming game with Blockly">
+    <meta name="keywords" content="Blockly,phina.js">
+    <meta name="author" content="EEIC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="blockly-master/blockly_compressed.js"></script>
+<script src="blockly-master/msg/js/ja.js"></script>
+<script src="Lib/blocks_compressed.js"></script>
+<script src="Lib/javascript_compressed.js"></script>
+<script src="Lib/d3.js"></script>
+<script src="phinajs/build/phina.js"></script>
+<!-- bootstrapがjqueryを必要としているので（d3もjqueryに変えるかも） -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<xml id="toolbox" style="display: none; trashcan: true">
+    <category name="ロジック">
+    <block type="controls_if"></block>
+    <block type="controls_repeat"></block>
+    <block type="logic_compare"></block>
+    </category>
+    <category name="さんすう">
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    </category>
+    <category name="もじ">
+        <block type="text"></block>
+    <block type="text_print"></block>
+    </category>
+    <category name="はんてい">
+        <block type="is_cliff"></block>
+    </category>
+    <category name="いどう">
+    <block type="jump"></block>
+    <block type="go_left"></block>
+    <block type="go_right"></block>
+    </category>
+</xml>
+
+<xml id="startBlock">
+    <block type="run_below" id="START" x="20" y="20" deletable="false" movable="false"></block>
+</xml>
+
+
+<link rel="stylesheet" href="Lib/reset.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script src="build/blockly-def.js"></script>
+</head>
+
+
+<body>
+ <header class="header">
+    <a href="#top" class="header-link">
+    <img class="header_img" src="./images/white_bulb.png" alt="eeic">
+    <div class="top-text">
+      <p class="up">EEIC 五月祭展示</p>
+      <p class="down">プログラミング教室</p>
+    </div>
+    </a>
+
+    <!--menu-triggerをglobal-navから外す作戦あり-->
+    <div class="menu-trigger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="global-nav">
+      <ul class="global-nav-list">
+        <li class="nav-item"><a href="#about" class="nav">ないよう</a></li>
+        <li class="nav-item"><a href="#contents" class="nav">ヒント</a></li>
+        <li class="nav-item"><a href="#access" class="nav">ACCESS</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <div id="contents" class="factor">
+        <div class="contents-wrapper">
+            <div id="phinaDiv">
+
+                <canvas id="phinaCanvas" class="">
+
+                </canvas>
+
+                <button type="button" id="button" class="button" value="stop">スタート</button>
+            </div>
+
+            <div class="blockly-side">
+            <div id="blocklyArea" class="">
+            </div>
+            <div id="logArea">
+                <p>
+                    ここにログが出るよ（まだ書いてないよ）
+                </p>
+            </div>
+            </div>
+            </div>
+        </div>
+        <div id="blocklyDiv" style="position: absolute"></div>
+        <div class="stage-input hide">
+            <p>ここにstageDataを入れてください</p>
+            <textarea rows="20" cols="60" autofocus="true" placeholder="JSON形式のデータを入力してください"></textarea>
+        </div>
+<!-- Domを操作する必要がある処理はここに書く -->
+<script src="build/html-behavior.js"></script>
+<!-- phina.globalize()した後に書く処理はここに書く -->
+<script src="./build/phina-app.js"></script>
+</body>
+</html>
