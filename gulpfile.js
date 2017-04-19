@@ -23,7 +23,7 @@ let header = require('gulp-header');
 gulp.task('default', ['concat']);
 gulp.task('dev', ['watch']);
 
-gulp.task('concat', ['concat-blockly-def', 'concat-html-behavior', 'concat-phina-app']);
+gulp.task('concat', ['concat-blockly-def', 'concat-html-behavior', 'concat-phina-app', 'concat-editor-app']);
 
 gulp.task('concat-phina-app', function(){
     return gulp.src('./src/js/phina-app/*.js')
@@ -47,6 +47,15 @@ gulp.task('concat-html-behavior', function(){
     return gulp.src('./src/js/html-behavior/*.js')
         .pipe(concat('html-behavior.js'))
         .pipe(header(banner, {
+            pkg: pkg
+        }))
+        .pipe(gulp.dest('./build/'));
+});
+
+gulp.task('concat-editor-app', function(){
+    return gulp.src('./src/js/editor-app/*.js')
+        .pipe(concat('editor-app.js'))
+        .pipe(header(banner + globalize, {
             pkg: pkg
         }))
         .pipe(gulp.dest('./build/'));
