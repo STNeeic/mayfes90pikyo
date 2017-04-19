@@ -190,7 +190,7 @@ body .header a, body .header p{
     transition: background-color 300ms 0s ease;
     border: solid thin #c7b390;
     border-radius: 10px;
-    margin-top: 20px;
+    margin: 20px 0px;
 }
 
 .button:hover {
@@ -424,6 +424,23 @@ h3{
 
 #phinaCanvas {
     display: block;
+    margin: 0 auto;
+}
+
+#logArea {
+    width: 100%;
+    overflow: scroll;
+    border: dashed medium #f54961;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: transparent;
+}
+
+#logArea p {
+    text-align: left;
+    margin-top: 10px;
+    overflow: scroll;
+    display: block;
 }
 
 @media (min-width: 768px)
@@ -432,23 +449,19 @@ h3{
     #blocklyArea {
         height: 72vh;
         width: 60vw;
+        flex: 1 1 auto;
     }
 
     #phinaDiv {
         height: 72vh;
+        flex: 1 1 auto;
     }
 
-}
 
 @media (max-width: 768px)
 {
     #blocklyArea {
         height: calc(100vh - 75px);
-    }
-
-    #phinaCanvas {
-        margin: 0 auto;
-        margin-bottom: 20px;
     }
 }
 

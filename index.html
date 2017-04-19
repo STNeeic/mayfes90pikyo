@@ -19,7 +19,7 @@
 <xml id="toolbox" style="display: none; trashcan: true">
     <category name="ロジック">
     <block type="controls_if"></block>
-    <block type="controls_repeat_ext"></block>
+    <block type="controls_repeat"></block>
     <block type="logic_compare"></block>
     </category>
     <category name="さんすう">
@@ -79,13 +79,6 @@
 
     <div id="contents" class="factor">
         <div class="contents-wrapper">
-            <div class="blockly-side">
-            <div id="blocklyArea" class="">
-            </div>
-            <p>
-                ここにログが出るよ（まだ書いてないよ）
-            </p>
-            </div>
             <div id="phinaDiv">
 
                 <canvas id="phinaCanvas" class="">
@@ -94,10 +87,19 @@
 
                 <button type="button" id="button" class="button" value="stop">スタート</button>
             </div>
-        </div>
-    </div>
-<div id="blocklyDiv" style="position: absolute"></div>
 
+            <div class="blockly-side">
+            <div id="blocklyArea" class="">
+            </div>
+                <div id="logArea">
+            <p>
+                ここにログが出るよ（まだ書いてないよ）
+            </p>
+            </div>
+            </div>
+            </div>
+        </div>
+        <div id="blocklyDiv" style="position: absolute"></div>
 <!-- Domを操作する必要がある処理はここに書く -->
 <script src="build/html-behavior.js"></script>
 <!-- phina.globalize()した後に書く処理はここに書く -->
