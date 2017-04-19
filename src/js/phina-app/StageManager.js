@@ -20,6 +20,7 @@ phina.define('StageManager', {
     addItem: function(v) {
         //子供に登録する際は，最初の位置を覚える必要があるので
         //この関数を用いる．
+        v.startPos = v.position.clone();
         this.addChild(v);
     },
 
@@ -119,6 +120,10 @@ phina.define('StageManager', {
     },
     move : function(element){
         //あるエレメントを，当たり判定を考慮しながら動かす
+        if(!element.interactive){
+            //動かないもののはずなので抜ける
+            return;
+        }
         let near_items = this.children.sort((a, b) => {
                   return this.calcDistance(element, a) - this.calcDistance(element, b);
         });
@@ -138,12 +143,17 @@ phina.define('StageManager', {
                     }
                 }
         }
-        
+
 
         for(let i = 0; i < reactable_item_num; i++) {
             near_items[i].reactTo(element, scene);
         }
 
+    },
+    retry: function(){
+        this.children.forEach(item => item.position = item.startPos.clone());
+        this.player.position = this.player.startPos.clone();
+        this.goal.firstTime = true;
     },
     _accessor:{
         //子供の位置を全部動かす為のaccesor

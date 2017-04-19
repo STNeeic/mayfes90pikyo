@@ -49,18 +49,16 @@ phina.define('ResultBoard',{
         min = min > 0 ? min + "ふん" : "";
         return min + sec+ "びょう" + millsec;
     },
-    retry: function(e){
+    retry:function(e) {
+        //この時のthisはl_buttonなので注意!!!
         console.log("RESTART");
-        const board = this.board;
+        this.parent.retry();
+        this.board.removeAll();
+    },
+    removeAll: function(){
+        this.l_button.remove();
+        this.r_button.remove();
         this.remove();
-        board.r_button.remove();
-        board.scene.time = 0;
-        let player = board.scene.player;
-        player.position = player.startPos.clone();
-
-        board.scene.camera.follow();
-        board.scene.stageManager.goal.firstTime = true;
-        board.remove();
     },
     next: function(e){
         console.log("GOTO NEXTSTAGE");

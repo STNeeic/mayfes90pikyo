@@ -65,7 +65,10 @@ const TEST_STAGE = {
 
          console.log("GAME START");
      },
-
+     retry: function(){
+         this.time = 0;
+         this.stageManager.retry();
+     },
      update: function(app) {
          const keyboard = app.keyboard;
          const player = this.player;
@@ -96,6 +99,9 @@ const TEST_STAGE = {
              }
          }
 
+         if(keyboard.getKey('d')){
+             player.dead(); //for debbug
+         }
 
          if(keyboard.getKey('left')){
              player.dx = -20;

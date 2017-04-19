@@ -289,7 +289,10 @@ const TEST_STAGE = {
 
          console.log("GAME START");
      },
-
+     retry: function(){
+         this.time = 0;
+         this.stageManager.retry();
+     },
      update: function(app) {
          const keyboard = app.keyboard;
          const player = this.player;
@@ -320,6 +323,9 @@ const TEST_STAGE = {
              }
          }
 
+         if(keyboard.getKey('d')){
+             player.dead(); //for debbug
+         }
 
          if(keyboard.getKey('left')){
              player.dx = -20;
@@ -399,6 +405,8 @@ phina.define('Player',{
 
          this.sprite.fa = FrameAnimationWithState().setup(player_ss).attachTo(this.sprite);
 
+         this.setInteractive(true);
+
      },
     setVelocity: function(x, y){
         //forceがvelocityをセットする関数である
@@ -429,6 +437,21 @@ phina.define('Player',{
         }
 
 
+    },
+    dead: function(){
+        this.setInteractive(false);
+        this.sprite.fa.state = "dying";
+        this.setGravity(0,0);
+        this.tweener.play()
+            .by({y: -600},800, "easeOutCubic")
+            .by({y: 600}, 800, "easeInQuad")
+            .wait(1000)
+            .call(() => {
+                this.setInteractive(true);
+                this.setGravity(0,5);
+                this.parent.parent.retry();
+                this.tweener.stop();
+            });
     },
     omitOptions:function(){
         return {
@@ -501,18 +524,16 @@ phina.define('ResultBoard',{
         min = min > 0 ? min + "ふん" : "";
         return min + sec+ "びょう" + millsec;
     },
-    retry: function(e){
+    retry:function(e) {
+        //この時のthisはl_buttonなので注意!!!
         console.log("RESTART");
-        const board = this.board;
+        this.parent.retry();
+        this.board.removeAll();
+    },
+    removeAll: function(){
+        this.l_button.remove();
+        this.r_button.remove();
         this.remove();
-        board.r_button.remove();
-        board.scene.time = 0;
-        let player = board.scene.player;
-        player.position = player.startPos.clone();
-
-        board.scene.camera.follow();
-        board.scene.stageManager.goal.firstTime = true;
-        board.remove();
     },
     next: function(e){
         console.log("GOTO NEXTSTAGE");
@@ -573,6 +594,7 @@ phina.define('StageManager', {
     addItem: function(v) {
         //子供に登録する際は，最初の位置を覚える必要があるので
         //この関数を用いる．
+        v.startPos = v.position.clone();
         this.addChild(v);
     },
 
@@ -672,6 +694,10 @@ phina.define('StageManager', {
     },
     move : function(element){
         //あるエレメントを，当たり判定を考慮しながら動かす
+        if(!element.interactive){
+            //動かないもののはずなので抜ける
+            return;
+        }
         let near_items = this.children.sort((a, b) => {
                   return this.calcDistance(element, a) - this.calcDistance(element, b);
         });
@@ -691,12 +717,17 @@ phina.define('StageManager', {
                     }
                 }
         }
-        
+
 
         for(let i = 0; i < reactable_item_num; i++) {
             near_items[i].reactTo(element, scene);
         }
 
+    },
+    retry: function(){
+        this.children.forEach(item => item.position = item.startPos.clone());
+        this.player.position = this.player.startPos.clone();
+        this.goal.firstTime = true;
     },
     _accessor:{
         //子供の位置を全部動かす為のaccesor
@@ -746,8 +777,8 @@ const player_ss = {
         },
         "dying": {
             "frames": [4],
-            "frequency": 60,
-            "next": "die"
+            "frequency": 48,
+            "next": "dead"
         },
         "flying": {
             "frames": [1,2,3],
@@ -765,6 +796,11 @@ const player_ss = {
             "frames": [12,13,14],
             "frequency": 3,
             "next": "walking"
+        },
+        "dead": {
+            "frames": [5],
+            "frequency": 40,
+            "next": "stand"
         }
     },
     "frame": {

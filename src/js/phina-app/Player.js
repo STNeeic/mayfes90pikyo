@@ -28,6 +28,8 @@ phina.define('Player',{
 
          this.sprite.fa = FrameAnimationWithState().setup(player_ss).attachTo(this.sprite);
 
+         this.setInteractive(true);
+
      },
     setVelocity: function(x, y){
         //forceがvelocityをセットする関数である
@@ -58,6 +60,21 @@ phina.define('Player',{
         }
 
 
+    },
+    dead: function(){
+        this.setInteractive(false);
+        this.sprite.fa.state = "dying";
+        this.setGravity(0,0);
+        this.tweener.play()
+            .by({y: -600},800, "easeOutCubic")
+            .by({y: 600}, 800, "easeInQuad")
+            .wait(1000)
+            .call(() => {
+                this.setInteractive(true);
+                this.setGravity(0,5);
+                this.parent.parent.retry();
+                this.tweener.stop();
+            });
     },
     omitOptions:function(){
         return {

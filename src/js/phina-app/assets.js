@@ -16,8 +16,8 @@ const player_ss = {
         },
         "dying": {
             "frames": [4],
-            "frequency": 60,
-            "next": "die"
+            "frequency": 48,
+            "next": "dead"
         },
         "flying": {
             "frames": [1,2,3],
@@ -35,6 +35,11 @@ const player_ss = {
             "frames": [12,13,14],
             "frequency": 3,
             "next": "walking"
+        },
+        "dead": {
+            "frames": [5],
+            "frequency": 40,
+            "next": "stand"
         }
     },
     "frame": {
