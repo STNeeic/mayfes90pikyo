@@ -248,10 +248,13 @@ phina.define('ItemSelector',{
          this.startPos = this.alignPosFrom(e.pointer.position);
          if(e.pointer.position.y > 1050) return;
 
-         if(this.selector.state > 0){
              this.tmpRect = DisplayElement().addChildTo(this);
              this.tmpRect.position = this.startPos.clone();
+         if(this.selector.state > 0){
              this.tmpRect.addChild(this.builder.build(this.selector.state));
+         }
+         else {
+             this.tmpRect.addChild(Sprite('eraser', 64, 64));
          }
      },
      pointmove: function(e){
@@ -265,7 +268,10 @@ phina.define('ItemSelector',{
 
          for(let i = 0; i * 70 <= Math.abs(v.x); i++) {
              for(let j = 0; j * 70 <= Math.abs(v.y); j++) {
-                 const item = this.builder.build(this.selector.state);
+                 let item = Sprite('eraser', 64, 64);
+                 if(this.selector.state > 0) {
+                     item = this.builder.build(this.selector.state);
+                 }
                  item.position.set(i * u.x, j * u.y);
                  this.tmpRect.addChild(item);
              }
