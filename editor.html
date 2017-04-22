@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Programming game with Blockly">
+    <meta name="keywords" content="Blockly,phina.js">
+    <meta name="author" content="EEIC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="Lib/d3.js"></script>
+<script src="phinajs/build/phina.js"></script>
+<!-- bootstrapがjqueryを必要としているので（d3もjqueryに変えるかも） -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+
+<link rel="stylesheet" href="Lib/reset.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+
+<body>
+ <header class="header">
+    <a href="#top" class="header-link">
+    <img class="header_img" src="./images/white_bulb.png" alt="eeic">
+    <div class="top-text">
+      <p class="up">EEIC 五月祭展示</p>
+      <p class="down">ステージエディター</p>
+    </div>
+    </a>
+
+    <!--menu-triggerをglobal-navから外す作戦あり-->
+    <div class="menu-trigger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="global-nav">
+      <ul class="global-nav-list">
+        <li class="nav-item"><a href="#about" class="nav">リンク…</a></li>
+        <li class="nav-item"><a href="#contents" class="nav">リンク…</a></li>
+        <li class="nav-item"><a href="#access" class="nav">聞こえますか…</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <div id="contents" class="factor">
+        <div class="contents-wrapper">
+            <div id="phinaDiv">
+
+                <canvas id="phinaCanvas" class="">
+
+                </canvas>
+            </div>
+
+            </div>
+    </div>
+            <button type="button" class="button" id="import">IMPORT</button>
+            <button type="button" class="button" value="running" id="export">export</button>
+            <textarea rows="10" cols="100" id="JSONarea" placeholder="IMPORTとEXPORTはここで行います"></textarea>
+            <!-- Domを操作する必要がある処理はここに書く -->
+<!-- phina.globalize()した後に書く処理はここに書く -->
+<script src="./build/editor-app.js"></script>
+</body>
+</html>
