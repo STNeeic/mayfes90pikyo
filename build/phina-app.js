@@ -196,6 +196,9 @@ phina.define('Goal',{
     firstTime: true,
     init: function(){
         this.superInit();
+        this.tweener.by({
+            rotation: 360
+        }, 3000, "swing").setLoop(true);
     },
     reactTo: function(obj, scene){
         if(this.hitTestElement(obj) == true && this.firstTime == true) {
@@ -286,7 +289,17 @@ const TEST_STAGE = {
 
          this.player = this.stageManager.player;
          this.player.setGravity(0, 5);
-         
+
+         const button = $("#button");
+
+         button.on("click", () => {
+             if(button.attr("value") == "running") {
+                 this.retry();
+             } else {
+                 button.attr("value", "running")
+                     .text("リセット");
+             }
+         });
 
          this.camera = Camera({
              scene:this
@@ -295,13 +308,18 @@ const TEST_STAGE = {
          console.log("GAME START");
      },
      retry: function(){
+         //ボタンを戻す
+         $("#button").attr("value", "stop").text("スタート");
          this.time = 0;
          this.stageManager.retry();
+         this.camera.position.set(0,0);
+         this.camera.follow();
      },
      update: function(app) {
          const keyboard = app.keyboard;
          const player = this.player;
          const stageManager = this.stageManager;
+         const camera = this.camera;
 
 
          this.time += app.ticker.deltaTime;
@@ -312,12 +330,12 @@ const TEST_STAGE = {
          let vector = phina.geom.Vector2(0, 0);
          let jump = false;
 
-         const button = d3.select("#button");
+         const button = $("#button");
 
          if(button.attr("value") == "running"){
              const start_block = workspace.getBlockById("START");
              //BlocklyのNameSpaceの初期化
-             //Blockly.JavaScript.init(workspace);
+             Blockly.JavaScript.init(workspace);
              let code = "";
              try {
                  code = Blockly.JavaScript.blockToCode(start_block);
@@ -332,26 +350,32 @@ const TEST_STAGE = {
              player.die(); //for debbug
          }
 
-         if(keyboard.getKey('left')){
-             player.dx = -20;
+         if(keyboard.getKeyDown('left')){
+             camera.x += 70;
          }
-         if(keyboard.getKey('right')){
-             player.dx = 20;
+         if(keyboard.getKeyDown('right')){
+             camera.x += -70;
          }
-         if(keyboard.getKeyDown('up') || jump === true){
+         if(keyboard.getKeyDown('up')) {
+             camera.y += 70;
+         }
 
+         if( jump === true){
              if(this.stageManager.checkEarthing(player) == true) {
                  player.dy = -70;
              }
          }
-         if(keyboard.getKey('down')){
-             player.dy += 2;
+
+         if(keyboard.getKeyDown('down')){
+             camera.y += -70;
          }
 
 
          stageManager.move(player);
-         this.camera.follow();
 
+         if(button.attr("value") == "running") {
+             this.camera.follow();
+         }
          //ステージの高さより上にいたら死亡する
          if(player.y > stageManager.stageData.height + player.height){
              player.die();
