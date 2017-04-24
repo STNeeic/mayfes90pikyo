@@ -715,6 +715,18 @@ phina.define('StageManager', {
 
         return this.checkEarthing(element) && (this.getHitItems(dummy_left).length == 0 || this.getHitItems(dummy_right).length == 0);
     },
+    checkNearBlock: function(element, direction) {
+        //左隣りまたは右隣りに接触可能なブロックがあるかどうかを判定する関数
+
+        const dummy = Player(element.omitOptions());
+
+        const offs = Vector2(64, 0);
+        if(direction == "LEFT") offs.negate();
+
+        dummy.position.add(offs);
+
+        return this.getHitItems(dummy).some(item => item.canBeTouched);
+    },
     calcDistance: function(elem, item){
         //大体マンハッタン距離にしている
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);

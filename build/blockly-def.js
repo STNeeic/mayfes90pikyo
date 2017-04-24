@@ -9,49 +9,85 @@
 
 'use strict';
 
-Blockly.Blocks['go_left'] = {
+Blockly.Blocks['go_l_or_r'] = {
     init: function() {
         this.jsonInit({
-            "message0": 'ひだりに すすむ',
-            "colour": 200,
             "type": "Action",
+            "message0": "%1 に すすむ",
+            "args0": [
+                {
+                    "type": "field_dropdown",
+                    "name": "DIRECTION",
+                    "options": [
+                        [
+                            "右",
+                            "RIGHT"
+                        ],
+                        [
+                            "左",
+                            "LEFT"
+                        ]
+                    ]
+                }
+            ],
             "previousStatement": "Action",
-            "nextStatement": "Action"
+            "nextStatement": "Action",
+            "colour": 230,
+            "tooltip": "鳥が右か左にうごきます",
+            "helpUrl": ""
         });
     }
 };
 
-Blockly.Blocks['go_right'] = {
+Blockly.JavaScript['go_l_or_r'] = function(block){
+    var direction = block.getFieldValue('DIRECTION') == 'LEFT' ? '-20' : '20';
+    var code = 'player.dx = ' + direction + ';\n';
+    return code;
+};
+
+Blockly.Blocks['is_block'] = {
     init: function() {
         this.jsonInit({
-            "message0": 'みぎに すすむ',
-            "colour": 200,
-            "type": "Action",
-            "previousStatement": "Action",
-            "nextStatement": "Action"
+            "type": "Check",
+            "message0": "%1 に ブロックがある",
+            "args0": [
+                {
+                    "type": "field_dropdown",
+                    "name": "DIRECTION",
+                    "options": [
+                        [
+                            "右",
+                            "RIGHT"
+                        ],
+                        [
+                            "左",
+                            "LEFT"
+                        ]
+                    ]
+                }
+            ],
+            "output": "Boolean",
+            "colour": 100,
+            "tooltip": "自分の右隣りか左隣りにブロックがあるか調べます",
+            "helpUrl": ""
         });
     }
 };
 
-Blockly.JavaScript['go_left'] = function(block){
-    //go left
-    var code = 'player.dx = -20;\n';
-    return code;
-};
-
-Blockly.JavaScript['go_right'] = function(block){
-    //go right
-    var code = 'player.dx = 20;\n';
-    return code;
+Blockly.JavaScript['is_block'] = function(block) {
+    var direction = block.getFieldValue('DIRECTION');
+    var code = 'stageManager.checkNearBlock(player,"' + direction + '")';
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['is_cliff'] =  {
     init: function() {
         this.jsonInit({
-            "message0": 'がけか しらべる',
+            "message0": 'ガケの上にいる',
             "colour": 100,
             "type": "Check",
-            "output": "Boolean"
+            "output": "Boolean",
+            "tooltip": "自分がガケの上にいるか調べます"
         });
     }
 };
@@ -65,11 +101,12 @@ Blockly.JavaScript['is_cliff'] = function(block){
  Blockly.Blocks['jump'] = {
      init: function() {
          this.jsonInit({
-             "message0": 'ジャンプ',
+             "message0": 'ジャンプする',
              "colour": 200,
              "type": "Action",
              "previousStatement": "Action",
-             "nextStatement": "Action"
+             "nextStatement": "Action",
+             "tooltip": "鳥がジャンプします"
          });
      }
  };
