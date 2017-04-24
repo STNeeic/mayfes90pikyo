@@ -1,11 +1,12 @@
  Blockly.Blocks['jump'] = {
      init: function() {
          this.jsonInit({
-             "message0": 'ジャンプ',
+             "message0": 'ジャンプする',
              "colour": 200,
              "type": "Action",
              "previousStatement": "Action",
-             "nextStatement": "Action"
+             "nextStatement": "Action",
+             "tooltip": "鳥がジャンプします"
          });
      }
  };

@@ -1,10 +1,11 @@
 Blockly.Blocks['is_cliff'] =  {
     init: function() {
         this.jsonInit({
-            "message0": 'がけか しらべる',
+            "message0": 'ガケの上にいる',
             "colour": 100,
             "type": "Check",
-            "output": "Boolean"
+            "output": "Boolean",
+            "tooltip": "自分がガケの上にいるか調べます"
         });
     }
 };
