@@ -1,35 +1,35 @@
-Blockly.Blocks['go_left'] = {
+Blockly.Blocks['go_l_or_r'] = {
     init: function() {
         this.jsonInit({
-            "message0": 'ひだりに すすむ',
-            "colour": 200,
             "type": "Action",
+            "message0": "%1 に すすむ",
+            "args0": [
+                {
+                    "type": "field_dropdown",
+                    "name": "DIRECTION",
+                    "options": [
+                        [
+                            "右",
+                            "RIGHT"
+                        ],
+                        [
+                            "左",
+                            "LEFT"
+                        ]
+                    ]
+                }
+            ],
             "previousStatement": "Action",
-            "nextStatement": "Action"
+            "nextStatement": "Action",
+            "colour": 230,
+            "tooltip": "鳥が右か左にうごきます",
+            "helpUrl": ""
         });
     }
 };
 
-Blockly.Blocks['go_right'] = {
-    init: function() {
-        this.jsonInit({
-            "message0": 'みぎに すすむ',
-            "colour": 200,
-            "type": "Action",
-            "previousStatement": "Action",
-            "nextStatement": "Action"
-        });
-    }
-};
-
-Blockly.JavaScript['go_left'] = function(block){
-    //go left
-    var code = 'player.dx = -20;\n';
-    return code;
-};
-
-Blockly.JavaScript['go_right'] = function(block){
-    //go right
-    var code = 'player.dx = 20;\n';
+Blockly.JavaScript['go_l_or_r'] = function(block){
+    var direction = block.getFieldValue('DIRECTION') == 'LEFT' ? '-20' : '20';
+    var code = 'player.dx = ' + direction + ';\n';
     return code;
 };
