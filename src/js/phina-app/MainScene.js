@@ -41,14 +41,6 @@ const TEST_STAGE = {
          bg.height = this.height;
          bg.width = bg.height / bg_aspect;
 
-         // ラベルを生成
-
-         this.label = Label('かかったじかん：').addChildTo(this);
-         this.label.align = 'right';
-         this.label.x = this.gridX.span(15); // x 座標
-         this.label.y = this.gridY.span(1); // y 座標
-         this.label.fill = '#444'; // 塗りつぶし色
-
          this.stageManager = StageManager({
              scene: this
          });
@@ -68,15 +60,29 @@ const TEST_STAGE = {
          button.on("click", () => {
              if(button.attr("value") == "running") {
                  this.retry();
+                 this.cursors.show();
              } else {
                  button.attr("value", "running")
                      .text("リセット");
+                 this.cursors.hide();
              }
          });
+
 
          this.camera = Camera({
              scene:this
          }).addChildTo(this);
+
+         //uiはここから描画する
+         //childrenにいる順に下から描画されるので最後の方がレイヤー的に上の方になる
+
+         this.cursors = Cursors({
+             scene:this
+         }).addChildTo(this);
+         this.cursors.leftArrow.on('click',() => this.cameraMove(1, 0));
+         this.cursors.rightArrow.on('click',() => this.cameraMove(-1, 0));
+         this.cursors.topArrow.on('click',() => this.cameraMove(0, 1));
+         this.cursors.bottomArrow.on('click',() => this.cameraMove(0, -1));
 
          console.log("GAME START");
      },
@@ -87,6 +93,46 @@ const TEST_STAGE = {
          this.stageManager.retry();
          this.camera.position.set(0,0);
          this.camera.follow();
+     },
+     cameraMove: function(x, y) {
+         if(this.isValidPos(x, y)) {
+             this.camera.position.add(Vector2(x * 70, y * 70));
+         }
+     },
+     isValidPos: function(x, y){
+         //block_sizeを基準にして、x,y方向にこのマス分動いたらoutというのを判定する
+         let campos = this.camera.position.clone();
+         campos.add(Vector2(x * 70, y * 70));
+         //動いたときに描画領域がステージ画面の中に収まっているか判定
+         return campos.x <= 0 && campos.x + this.stageManager.stageData.width >= this.width
+             && campos.y <= 0 && campos.y + this.stageManager.stageData.height >= this.height;
+     },
+     checkCursors: function(){
+         //動けないようならカーソルを消す
+         //動けるならカーソルを付けるやつ
+         if(this.isValidPos(1, 0)) {
+             this.cursors.leftArrow.show();
+         } else {
+             this.cursors.leftArrow.hide();
+         }
+
+         if(this.isValidPos(-1, 0)) {
+             this.cursors.rightArrow.show();
+         } else {
+             this.cursors.rightArrow.hide();
+         }
+
+         if(this.isValidPos(0, 1)) {
+             this.cursors.topArrow.show();
+         } else {
+             this.cursors.topArrow.hide();
+         }
+
+         if(this.isValidPos(0, -1)) {
+             this.cursors.bottomArrow.show();
+         } else {
+             this.cursors.bottomArrow.hide();
+         }
      },
      update: function(app) {
          const keyboard = app.keyboard;
@@ -124,13 +170,16 @@ const TEST_STAGE = {
          }
 
          if(keyboard.getKeyDown('left')){
-             camera.x += 70;
+             this.cameraMove(1, 0);
          }
          if(keyboard.getKeyDown('right')){
-             camera.x += -70;
+             this.cameraMove(-1, 0);
          }
          if(keyboard.getKeyDown('up')) {
-             camera.y += 70;
+             this.cameraMove(0, 1);
+         }
+         if(keyboard.getKeyDown('down')){
+             this.cameraMove(0, -1);
          }
 
          if( jump === true){
@@ -139,15 +188,13 @@ const TEST_STAGE = {
              }
          }
 
-         if(keyboard.getKeyDown('down')){
-             camera.y += -70;
-         }
-
-
+        
          stageManager.move(player);
 
          if(button.attr("value") == "running") {
              this.camera.follow();
+         } else {
+             this.checkCursors();
          }
          //ステージの高さより上にいたら死亡する
          if(player.y > stageManager.stageData.height + player.height){
