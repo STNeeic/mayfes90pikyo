@@ -23,17 +23,17 @@
 
          this.stageData = this.stageManager.stageData;
          this.stageManager.loadStage(this.stageData);
-
-         //アイテム選択用の部分を作成
-         this.selector = ItemSelector(this).addChildTo(this);
-
-         this.builder = ItemBuilder();
-
          //cameraを作成
          this.camera = Camera({
              scene:this,
              stageManager: this.stageManager
          }).addChildTo(this);
+
+         //ここからUIのレンダリング
+         //アイテム選択用の部分を作成
+         this.selector = ItemSelector(this).addChildTo(this);
+
+         this.builder = ItemBuilder();
 
          this.setInteractive(true);
          this.on("pointstart", this.pointstart);
@@ -46,6 +46,9 @@
 
                  if(!!this.stageData.title) {
                      $("#title").val(this.stageData.title);
+                 }
+                 if(!!this.stageData.label) {
+                     $("#label").val(this.stageData.label);
                  }
                  if(!!this.stageData.description) {
                      $("#description").val(this.stageData.description);
@@ -60,6 +63,9 @@
          $("#export").on("click", () => {
              if($("#title").val() != "") {
                  this.stageData.title = $("#title").val();
+             }
+             if($("#label").val() != "") {
+                 this.stageData.label = $("#label").val();
              }
              if ($("#description").val() != "") {
                  this.stageData.description = $("#description").val();
