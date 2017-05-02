@@ -180,17 +180,17 @@ phina.define('ItemSelector',{
 
          this.stageData = this.stageManager.stageData;
          this.stageManager.loadStage(this.stageData);
-
-         //アイテム選択用の部分を作成
-         this.selector = ItemSelector(this).addChildTo(this);
-
-         this.builder = ItemBuilder();
-
          //cameraを作成
          this.camera = Camera({
              scene:this,
              stageManager: this.stageManager
          }).addChildTo(this);
+
+         //ここからUIのレンダリング
+         //アイテム選択用の部分を作成
+         this.selector = ItemSelector(this).addChildTo(this);
+
+         this.builder = ItemBuilder();
 
          this.setInteractive(true);
          this.on("pointstart", this.pointstart);
@@ -203,6 +203,9 @@ phina.define('ItemSelector',{
 
                  if(!!this.stageData.title) {
                      $("#title").val(this.stageData.title);
+                 }
+                 if(!!this.stageData.label) {
+                     $("#label").val(this.stageData.label);
                  }
                  if(!!this.stageData.description) {
                      $("#description").val(this.stageData.description);
@@ -217,6 +220,9 @@ phina.define('ItemSelector',{
          $("#export").on("click", () => {
              if($("#title").val() != "") {
                  this.stageData.title = $("#title").val();
+             }
+             if($("#label").val() != "") {
+                 this.stageData.label = $("#label").val();
              }
              if ($("#description").val() != "") {
                  this.stageData.description = $("#description").val();
@@ -373,6 +379,7 @@ phina.define('Player',{
 
          this.sprite = Sprite('tomapiko', 64, 64).addChildTo(this);
          this.sprite.scaleX = this.sprite.scaleY = 2;
+         this.sprite.scaleX *= -1;
          this.sprite.frameIndex = 1;
 
 
@@ -576,7 +583,7 @@ const player_ss = {
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
      //widthとheightを書かない場合default値になってしまう
      let s = app.canvas.domElement.style;
-     s.width = "100vw";
+     s.width = "90vw";
      s.height = "auto";
      //app.enableStats();
      // アプリケーション実行
