@@ -43,17 +43,8 @@ phina.namespace(function() {
             },
           },
         });
-          $(".stage-input").removeClass("hide");
-        this.on('pointend', function() {
-            $(".stage-input").addClass("hide");
-            try {
-                console.log($(".stage-input textarea").val());
-                let stageData = JSON.parse($(".stage-input textarea").val());
-                this.exit({stageData: stageData});
-            } catch (e) {
-                console.log(e);
-                this.exit();
-            }
+          this.on('pointend', function() {
+              this.exit();
         });
       }
     },
