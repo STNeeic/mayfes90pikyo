@@ -16,6 +16,7 @@ phina.define('Player',{
 
          this.sprite = Sprite('tomapiko', 64, 64).addChildTo(this);
          this.sprite.scaleX = this.sprite.scaleY = 2;
+         this.sprite.scaleX *= -1;
          this.sprite.frameIndex = 1;
 
 
