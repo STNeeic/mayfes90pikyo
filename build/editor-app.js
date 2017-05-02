@@ -200,6 +200,14 @@ phina.define('ItemSelector',{
          $("#import").on("click" ,() => {
              try {
                  this.stageData = JSON.parse($("#JSONarea").val());
+
+                 if(!!this.stageData.title) {
+                     $("#title").val(this.stageData.title);
+                 }
+                 if(!!this.stageData.description) {
+                     $("#description").val(this.stageData.description);
+                 }
+
              } catch (e){
                  window.alert(e);
                  console.warn(e);
@@ -207,6 +215,12 @@ phina.define('ItemSelector',{
          });
 
          $("#export").on("click", () => {
+             if($("#title").val() != "") {
+                 this.stageData.title = $("#title").val();
+             }
+             if ($("#description").val() != "") {
+                 this.stageData.description = $("#description").val();
+             }
              $("#JSONarea").val(JSON.stringify(this.stageData));
          });
 
