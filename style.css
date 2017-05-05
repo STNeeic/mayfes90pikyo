@@ -456,15 +456,16 @@ h3{
         height: 72vh;
         flex: 1 1 auto;
     }
+}
 
 
 @media (max-width: 768px)
 {
     #blocklyArea {
-        height: calc(100vh - 75px);
+        height: calc(90vh - 75px);
+
     }
 }
-
 .stage-input {
     position: absolute;
     top: 10vh;
