@@ -13,7 +13,7 @@ const ASSETS = {
          'tomapiko': './phinajs/assets/images/tomapiko_ss.png',
          'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
-         'result-board': './pictures/ResultBoard.png',
+         'result-board': './pictures/Result.png',
          'stage-selector': './pictures/stageselect_bg.png',
          'arrows': './pictures/EditorIcons.png',
          'original-stage': './pictures/stages/original.png'

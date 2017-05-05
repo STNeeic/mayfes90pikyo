@@ -626,24 +626,26 @@ phina.define('ResultBoard',{
         this.setPosition(scene.gridX.center(), scene.gridY.center());
         scene.addChild(this);
 
-        const right_line = 225; //つぎへすすむの「む」の位置に揃うライン
+        const right_line = 160; //次にいくの「く」の位置に揃うライン
 
         const board = Sprite('result-board').addChildTo(this);
-        const score = Label(scene.score + " てん").addChildTo(this);
-        score.setPosition(right_line, 30);
+        const score = Label(scene.score + " 点").addChildTo(this);
+        score.setPosition(right_line, 0);
         score.align = 'right';
+        score.fontSize = 36;
         const time = this.timeToStr(scene.time);
         const timelabel = Label(time).addChildTo(this);
-        timelabel.setPosition(right_line, -35);
+        timelabel.setPosition(right_line, -110);
         timelabel.align = 'right';
+        timelabel.fontSize = 36;
 
         //当たり判定がずれないようにsceneにaddChildしている
         const l_button = Button({
             text: ""
         }).addChildTo(scene);
-        l_button.width = 220;
-        l_button.height = 70;
-        l_button.setPosition(250,630)
+        l_button.width = 200;
+        l_button.height = 140;
+        l_button.setPosition(220,710)
         .on('push', this.retry)
             .on('mouseover', function(e){console.log("L-BUTTON MOUSEOVER");})
             .board = this;
@@ -652,9 +654,9 @@ phina.define('ResultBoard',{
         const r_button = Button({
             text: ""
         }).addChildTo(scene);
-        r_button.width = 220;
-        r_button.height = 70;
-        r_button.setPosition(470,630)
+        r_button.width = 200;
+        r_button.height = 140;
+        r_button.setPosition(470,710)
         .on('push', this.next)
             .on('mouseover', function(e){console.log("R-BUTTON MOUSEOVER");})
             .board = this;
@@ -664,8 +666,8 @@ phina.define('ResultBoard',{
         const millsec = Math.floor((time % 1000) / 10);
         let sec = Math.floor((time / 1000) % 60);
         let min = Math.floor(time / 60000);
-        min = min > 0 ? min + "ふん" : "";
-        return min + sec+ "びょう" + millsec;
+        min = min > 0 ? min + "分" : "";
+        return min + sec+ "秒" + millsec;
     },
     retry:function(e) {
         //この時のthisはl_buttonなので注意!!!
@@ -1130,7 +1132,7 @@ const ASSETS = {
          'tomapiko': './phinajs/assets/images/tomapiko_ss.png',
          'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
-         'result-board': './pictures/ResultBoard.png',
+         'result-board': './pictures/Result.png',
          'stage-selector': './pictures/stageselect_bg.png',
          'arrows': './pictures/EditorIcons.png',
          'original-stage': './pictures/stages/original.png'
