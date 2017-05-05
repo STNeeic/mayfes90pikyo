@@ -62,5 +62,6 @@ phina.define('ResultBoard',{
     },
     next: function(e){
         console.log("GOTO NEXTSTAGE");
+        this.parent.next();
     }
 });

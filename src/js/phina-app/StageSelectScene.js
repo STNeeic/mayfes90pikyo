@@ -9,13 +9,28 @@ phina.define('StageSelectScene',{
         let title = Label("ステージを選んでね").addChildTo(this);
         title.setPosition(this.gridX.center(), 40);
 
-        //カルーセル形式のアイコンを作成
+        //localStorageからクリア状況を取得
+        let progress = {};
+        if(!localStorage.progress){
+            progress = {};
+            localStorage.progress = JSON.stringify(progress);
+        } else {
+            progress = JSON.parse(localStorage.progress);
+        }
+
+        if(!!params.progress) {
+            progress[params.progress.label] = params.progress.result;
+            localStorage.progress = JSON.stringify(progress);
+        }
+
+                //カルーセル形式のアイコンを作成
         let carousel = DisplayElement().addChildTo(this);
         this.carousel = carousel;
         STAGE_DATA.forEach((stage, index) => {
             StageViewItem({
                 stageData: stage,
-                scene: this
+                scene: this,
+                progress: !!stage.label ? progress[stage.label] : false
             })
                 .setPosition(this.gridX.center() + this.width * index , this.gridY.center())
                 .addChildTo(carousel);
@@ -106,12 +121,20 @@ phina.define('StageViewItem', {
         }).addChildTo(this);
         description.setPosition(5, 200);
 
-
+        //画像（あれば）
         let img = !!stageData.label ? Sprite(stageData.label).addChildTo(this) : null;
         if(img != null){
             img.setPosition(0, -50);
         }
 
+        //ステージをクリアしていたら星がくるくる回るようにする
+        let progress = Goal();
+        if(params.progress == true) {
+            progress.setPosition(0, -(progress.height + this.height) / 2);
+            progress.addChildTo(this);
+        }
+
+        //オリジナルのステージをロードするためのステージかどうかのフラグ
         this.import = stageData.import != null ? stageData.import : false;
         this.setInteractive(true);
         this.on('pointend',function (e) {

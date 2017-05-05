@@ -94,6 +94,20 @@ const TEST_STAGE = {
          this.camera.position.set(0,0);
          this.camera.follow();
      },
+     next: function() {
+         //ボタンを戻す
+         $("#button").attr("value", "stop").text("スタート");
+         let label = this.stageManager.stageData.label;
+         if(!!label) {
+             this.exit(
+                 {progress:
+                  {label: label,
+                   result: true}});
+         }
+         else {
+             this.exit();
+         }
+     },
      cameraMove: function(x, y) {
          if(this.isValidPos(x, y)) {
              this.camera.position.add(Vector2(x * 70, y * 70));
