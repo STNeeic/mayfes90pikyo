@@ -57,6 +57,8 @@ const TEST_STAGE = {
 
          const button = $("#button");
 
+         //onの二度づけ禁止
+         button.off("click");
          button.on("click", () => {
              if(button.attr("value") == "running") {
                  this.retry();
