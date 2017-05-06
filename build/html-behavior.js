@@ -36,16 +36,20 @@ let onchange = function(e) {
     let blk = workspace.getBlockById("START");
 
     //STARTに繋がっているブロックを網羅するgenerator
-    let blkgen = function* (){
-        let b = blk;
+    function* blkgen(b){
         while(b != null){
             yield b;
-            let child = b.getChildren();
-            if(child.length > 0) yield* child;
+            let children = b.getChildren();
+            for(let child of children) {
+                let itr = blkgen(child);
+                for(let son of itr) {
+                    yield son;
+                }
+            };
             b = b.getNextBlock();
         }
     };
-    let gen = blkgen();
+    let gen = blkgen(blk);
     for (let v of gen) {
         v.setDisabled(false);
     }
