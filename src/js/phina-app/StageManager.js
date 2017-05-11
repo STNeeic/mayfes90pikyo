@@ -96,30 +96,30 @@ phina.define('StageManager', {
             return false;
         });
     },
-    checkNearCliff: function(element){
-        const dummy_left = Player(element.omitOptions());
-        const dummy_right = Player(element.omitOptions());
+    checkNearCliff: function(element, direction){
+        //左側か右側に足場があるか判定する関数
+        const dummy = Player(element.omitOptions());
 
-        const left_offs = Vector2(-64, 64);
-        const right_offs = Vector2(64, 64);
+        let offs = Vector2(70, 70);
+        if(direction == 'LEFT') offs.x *= -1;
 
-        dummy_left.position.add(left_offs);
-        dummy_right.position.add(right_offs);
+        dummy.position.add(offs);
 
-        return this.checkEarthing(element) && (this.getHitItems(dummy_left).length == 0 || this.getHitItems(dummy_right).length == 0);
+        return this.checkEarthing(element) && this.getHitItems(dummy).length == 0;
     },
     checkNearBlock: function(element, direction) {
         //左隣りまたは右隣りに接触可能なブロックがあるかどうかを判定する関数
 
         const dummy = Player(element.omitOptions());
 
-        const offs = Vector2(64, 0);
+        const offs = Vector2(70, 0);
         if(direction == "LEFT") offs.negate();
 
         dummy.position.add(offs);
 
         return this.getHitItems(dummy).some(item => item.canBeTouched);
     },
+
     calcDistance: function(elem, item){
         //大体マンハッタン距離にしている
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);

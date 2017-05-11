@@ -1,17 +1,35 @@
 Blockly.Blocks['is_cliff'] =  {
     init: function() {
         this.jsonInit({
-            "message0": 'ガケの上にいる',
-            "colour": 100,
             "type": "Check",
+            "message0": "%1 に すすむと落ちる",
+            "args0": [
+                {
+                    "type": "field_dropdown",
+                    "name": "DIRECTION",
+                    "options": [
+                        [
+                            "右がわ",
+                            "RIGHT"
+                        ],
+                        [
+                            "左がわ",
+                            "LEFT"
+                        ]
+                    ]
+                }
+            ],
             "output": "Boolean",
-            "tooltip": "自分がガケの上にいるか調べます"
+            "colour": 100,
+            "tooltip": "自分の右隣りか左隣りに進もうとすると落ちるかどうか調べます",
+            "helpUrl": ""
         });
     }
 };
 
 Blockly.JavaScript['is_cliff'] = function(block){
     //崖にいるか調べる
-    var code = 'stageManager.checkNearCliff(player)';
+    var direction = block.getFieldValue('DIRECTION');
+    var code = 'stageManager.checkNearCliff(player,"'+ direction +'")';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
