@@ -340,6 +340,10 @@ const TEST_STAGE = {
              } else {
                  button.attr("value", "running")
                      .text("リセット");
+                 //BlocklyのNameSpaceの初期化
+                 Blockly.JavaScript.init(workspace);
+                 //変数の初期化
+                 this.player.variable = 0;
                  this.cursors.hide();
              }
          });
@@ -443,8 +447,6 @@ const TEST_STAGE = {
 
          if(button.attr("value") == "running"){
              const start_block = workspace.getBlockById("START");
-             //BlocklyのNameSpaceの初期化
-             Blockly.JavaScript.init(workspace);
              let code = "";
              try {
                  code = Blockly.JavaScript.blockToCode(start_block);
