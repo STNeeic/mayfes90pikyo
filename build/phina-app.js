@@ -894,9 +894,10 @@ phina.define('StageSelectScene',{
 
     init: function(params) {
         this.superInit(params);
-        //タイトルラベルを作成
-        let title = Label("ステージを選んでね").addChildTo(this);
-        title.setPosition(this.gridX.center(), 40);
+        //bgを作成
+        Sprite('stageselectbg').setPosition(this.gridX.center(), this.gridY.center()).addChildTo(this);
+
+        const offsY = 50;
 
         //localStorageからクリア状況を取得
         let progress = {};
@@ -921,7 +922,7 @@ phina.define('StageSelectScene',{
                 scene: this,
                 progress: !!stage.label ? progress[stage.label] : false
             })
-                .setPosition(this.gridX.center() + this.width * index , this.gridY.center())
+                .setPosition(this.gridX.center() + this.width * index , this.gridY.center() + offsY)
                 .addChildTo(carousel);
         });
 
@@ -931,7 +932,7 @@ phina.define('StageSelectScene',{
             direction: "horizontal"
         }).addChildTo(this);
 
-
+        this.cursors.y += offsY;
         this.cursors.leftArrow.on('click', () => this.goLeft());
         this.cursors.rightArrow.on('click', () => this.goRight());
 
@@ -1058,46 +1059,41 @@ phina.namespace(function() {
      */
     init: function(params) {
       params = ({}).$safe(params, phina.game.TitleScene.defaults);
-      this.superInit(params);
+        this.superInit(params);
 
-      this.backgroundColor = params.backgroundColor;
+        //背景をタイトルに
+        this.bg = Sprite('title')
+            .setPosition(this.gridX.center(), this.gridY.center())
+            .addChildTo(this);
 
-      this.fromJSON({
-        children: {
-          titleLabel: {
-            className: 'phina.display.Label',
-            arguments: {
-              text: params.title,
-              fill: params.fontColor,
-              stroke: false,
-              fontSize: 64,
-            },
-            x: this.gridX.center(),
-            y: this.gridY.span(4),
-          }
-        }
-      });
+        //ボタンを追加
+        let startButton = Button({
+            width: 400,
+            height: 180,
+            fill : 'transparent',
+            text: ''
+        }).addChildTo(this.bg)
+            .setPosition(0, -30)
+        .on('pointend', function(){
+            localStorage.progress = '{}';
+            this.exit();
+        }.bind(this));
 
-      if (params.exitType === 'touch') {
-        this.fromJSON({
-          children: {
-            touchLabel: {
-              className: 'phina.display.Label',
-              arguments: {
-                text: "TOUCH START",
-                fill: params.fontColor,
-                stroke: false,
-                fontSize: 32,
-              },
-              x: this.gridX.center(),
-              y: this.gridY.span(12),
-            },
-          },
+        let restartButton = Button({
+            width: 400,
+            height: 180,
+            fill : 'transparent',
+            text: ''
+        }).addChildTo(this.bg)
+            .setPosition(0, 250)
+            .on('pointend', function(){
+                localStorage.progress = '{}';
+                this.exit();
+            }.bind(this));
+
+        this.on('pointend', function(){
+            this.exit();
         });
-          this.on('pointend', function() {
-              this.exit();
-        });
-      }
     },
 
     _static: {
@@ -1133,9 +1129,11 @@ const ASSETS = {
          'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
          'result-board': './pictures/Result.png',
-         'stage-selector': './pictures/stageselect_bg.png',
+         'stage-selector': './pictures/stageselectitem_bg.png',
          'arrows': './pictures/EditorIcons.png',
-         'original-stage': './pictures/stages/original.png'
+         'original-stage': './pictures/stages/original.png',
+         'title': './pictures/title.png',
+         'stageselectbg': './pictures/stageselect_bg.png'
      },
  };
 
@@ -1202,14 +1200,14 @@ const player_ss = {
          nextLabel: 'select'
      }];
      let app = GameApp({
-         startLabel: 'title', // ローディングシーンから始める
+         startLabel: 'title', 
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
          width:700,
          height:1050,
          scenes:scenes,
          fit: false,
-         lie: true
+         lie: true //loadingが出るようになる
      });
 
      //appをinitした時点でwidthとheightが決まってしまうので書き換える

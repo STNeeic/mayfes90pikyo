@@ -14,9 +14,11 @@ const ASSETS = {
          'tiles': './pictures/Base_pack/Tiles/tiles_spritesheet.png',
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
          'result-board': './pictures/Result.png',
-         'stage-selector': './pictures/stageselect_bg.png',
+         'stage-selector': './pictures/stageselectitem_bg.png',
          'arrows': './pictures/EditorIcons.png',
-         'original-stage': './pictures/stages/original.png'
+         'original-stage': './pictures/stages/original.png',
+         'title': './pictures/title.png',
+         'stageselectbg': './pictures/stageselect_bg.png'
      },
  };
 

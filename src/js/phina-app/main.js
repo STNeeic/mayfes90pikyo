@@ -18,14 +18,14 @@
          nextLabel: 'select'
      }];
      let app = GameApp({
-         startLabel: 'title', // ローディングシーンから始める
+         startLabel: 'title', 
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
          width:700,
          height:1050,
          scenes:scenes,
          fit: false,
-         lie: true
+         lie: true //loadingが出るようになる
      });
 
      //appをinitした時点でwidthとheightが決まってしまうので書き換える

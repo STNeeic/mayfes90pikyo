@@ -5,9 +5,10 @@ phina.define('StageSelectScene',{
 
     init: function(params) {
         this.superInit(params);
-        //タイトルラベルを作成
-        let title = Label("ステージを選んでね").addChildTo(this);
-        title.setPosition(this.gridX.center(), 40);
+        //bgを作成
+        Sprite('stageselectbg').setPosition(this.gridX.center(), this.gridY.center()).addChildTo(this);
+
+        const offsY = 50;
 
         //localStorageからクリア状況を取得
         let progress = {};
@@ -32,7 +33,7 @@ phina.define('StageSelectScene',{
                 scene: this,
                 progress: !!stage.label ? progress[stage.label] : false
             })
-                .setPosition(this.gridX.center() + this.width * index , this.gridY.center())
+                .setPosition(this.gridX.center() + this.width * index , this.gridY.center() + offsY)
                 .addChildTo(carousel);
         });
 
@@ -42,7 +43,7 @@ phina.define('StageSelectScene',{
             direction: "horizontal"
         }).addChildTo(this);
 
-
+        this.cursors.y += offsY;
         this.cursors.leftArrow.on('click', () => this.goLeft());
         this.cursors.rightArrow.on('click', () => this.goRight());
 

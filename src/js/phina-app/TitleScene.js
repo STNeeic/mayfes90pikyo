@@ -7,46 +7,41 @@ phina.namespace(function() {
      */
     init: function(params) {
       params = ({}).$safe(params, phina.game.TitleScene.defaults);
-      this.superInit(params);
+        this.superInit(params);
 
-      this.backgroundColor = params.backgroundColor;
+        //背景をタイトルに
+        this.bg = Sprite('title')
+            .setPosition(this.gridX.center(), this.gridY.center())
+            .addChildTo(this);
 
-      this.fromJSON({
-        children: {
-          titleLabel: {
-            className: 'phina.display.Label',
-            arguments: {
-              text: params.title,
-              fill: params.fontColor,
-              stroke: false,
-              fontSize: 64,
-            },
-            x: this.gridX.center(),
-            y: this.gridY.span(4),
-          }
-        }
-      });
+        //ボタンを追加
+        let startButton = Button({
+            width: 400,
+            height: 180,
+            fill : 'transparent',
+            text: ''
+        }).addChildTo(this.bg)
+            .setPosition(0, -30)
+        .on('pointend', function(){
+            localStorage.progress = '{}';
+            this.exit();
+        }.bind(this));
 
-      if (params.exitType === 'touch') {
-        this.fromJSON({
-          children: {
-            touchLabel: {
-              className: 'phina.display.Label',
-              arguments: {
-                text: "TOUCH START",
-                fill: params.fontColor,
-                stroke: false,
-                fontSize: 32,
-              },
-              x: this.gridX.center(),
-              y: this.gridY.span(12),
-            },
-          },
+        let restartButton = Button({
+            width: 400,
+            height: 180,
+            fill : 'transparent',
+            text: ''
+        }).addChildTo(this.bg)
+            .setPosition(0, 250)
+            .on('pointend', function(){
+                localStorage.progress = '{}';
+                this.exit();
+            }.bind(this));
+
+        this.on('pointend', function(){
+            this.exit();
         });
-          this.on('pointend', function() {
-              this.exit();
-        });
-      }
     },
 
     _static: {
