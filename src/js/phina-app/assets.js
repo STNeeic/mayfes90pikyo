@@ -18,7 +18,8 @@ const ASSETS = {
          'arrows': './pictures/EditorIcons.png',
          'original-stage': './pictures/stages/original.png',
          'title': './pictures/title.png',
-         'stageselectbg': './pictures/stageselect_bg.png'
+         'stageselectbg': './pictures/stageselect_bg.png',
+         'marker': "./pictures/marker.png"
      },
  };
 
