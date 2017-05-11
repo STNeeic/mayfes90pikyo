@@ -1202,13 +1202,14 @@ const player_ss = {
          nextLabel: 'select'
      }];
      let app = GameApp({
-         startLabel: 'title', // メインシーンから開始する
+         startLabel: 'title', // ローディングシーンから始める
          assets: ASSETS,
          domElement: document.getElementById("phinaCanvas"),
          width:700,
          height:1050,
          scenes:scenes,
-         fit: false
+         fit: false,
+         lie: true
      });
 
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
@@ -1216,7 +1217,7 @@ const player_ss = {
      let s = app.canvas.domElement.style;
      s.width = "48vh";
      s.height = "auto";
-     
+
      app.enableStats();
      // アプリケーション実行
      app.run();
