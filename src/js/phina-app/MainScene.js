@@ -183,6 +183,9 @@ const TEST_STAGE = {
              }
          }
 
+         //markerの初期化処理
+         player.onMarker = "";
+
          if(keyboard.getKey('d')){
              player.die(); //for debbug
          }

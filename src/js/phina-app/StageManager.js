@@ -119,7 +119,14 @@ phina.define('StageManager', {
 
         return this.getHitItems(dummy).some(item => item.canBeTouched);
     },
-
+    //任意の色のマーカー上にいるか
+    isOnAnyMarker: function(element) {
+        return element.onMarker != "";
+    },
+    //ある特定の色のマーカー上にいるか
+    isOnMarker: function(element, color) {
+        return element.onMarker == color;
+    },
     calcDistance: function(elem, item){
         //大体マンハッタン距離にしている
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);
