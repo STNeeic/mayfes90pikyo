@@ -579,7 +579,21 @@ phina.define('Player',{
 
          this.sprite = Sprite('tomapiko', 64, 64).addChildTo(this);
          this.sprite.scaleX = this.sprite.scaleY = 2;
+         //最初右向きにする
+         this.sprite.scaleX *= -1;
          this.sprite.frameIndex = 1;
+
+         //bang_balloon
+         //なんか理解したっぽい時に出てくる
+         this.bang_balloon = Sprite('bang-balloon').addChildTo(this)
+             .setInteractive(false)
+             .setPosition(60, -60)
+             .hide()
+             .on('enterframe', () => {
+                 let balloon = this.bang_balloon;
+                 balloon.scaleX = this.sprite.scaleX < 0 ? 1 : -1;
+                 balloon.setPosition(60 * balloon.scaleX, -60);
+             });
 
 
 
@@ -615,6 +629,16 @@ phina.define('Player',{
         var x = this.physicalBody.velocity.x;
         this.physicalBody.force(x, y);
     },
+    understood: function(){
+        this.bang_balloon.tweener.play()
+            .call(() => this.bang_balloon.show())
+            .wait(300)
+            .call(() => {
+                this.bang_balloon.hide();
+                this.bang_balloon.tweener.stop();
+            });
+    }
+    ,
     move: function(){
         this.physicalBody.move();
         //動いてたらその方向に体を向かせる
@@ -870,7 +894,11 @@ phina.define('StageManager', {
 
         dummy.position.add(offs);
 
-        return this.checkEarthing(element) && this.getHitItems(dummy).length == 0;
+        if(this.checkEarthing(element) && this.getHitItems(dummy).length == 0){
+            if(element.className == "Player") element.understood();
+            return true;
+        }
+        return false;
     },
     checkNearBlock: function(element, direction) {
         //左隣りまたは右隣りに接触可能なブロックがあるかどうかを判定する関数
@@ -882,15 +910,27 @@ phina.define('StageManager', {
 
         dummy.position.add(offs);
 
-        return this.getHitItems(dummy).some(item => item.canBeTouched);
+        if(this.getHitItems(dummy).some(item => item.canBeTouched)){
+            if(element.className == "Player") element.understood();
+            return true;
+        }
+        return false;
     },
     //任意の色のマーカー上にいるか
     isOnAnyMarker: function(element) {
-        return element.onMarker != "";
+        if(element.onMarker != ""){
+            if(element.className == "Player") element.understood();
+            return true;
+        };
+        return false;
     },
     //ある特定の色のマーカー上にいるか
     isOnMarker: function(element, color) {
-        return element.onMarker == color;
+        if(element.onMarker == color) {
+            if(element.className == "Player") element.understood();
+            return true;
+        }
+        return false;
     },
     calcDistance: function(elem, item){
         //大体マンハッタン距離にしている
@@ -1186,7 +1226,8 @@ const ASSETS = {
          'original-stage': './pictures/stages/original.png',
          'title': './pictures/title.png',
          'stageselectbg': './pictures/stageselect_bg.png',
-         'marker': "./pictures/marker.png"
+         'marker': "./pictures/marker.png",
+         'bang-balloon': "./pictures/bang_balloon.png"
      },
  };
 

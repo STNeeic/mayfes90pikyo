@@ -14,7 +14,21 @@ phina.define('Player',{
 
          this.sprite = Sprite('tomapiko', 64, 64).addChildTo(this);
          this.sprite.scaleX = this.sprite.scaleY = 2;
+         //最初右向きにする
+         this.sprite.scaleX *= -1;
          this.sprite.frameIndex = 1;
+
+         //bang_balloon
+         //なんか理解したっぽい時に出てくる
+         this.bang_balloon = Sprite('bang-balloon').addChildTo(this)
+             .setInteractive(false)
+             .setPosition(60, -60)
+             .hide()
+             .on('enterframe', () => {
+                 let balloon = this.bang_balloon;
+                 balloon.scaleX = this.sprite.scaleX < 0 ? 1 : -1;
+                 balloon.setPosition(60 * balloon.scaleX, -60);
+             });
 
 
 
@@ -50,6 +64,16 @@ phina.define('Player',{
         var x = this.physicalBody.velocity.x;
         this.physicalBody.force(x, y);
     },
+    understood: function(){
+        this.bang_balloon.tweener.play()
+            .call(() => this.bang_balloon.show())
+            .wait(300)
+            .call(() => {
+                this.bang_balloon.hide();
+                this.bang_balloon.tweener.stop();
+            });
+    }
+    ,
     move: function(){
         this.physicalBody.move();
         //動いてたらその方向に体を向かせる

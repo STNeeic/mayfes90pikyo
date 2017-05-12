@@ -84,9 +84,65 @@ phina.define('Camera', {
         }
 
         this.addChild(this.stageManager);
+    },
+    move: function(x, y) {
+        this.position.add(Vector2(x * 70, y * 70));
     }
 
     });
+
+phina.define('Cursors',{
+    superClass: 'DisplayElement',
+    init: function(params){
+        this.superInit();
+        this.scene = params.scene || null;
+        let arrow_num = 4;
+        if(params.direction == "horizontal"){
+            arrow_num = 2;
+        }
+
+        const scene = this.scene;
+
+        for(let i = 0; i < arrow_num; i++) {
+            let arrow = Sprite('arrows', 64, 64).addChildTo(this);
+            arrow.frameIndex = 1;
+            arrow.scaleX = arrow.scaleY = 1.5;
+            const OFFS = 32 * arrow.scaleX;
+            arrow.setInteractive(true)
+                .on('click', () =>{
+                    if(i < 2) {
+                        this.scene.camera.move(1 - 2 * i, 0);
+                    } else {
+                        this.scene.camera.move(0, 1 - 2 * (i % 2));
+                        }
+                    });
+            if(i < 2) {
+                let offs_x = i == 0 ? OFFS : scene.width - OFFS;
+                if(i == 0){
+                    arrow.scaleX *= -1;
+                    this.leftArrow = arrow;
+                } else {
+                    this.rightArrow = arrow;
+                }
+                arrow.setPosition(offs_x , scene.gridY.center());
+            } else {
+                let offs_y = i == 2 ? OFFS : scene.height - OFFS;
+                if(i == 2) {
+                    arrow.rotation = 270;
+                    this.topArrow = arrow;
+                } else {
+                    arrow.rotation = 90;
+                    this.bottomArrow = arrow;
+                }
+                arrow.setPosition(scene.gridX.center(), offs_y);
+            }
+        }
+    },
+    update: function(app){
+        if(app.frame % 10 == 0)
+        this.children.forEach(arrow => arrow.frameIndex = (arrow.frameIndex + 3) % 3 + 1);
+    }
+});
 
 phina.define('Goal',{
     //ゴールとなるアイテム．
@@ -198,6 +254,8 @@ phina.define('ItemSelector',{
          //アイテム選択用の部分を作成
          this.selector = ItemSelector(this).addChildTo(this);
 
+         this.cursors = Cursors({scene: this}).addChildTo(this);
+
          this.builder = ItemBuilder();
 
          this.setInteractive(true);
@@ -249,16 +307,16 @@ phina.define('ItemSelector',{
          let v = Vector2(0,0);
 
          if(keyboard.getKey('left')){
-             v.x -= 70;
-         }
-         if(keyboard.getKey('right')){
              v.x += 70;
          }
-         if(keyboard.getKeyDown('up')){
-             v.y -= 70;
+         if(keyboard.getKey('right')){
+             v.x -= 70;
+         }
+         if(keyboard.getKey('up')){
+             v.y += 70;
          }
          if(keyboard.getKey('down')){
-             v.y += 70;
+             v.y -= 70;
          }
 
          this.camera.position.add(v);
@@ -272,9 +330,14 @@ phina.define('ItemSelector',{
          const y = Math.floor(v.y / 70) * 70 + 35;
          return Vector2(x, y);
      },
+     checkValidPos: function(e) {
+         const pos = e.pointer.position;
+         if(pos.y > 1050) return false;
+         return !this.cursors.children.some(cursor => cursor.hitTest(pos.x, pos.y));
+     },
      pointstart: function(e){
          this.startPos = this.alignPosFrom(e.pointer.position);
-         if(e.pointer.position.y > 1050) return;
+         if(!this.checkValidPos(e)) return;
 
              this.tmpRect = DisplayElement().addChildTo(this);
              this.tmpRect.position = this.startPos.clone();
@@ -286,7 +349,7 @@ phina.define('ItemSelector',{
          }
      },
      pointmove: function(e){
-         if(e.pointer.position.y > 1050) return;
+         if(!this.checkValidPos(e)) return;
          this.nowPos = this.alignPosFrom(e.pointer.position);
          this.tmpRect.children.forEach(item => item.remove());
          const v = Vector2.sub(this.startPos, this.nowPos);
@@ -306,7 +369,7 @@ phina.define('ItemSelector',{
          }
      },
      pointend: function(e){
-         if(e.pointer.position.y > 1050) return;
+         if(!this.checkValidPos(e)) return;
          this.tmpRect.remove();
          this.nowPos = this.alignPosFrom(e.pointer.position);
 

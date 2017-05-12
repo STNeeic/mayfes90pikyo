@@ -105,7 +105,11 @@ phina.define('StageManager', {
 
         dummy.position.add(offs);
 
-        return this.checkEarthing(element) && this.getHitItems(dummy).length == 0;
+        if(this.checkEarthing(element) && this.getHitItems(dummy).length == 0){
+            if(element.className == "Player") element.understood();
+            return true;
+        }
+        return false;
     },
     checkNearBlock: function(element, direction) {
         //左隣りまたは右隣りに接触可能なブロックがあるかどうかを判定する関数
@@ -117,15 +121,27 @@ phina.define('StageManager', {
 
         dummy.position.add(offs);
 
-        return this.getHitItems(dummy).some(item => item.canBeTouched);
+        if(this.getHitItems(dummy).some(item => item.canBeTouched)){
+            if(element.className == "Player") element.understood();
+            return true;
+        }
+        return false;
     },
     //任意の色のマーカー上にいるか
     isOnAnyMarker: function(element) {
-        return element.onMarker != "";
+        if(element.onMarker != ""){
+            if(element.className == "Player") element.understood();
+            return true;
+        };
+        return false;
     },
     //ある特定の色のマーカー上にいるか
     isOnMarker: function(element, color) {
-        return element.onMarker == color;
+        if(element.onMarker == color) {
+            if(element.className == "Player") element.understood();
+            return true;
+        }
+        return false;
     },
     calcDistance: function(elem, item){
         //大体マンハッタン距離にしている
