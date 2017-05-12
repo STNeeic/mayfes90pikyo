@@ -18,10 +18,12 @@ phina.define('Marker', {
 
         obj.onMarker = this.color;
         this.frameIndex = this.getColorId() + 1;
+        this.tweener.play().wait(500)
+            .call(() => {
+                this.frameIndex = this.getColorId();
+                this.tweener.stop();
+            });
     },
     update: function(app){
-        if(app.frame % 10 == 0){
-            this.frameIndex = this.getColorId();
-        }
     }
 });
