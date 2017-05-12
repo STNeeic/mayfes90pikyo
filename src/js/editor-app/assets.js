@@ -5,7 +5,8 @@
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
          'result-board': './pictures/ResultBoard.png',
          'eraser': './pictures/EditorIcons.png',
-         'arrows': './pictures/EditorIcons.png'
+         'arrows': './pictures/EditorIcons.png',
+         'marker': "./pictures/marker.png"
      },
  };
 
