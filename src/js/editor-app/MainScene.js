@@ -33,6 +33,8 @@
          //アイテム選択用の部分を作成
          this.selector = ItemSelector(this).addChildTo(this);
 
+         this.cursors = Cursors({scene: this}).addChildTo(this);
+
          this.builder = ItemBuilder();
 
          this.setInteractive(true);
@@ -84,16 +86,16 @@
          let v = Vector2(0,0);
 
          if(keyboard.getKey('left')){
-             v.x -= 70;
-         }
-         if(keyboard.getKey('right')){
              v.x += 70;
          }
-         if(keyboard.getKeyDown('up')){
-             v.y -= 70;
+         if(keyboard.getKey('right')){
+             v.x -= 70;
+         }
+         if(keyboard.getKey('up')){
+             v.y += 70;
          }
          if(keyboard.getKey('down')){
-             v.y += 70;
+             v.y -= 70;
          }
 
          this.camera.position.add(v);
@@ -107,9 +109,14 @@
          const y = Math.floor(v.y / 70) * 70 + 35;
          return Vector2(x, y);
      },
+     checkValidPos: function(e) {
+         const pos = e.pointer.position;
+         if(pos.y > 1050) return false;
+         return !this.cursors.children.some(cursor => cursor.hitTest(pos.x, pos.y));
+     },
      pointstart: function(e){
          this.startPos = this.alignPosFrom(e.pointer.position);
-         if(e.pointer.position.y > 1050) return;
+         if(!this.checkValidPos(e)) return;
 
              this.tmpRect = DisplayElement().addChildTo(this);
              this.tmpRect.position = this.startPos.clone();
@@ -121,7 +128,7 @@
          }
      },
      pointmove: function(e){
-         if(e.pointer.position.y > 1050) return;
+         if(!this.checkValidPos(e)) return;
          this.nowPos = this.alignPosFrom(e.pointer.position);
          this.tmpRect.children.forEach(item => item.remove());
          const v = Vector2.sub(this.startPos, this.nowPos);
@@ -141,7 +148,7 @@
          }
      },
      pointend: function(e){
-         if(e.pointer.position.y > 1050) return;
+         if(!this.checkValidPos(e)) return;
          this.tmpRect.remove();
          this.nowPos = this.alignPosFrom(e.pointer.position);
 

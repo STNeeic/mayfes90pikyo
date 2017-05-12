@@ -17,6 +17,9 @@ phina.define('Camera', {
         }
 
         this.addChild(this.stageManager);
+    },
+    move: function(x, y) {
+        this.position.add(Vector2(x * 70, y * 70));
     }
 
     });
