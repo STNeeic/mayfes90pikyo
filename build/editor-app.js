@@ -101,6 +101,7 @@ phina.define('ItemBuilder',{
     //stageに配置されるitemを数字に応じて出力するbuilder
     //もっとうまく書けるかもしれない
     init: function(){
+        this.colorId = Marker().colorId;
     },
     build: function(num){
         switch(num){
@@ -108,6 +109,13 @@ phina.define('ItemBuilder',{
         case 1: return Block();
         case 2: return Goal();
         case 3: return Player({});
+            //for marker
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            return Marker(this.colorId[num - 4]);
         default: return null;
         }
     }
@@ -361,6 +369,22 @@ phina.define('ItemSelector',{
  });
 
 
+phina.define('Marker', {
+    superClass: 'Sprite',
+    init: function(color) {
+        this.superInit('marker', 70, 70);
+        this.color = color || 'skyblue';
+        this.frameIndex = this.getColorId();
+        this.setInteractive(true);
+    },
+    //Spriteのmarkerにおける色の並び順
+    colorId: ['skyblue', 'green', 'yellow', 'red', 'purple'],
+    getColorId: function() {
+        //colorに適切なframeIndexを返す関数
+        return this.colorId.indexOf(this.color) * 3;
+    }
+});
+
 phina.define('Player',{
     //プレイヤーのクラス
     //当たり判定用の四角形が実体で
@@ -521,7 +545,8 @@ phina.define('StageManager', {
          'bg-main': './pictures/Mushroom_expansion/Backgrounds/bg_grasslands.png',
          'result-board': './pictures/ResultBoard.png',
          'eraser': './pictures/EditorIcons.png',
-         'arrows': './pictures/EditorIcons.png'
+         'arrows': './pictures/EditorIcons.png',
+         'marker': "./pictures/marker.png"
      },
  };
 

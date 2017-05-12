@@ -260,6 +260,8 @@ phina.define('ItemBuilder',{
     //stageに配置されるitemを数字に応じて出力するbuilder
     //もっとうまく書けるかもしれない
     init: function(){
+        //MarkerのcolorIdを取得するため
+        this.colorId = Marker().colorId;
     },
     build: function(num){
         switch(num){
@@ -267,6 +269,14 @@ phina.define('ItemBuilder',{
         case 1: return Block();
         case 2: return Goal();
         case 3: return Player({});
+            //for marker
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            return Marker(this.colorId[num - 4]);
+
         default: return null;
         }
     }
@@ -457,6 +467,9 @@ const TEST_STAGE = {
              }
          }
 
+         //markerの初期化処理
+         player.onMarker = "";
+
          if(keyboard.getKey('d')){
              player.die(); //for debbug
          }
@@ -495,6 +508,36 @@ const TEST_STAGE = {
      }
  });
 
+
+phina.define('Marker', {
+    superClass: 'Sprite',
+    init: function(color) {
+        this.superInit('marker', 70, 70);
+        this.color = color || 'skyblue';
+        this.frameIndex = this.getColorId();
+        this.setInteractive(true);
+    },
+    //Spriteのmarkerにおける色の並び順
+    colorId: ['skyblue', 'green', 'yellow', 'red', 'purple'],
+    getColorId: function() {
+        //colorに適切なframeIndexを返す関数
+        return this.colorId.indexOf(this.color) * 3;
+    },
+    reactTo: function(obj, scene) {
+        if(!this.hitTestElement(obj)) return;
+        if(obj.className != "Player") return;
+
+        obj.onMarker = this.color;
+        this.frameIndex = this.getColorId() + 1;
+        this.tweener.play().wait(500)
+            .call(() => {
+                this.frameIndex = this.getColorId();
+                this.tweener.stop();
+            });
+    },
+    update: function(app){
+    }
+});
 
 phina.define('PhysicalBody',{
     //updateで衝突判定を呼ぶようにしたPhysicalアクセサリ
@@ -841,7 +884,14 @@ phina.define('StageManager', {
 
         return this.getHitItems(dummy).some(item => item.canBeTouched);
     },
-
+    //任意の色のマーカー上にいるか
+    isOnAnyMarker: function(element) {
+        return element.onMarker != "";
+    },
+    //ある特定の色のマーカー上にいるか
+    isOnMarker: function(element, color) {
+        return element.onMarker == color;
+    },
     calcDistance: function(elem, item){
         //大体マンハッタン距離にしている
         const x = Math.abs(item.x - elem.x) - (item.width / 2 + elem.width / 2);
@@ -1116,7 +1166,7 @@ phina.namespace(function() {
 });
 
 const STAGE_DATA = [
-    {"blockSize":70,"width":700,"height":1050,"data":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,3,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,2,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"title":"始まりのステージ","description":"右に動かしてみよう",label:"original-stage"},
+    {"blockSize":70,"width":700,"height":1050,"data":[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,3,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,5,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,2,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"title":"始まりのステージ","description":"右に動かしてみよう",label:"original-stage"},
     {"blockSize":70,"width":1610,"height":1050,"data":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,3,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,1,0,0,0,0,0,1,1,1],[0,0,0,0,0,2,1,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]},
 
     {
@@ -1135,7 +1185,8 @@ const ASSETS = {
          'arrows': './pictures/EditorIcons.png',
          'original-stage': './pictures/stages/original.png',
          'title': './pictures/title.png',
-         'stageselectbg': './pictures/stageselect_bg.png'
+         'stageselectbg': './pictures/stageselect_bg.png',
+         'marker': "./pictures/marker.png"
      },
  };
 
