@@ -14,7 +14,8 @@ phina.define('StageManager', {
             width: 700,
             height: 1050,
             blockSize: 70,
-            data: Array.apply(null, new Array(70)).map(() => Array.apply(null, new Array(70)).map(() => 0))
+            //一番下にblockを敷いておく
+            data: Array.apply(null, new Array(10)).map(() => Array.apply(null, new Array(15)).map((a,i) => {if(i == 14){return 1;} else return 0;}))
         };
     },
 
