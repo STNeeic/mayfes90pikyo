@@ -20,7 +20,8 @@ const ASSETS = {
          'title': './pictures/title.png',
          'stageselectbg': './pictures/stageselect_bg.png',
          'marker': "./pictures/marker.png",
-         'bang-balloon': "./pictures/bang_balloon.png"
+         'bang-balloon': "./pictures/bang_balloon.png",
+         'exit-icon': "./pictures/exit_icon.png"
      },
  };
 

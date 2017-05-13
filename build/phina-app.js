@@ -374,6 +374,13 @@ const TEST_STAGE = {
          this.cursors.topArrow.on('click',() => this.cameraMove(0, 1));
          this.cursors.bottomArrow.on('click',() => this.cameraMove(0, -1));
 
+         //脱出ボタンを設置
+         this.exitButton = Sprite('exit-icon')
+             .setPosition(this.gridX.span(2), this.gridY.span(1))
+             .addChildTo(this)
+             .setInteractive(true)
+             .on('click', () => this.exit());
+
          console.log("GAME START");
      },
      retry: function(){
@@ -1227,7 +1234,8 @@ const ASSETS = {
          'title': './pictures/title.png',
          'stageselectbg': './pictures/stageselect_bg.png',
          'marker': "./pictures/marker.png",
-         'bang-balloon': "./pictures/bang_balloon.png"
+         'bang-balloon': "./pictures/bang_balloon.png",
+         'exit-icon': "./pictures/exit_icon.png"
      },
  };
 
