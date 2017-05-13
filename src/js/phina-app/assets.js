@@ -21,7 +21,8 @@ const ASSETS = {
          'stageselectbg': './pictures/stageselect_bg.png',
          'marker': "./pictures/marker.png",
          'bang-balloon': "./pictures/bang_balloon.png",
-         'exit-icon': "./pictures/exit_icon.png"
+         'exit-icon': "./pictures/exit_icon.png",
+         'needle': "./pictures/needle.png"
      },
  };
 
