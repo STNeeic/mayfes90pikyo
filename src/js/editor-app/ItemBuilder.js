@@ -17,6 +17,8 @@ phina.define('ItemBuilder',{
         case 7:
         case 8:
             return Marker(this.colorId[num - 4]);
+        case 9:
+            return Needle();
         default: return null;
         }
     }

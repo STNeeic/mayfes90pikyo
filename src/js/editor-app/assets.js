@@ -6,8 +6,9 @@
          'result-board': './pictures/ResultBoard.png',
          'eraser': './pictures/EditorIcons.png',
          'arrows': './pictures/EditorIcons.png',
-         'marker': "./pictures/marker.png"
-     },
+         'marker': "./pictures/marker.png",
+         'needle': './pictures/needle.png'
+     }
  };
 
 const player_ss = {
