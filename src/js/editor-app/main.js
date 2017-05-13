@@ -13,7 +13,7 @@
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
      //widthとheightを書かない場合default値になってしまう
      let s = app.canvas.domElement.style;
-     s.width = "90vw";
+     s.width = "70vw";
      s.height = "auto";
      //app.enableStats();
      // アプリケーション実行
