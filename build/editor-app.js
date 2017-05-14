@@ -172,6 +172,8 @@ phina.define('ItemBuilder',{
         case 7:
         case 8:
             return Marker(this.colorId[num - 4]);
+        case 9:
+            return Needle();
         default: return null;
         }
     }
@@ -249,6 +251,9 @@ phina.define('ItemSelector',{
              scene:this,
              stageManager: this.stageManager
          }).addChildTo(this);
+
+         //マウスの位置にアイコンを描画する
+         this.pointerIcon = PointerIcon({scene: this}).addChildTo(this);
 
          //ここからUIのレンダリング
          //アイテム選択用の部分を作成
@@ -448,6 +453,47 @@ phina.define('Marker', {
     }
 });
 
+phina.define('Needle', {
+    //とりあえずのブロック．
+    //いい感じの画像があったら差し替えたい
+     superClass: 'Sprite',
+
+     init: function() {
+         this.superInit('needle');
+         //接地可能か
+         this.canBeTouched = false;
+     },
+    adjustFrameIndex: function(x, y, data) {
+        //周りにブロックがあったらブロックと反対側を向くようにしたい
+        let neighbours = [[],[],[]];
+        //周囲のデータを持つ配列neighboursを作る
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+                if(x + i - 1 < 0 || y + j - 1 < 0 || x + i  > data.length || y + j > data[x + i - 1].length) {
+                    neighbours[i].push(-1);
+                    continue;
+                }
+                neighbours[i].push(data[x + i - 1][y + j - 1]);
+            }
+        }
+
+
+        if(neighbours[1][2] == 1){
+            //下にブロックがあったら上向きにする
+            this.rotation = 0;
+        } else if(neighbours[1][0] == 1){
+            //上にブロックがあったら下向きにする
+            this.rotation = 180;
+        } else if(neighbours[0][1] == 1) {
+            //左側にブロックがあったら右を向く
+            this.rotation = 90;
+        } else if(neighbours[2][1] == 1) {
+            //右側にブロックがあったら左を向く
+            this.rotation = 270;
+        }
+    }
+});
+
 phina.define('Player',{
     //プレイヤーのクラス
     //当たり判定用の四角形が実体で
@@ -483,6 +529,57 @@ phina.define('Player',{
             x: this.x,
             y: this.y
         };
+    }
+});
+
+phina.define('PointerIcon', {
+    superClass: "DisplayElement",
+    init: function(options) {
+        this.superInit();
+        this.scene = options.scene;
+        this.icon = Sprite('eraser', 64, 64).addChildTo(this);
+        this.setInteractive(true);
+        this.on('pointstart', () => {
+            //ドラッグ中はアイコンを隠す
+            this.hide();
+        });
+        this.on('pointend', () => {
+            //ドラッグ後はアイコンを見せる
+            this.show();
+        });
+
+                },
+    update: function(app) {
+        //corsorのstyleの選択権をInteractiveから奪う
+        if(!this.firstTime) {
+        app.interactive.check = function(root) {
+            if (!this._enable || !this.app.pointers) return ;
+            this._checkElement(root);
+        };
+            this.firstTime = true;
+        }
+
+
+
+        const pos = app.pointer.position.clone();
+        this.position = pos; //this.scene.alignPosFrom(pos);
+        this.icon.remove();
+        //iconの更新
+        if(this.scene.selector.state > 0) {
+            this.icon = this.scene.builder.build(this.scene.selector.state);
+        } else {
+            this.icon = Sprite('eraser', 64, 64);
+        }
+
+        this.addChild(this.icon);
+
+        //マウスカーソルを描画するかどうかの更新
+        if(this.scene.checkValidPos(app) ){
+            app.domElement.style.cursor = "none";
+        } else {
+            app.domElement.style.cursor = "auto";
+        }
+
     }
 });
 
@@ -534,7 +631,8 @@ phina.define('StageManager', {
             width: 700,
             height: 1050,
             blockSize: 70,
-            data: Array.apply(null, new Array(70)).map(() => Array.apply(null, new Array(70)).map(() => 0))
+            //一番下にblockを敷いておく
+            data: Array.apply(null, new Array(10)).map(() => Array.apply(null, new Array(15)).map((a,i) => {if(i == 14){return 1;} else return 0;}))
         };
     },
 
@@ -609,8 +707,9 @@ phina.define('StageManager', {
          'result-board': './pictures/ResultBoard.png',
          'eraser': './pictures/EditorIcons.png',
          'arrows': './pictures/EditorIcons.png',
-         'marker': "./pictures/marker.png"
-     },
+         'marker': "./pictures/marker.png",
+         'needle': './pictures/needle.png'
+     }
  };
 
 const player_ss = {
@@ -671,7 +770,7 @@ const player_ss = {
      //appをinitした時点でwidthとheightが決まってしまうので書き換える
      //widthとheightを書かない場合default値になってしまう
      let s = app.canvas.domElement.style;
-     s.width = "90vw";
+     s.width = "70vw";
      s.height = "auto";
      //app.enableStats();
      // アプリケーション実行

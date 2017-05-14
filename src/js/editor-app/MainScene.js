@@ -29,6 +29,9 @@
              stageManager: this.stageManager
          }).addChildTo(this);
 
+         //マウスの位置にアイコンを描画する
+         this.pointerIcon = PointerIcon({scene: this}).addChildTo(this);
+
          //ここからUIのレンダリング
          //アイテム選択用の部分を作成
          this.selector = ItemSelector(this).addChildTo(this);
