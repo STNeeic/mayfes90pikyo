@@ -83,6 +83,7 @@ body .header a, body .header p{
     float: left;
 
     display: -webkit-flex;
+    display: -moz-flex;
     display: flex;
     -webkit-align-items: flex-start; /* 縦方向中央揃え（Safari用） */
     align-items: flex-start;
@@ -220,6 +221,7 @@ body .header a, body .header p{
 
 .contents-wrapper{
     display: -webkit-flex;
+    display: -moz-flex;
     display: flex;
     width: 100%;
     margin-top: 15px;
@@ -393,6 +395,7 @@ h3{
         margin-bottom: 30px;
 
         -webkit-flex-direction: column; /* Safari */
+        -moz-flex-direction: column; /* Firefox */
         flex-direction:         column;
         flex-wrap: wrap;
         justify-content: space-around;
