@@ -186,6 +186,7 @@ const TEST_STAGE = {
                  eval(code);
              } catch(e){
                  console.log(e);
+                 $("#logArea").removeClass("hide");
                  $("#logArea > p").text(e.name + ":" + e.message);
              }
          }

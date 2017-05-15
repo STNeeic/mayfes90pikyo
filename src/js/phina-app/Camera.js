@@ -26,14 +26,27 @@ phina.define('Camera', {
         var ydiff = this.player.y + this.y - this.sceneHeight / 2;
 
         //スレッショルドをどこで設定するかは未定
-        var left_threthold = 300;
-        var right_threthold = 200;
+        const left_threthold = 300;
+        const right_threthold = 200;
 
+        //x軸
         if(xdiff + left_threthold < 0){
             this.x -= xdiff + left_threthold;
         }
         else if(xdiff - right_threthold > 0) {
             this.x -= xdiff - right_threthold;
         }
+
+        //y軸
+        //playerが設置している時は地面が1マス分映るまでずらす
+        const air_threthold = [200, 200];
+        if(this.stageManager.checkEarthing(this.player)){
+            //1マス分乗っている部分が見えるように
+            //1フレームに少しずつずらしていく
+            const y_destDiff = this.sceneHeight - (70 + this.player.height / 2 + (this.player.y - this.y));
+                this.y += y_destDiff;
+            console.log(y_destDiff);
+        }
+
     }
 });

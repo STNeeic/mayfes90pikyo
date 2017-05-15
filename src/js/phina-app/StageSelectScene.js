@@ -145,11 +145,16 @@ phina.define('StageViewItem', {
                     $(".stage-input").addClass("hide");
                     try {
                         console.log($(".stage-input textarea").val());
-                        let stageData = JSON.parse($(".stage-input textarea").val());
+                        const label = stageData.label;
+                        stageData = JSON.parse($(".stage-input textarea").val());
+                        //ラベルをoriginal-stageに書き換え
+                        stageData.label = label;
                         scene.exit({stageData: stageData});
                     } catch (e) {
                         console.log(e);
-                        scene.exit();
+                        $("#logArea").removeClass("hide");
+                        $("#logArea > p").text("うまくデータが読み込めませんでした。詳しい原因を知るにはConsoleをみて下さい。");
+                        $(".stage-input").addClass("hide");
                     }
                 });
             } else {

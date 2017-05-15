@@ -134,15 +134,28 @@ phina.define('Camera', {
         var ydiff = this.player.y + this.y - this.sceneHeight / 2;
 
         //スレッショルドをどこで設定するかは未定
-        var left_threthold = 300;
-        var right_threthold = 200;
+        const left_threthold = 300;
+        const right_threthold = 200;
 
+        //x軸
         if(xdiff + left_threthold < 0){
             this.x -= xdiff + left_threthold;
         }
         else if(xdiff - right_threthold > 0) {
             this.x -= xdiff - right_threthold;
         }
+
+        //y軸
+        //playerが設置している時は地面が1マス分映るまでずらす
+        const air_threthold = [200, 200];
+        if(this.stageManager.checkEarthing(this.player)){
+            //1マス分乗っている部分が見えるように
+            //1フレームに少しずつずらしていく
+            const y_destDiff = this.sceneHeight - (70 + this.player.height / 2 + (this.player.y - this.y));
+                this.y += y_destDiff;
+            console.log(y_destDiff);
+        }
+
     }
 });
 
@@ -471,6 +484,7 @@ const TEST_STAGE = {
                  eval(code);
              } catch(e){
                  console.log(e);
+                 $("#logArea").removeClass("hide");
                  $("#logArea > p").text(e.name + ":" + e.message);
              }
          }
@@ -1186,11 +1200,16 @@ phina.define('StageViewItem', {
                     $(".stage-input").addClass("hide");
                     try {
                         console.log($(".stage-input textarea").val());
-                        let stageData = JSON.parse($(".stage-input textarea").val());
+                        const label = stageData.label;
+                        stageData = JSON.parse($(".stage-input textarea").val());
+                        //ラベルをoriginal-stageに書き換え
+                        stageData.label = label;
                         scene.exit({stageData: stageData});
                     } catch (e) {
                         console.log(e);
-                        scene.exit();
+                        $("#logArea").removeClass("hide");
+                        $("#logArea > p").text("うまくデータが読み込めませんでした。詳しい原因を知るにはConsoleをみて下さい。");
+                        $(".stage-input").addClass("hide");
                     }
                 });
             } else {
