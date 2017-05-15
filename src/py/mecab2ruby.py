@@ -2,13 +2,19 @@
 
 import re
 import jaconv as ja
+import sys
 
-kana = re.compile('^[あ-んア-ン0-9a-zA-Zー〜、。「」『』！]+$')
+kana = re.compile('^[あ-んア-ン0-9a-zA-Zー〜、。「」『』！\u0028\u0029・]+$')
+args = sys.argv
+for str in sys.stdin:
+    if "EOS" in str:
+        if len(args) > 1:
+            #brを入れることを要求された時
+            print("<br>")
+        else:
+            print("")
+        continue
 
-while True:
-    str = input()
-    if str == "EOS":
-        break
     data = re.split('[\s,]', str)
     if kana.fullmatch(data[0]) == None:
         #この時漢字が含まれているはず

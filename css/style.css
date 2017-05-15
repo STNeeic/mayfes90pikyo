@@ -214,7 +214,7 @@ background-color: rgba(255,255,255,0.8);
 /*##############################*/
 
 .top{
-    background: url("../images/top.jpg") center;
+    background: url("../pictures/top.png") center;
     background-size: cover;
     color: white;
     overflow: hidden;
@@ -232,14 +232,14 @@ background-color: rgba(255,255,255,0.8);
 .top:before{
     content: '';
     background: inherit;/*.topで設定した背景画像を継承する*/
-    -webkit-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
+    -webkit-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
     position: absolute; /*ブラー効果で画像の端がボヤけた分だけ位置を調整*/
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
     z-index: -1;/*重なり順序を一番下にしておく*/
 }
 
