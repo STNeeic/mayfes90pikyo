@@ -104,8 +104,8 @@ body p{
         display: -webkit-inline-flex; /* Safari */
         display: inline-flex;
         float: right;
-
-        width: 403px;
+        justify-content: flex-end;
+        width: calc(100vw  - 450px);
         z-index: 2;
     }
 
