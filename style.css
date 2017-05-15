@@ -431,8 +431,7 @@ h3{
 }
 
 #logArea {
-    width: 100%;
-    overflow: scroll;
+    width: inherit;
     border: dashed medium #f54961;
     border-radius: 5px;
     margin-top: 10px;
@@ -442,8 +441,7 @@ h3{
 #logArea p {
     text-align: left;
     margin-top: 10px;
-    overflow: scroll;
-    display: block;
+    color: red;
 }
 
 @media (min-width: 768px)
