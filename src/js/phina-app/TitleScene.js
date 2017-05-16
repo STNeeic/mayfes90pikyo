@@ -42,6 +42,10 @@ phina.namespace(function() {
         this.on('pointend', function(){
             this.exit();
         });
+
+        //ボタンを押したら終わるようにする
+        $("#button").off("click");
+        $("#button").on("click", () => this.exit());
     },
 
     _static: {

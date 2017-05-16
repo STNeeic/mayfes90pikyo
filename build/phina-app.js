@@ -1139,6 +1139,12 @@ phina.define('StageSelectScene',{
 
         carousel.checkPosition();
 
+        //ボタンを押したらその時中央にいたステージのデータを読み込むようにする
+        $("#button").off("click");
+        $("#button").on("click", () => {
+            carousel.children[carousel.pos].exit();
+        });
+
     },
     update: function(app) {
         const keyboard = app.keyboard;
@@ -1179,23 +1185,23 @@ phina.define('StageViewItem', {
         this.width = bg.width;
         this.height = bg.height;
 
-        let stageData = params.stageData || null;
-        let scene = params.scene || null;
+        this.stageData = params.stageData || null;
+        this.scene = params.scene || null;
 
 
-        let title = Label(stageData.title + "").addChildTo(this);
+        let title = Label(this.stageData.title + "").addChildTo(this);
         title.setPosition(0, -260);
 
 
         let description = LabelArea({
-            text: stageData.description + "",
+            text: this.stageData.description + "",
             width: 400,
             height: 100
         }).addChildTo(this);
         description.setPosition(5, 200);
 
         //画像（あれば）
-        let img = !!stageData.label ? Sprite(stageData.label).addChildTo(this) : null;
+        let img = !!this.stageData.label ? Sprite(this.stageData.label).addChildTo(this) : null;
         if(img != null){
             img.setPosition(0, -50);
         }
@@ -1208,20 +1214,23 @@ phina.define('StageViewItem', {
         }
 
         //オリジナルのステージをロードするためのステージかどうかのフラグ
-        this.import = stageData.import != null ? stageData.import : false;
+        this.import = this.stageData.import != null ? this.stageData.import : false;
         this.setInteractive(true);
-        this.on('pointend',function (e) {
-            if(this.import == true) {
+        this.on('pointend', () => this.exit());
+    },
+    //ステージに行く
+    exit: function() {
+        if(this.import == true) {
                 $(".stage-input").removeClass("hide");
                 $(".stage-input .button").on('click', () => {
                     $(".stage-input").addClass("hide");
                     try {
                         console.log($(".stage-input textarea").val());
-                        const label = stageData.label;
-                        stageData = JSON.parse($(".stage-input textarea").val());
+                        const label = this.stageData.label;
+                        const stageData = JSON.parse($(".stage-input textarea").val());
                         //ラベルをoriginal-stageに書き換え
                         stageData.label = label;
-                        scene.exit({stageData: stageData});
+                        this.scene.exit({stageData: stageData});
                     } catch (e) {
                         console.log(e);
                         $("#logArea").removeClass("hide");
@@ -1230,11 +1239,10 @@ phina.define('StageViewItem', {
                     }
                 });
             } else {
-                scene.exit({
-                    stageData: stageData
+                this.scene.exit({
+                    stageData: this.stageData
                 });
             }
-        });
     }
 });
 
@@ -1282,6 +1290,10 @@ phina.namespace(function() {
         this.on('pointend', function(){
             this.exit();
         });
+
+        //ボタンを押したら終わるようにする
+        $("#button").off("click");
+        $("#button").on("click", () => this.exit());
     },
 
     _static: {
