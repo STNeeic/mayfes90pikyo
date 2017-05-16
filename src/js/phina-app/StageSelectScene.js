@@ -54,14 +54,18 @@ phina.define('StageSelectScene',{
         carousel.checkPosition = () => {
             if(carousel.isValidPos(-1)){
                 this.cursors.leftArrow.show();
+                this.cursors.leftArrow.setInteractive(true);
             } else {
                 this.cursors.leftArrow.hide();
+                this.cursors.leftArrow.setInteractive(false);
             }
 
             if(carousel.isValidPos(1)) {
                 this.cursors.rightArrow.show();
+                this.cursors.rightArrow.setInteractive(true);
             } else {
                 this.cursors.rightArrow.hide();
+                this.cursors.rightArrow.setInteractive(false);
             }
         };
 

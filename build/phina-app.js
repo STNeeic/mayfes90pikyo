@@ -369,7 +369,6 @@ const TEST_STAGE = {
          button.on("click", () => {
              if(button.attr("value") == "running") {
                  this.retry();
-                 this.cursors.show();
              } else {
                  button.attr("value", "running")
                      .text("リセット");
@@ -413,6 +412,7 @@ const TEST_STAGE = {
          this.stageManager.retry();
          this.camera.position.set(0,0);
          this.camera.follow();
+         this.cursors.show();
      },
      next: function() {
          //ボタンを戻す
@@ -446,26 +446,34 @@ const TEST_STAGE = {
          //動けるならカーソルを付けるやつ
          if(this.isValidPos(1, 0)) {
              this.cursors.leftArrow.show();
+             this.cursors.leftArrow.setInteractive(true);
          } else {
              this.cursors.leftArrow.hide();
+             this.cursors.leftArrow.setInteractive(false);
          }
 
          if(this.isValidPos(-1, 0)) {
              this.cursors.rightArrow.show();
+             this.cursors.rightArrow.setInteractive(true);
          } else {
              this.cursors.rightArrow.hide();
+             this.cursors.rightArrow.setInteractive(false);
          }
 
          if(this.isValidPos(0, 1)) {
              this.cursors.topArrow.show();
+             this.cursors.toptArrow.setInteractive(true);
          } else {
              this.cursors.topArrow.hide();
+             this.cursors.topArrow.setInteractive(false);
          }
 
          if(this.isValidPos(0, -1)) {
              this.cursors.bottomArrow.show();
+             this.cursors.bottomArrow.setInteractive(true);
          } else {
              this.cursors.bottomArrow.hide();
+             this.cursors.bottomArrow.setInteractive(false);
          }
      },
      update: function(app) {
@@ -501,10 +509,6 @@ const TEST_STAGE = {
          //markerの初期化処理
          player.onMarker = "";
 
-         if(keyboard.getKey('d')){
-             player.die(); //for debbug
-         }
-
          if(keyboard.getKeyDown('left')){
              this.cameraMove(1, 0);
          }
@@ -524,7 +528,7 @@ const TEST_STAGE = {
              }
          }
 
-        
+
          stageManager.move(player);
 
          if(button.attr("value") == "running") {
@@ -1118,14 +1122,18 @@ phina.define('StageSelectScene',{
         carousel.checkPosition = () => {
             if(carousel.isValidPos(-1)){
                 this.cursors.leftArrow.show();
+                this.cursors.leftArrow.setInteractive(true);
             } else {
                 this.cursors.leftArrow.hide();
+                this.cursors.leftArrow.setInteractive(false);
             }
 
             if(carousel.isValidPos(1)) {
                 this.cursors.rightArrow.show();
+                this.cursors.rightArrow.setInteractive(true);
             } else {
                 this.cursors.rightArrow.hide();
+                this.cursors.rightArrow.setInteractive(false);
             }
         };
 
