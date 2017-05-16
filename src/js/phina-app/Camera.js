@@ -39,14 +39,23 @@ phina.define('Camera', {
 
         //y軸
         //playerが設置している時は地面が1マス分映るまでずらす
-        const air_threthold = [200, 200];
-        if(this.stageManager.checkEarthing(this.player)){
-            //1マス分乗っている部分が見えるように
-            //1フレームに少しずつずらしていく
-            const y_destDiff = this.sceneHeight - (70 + this.player.height / 2 + (this.player.y - this.y));
-                this.y += y_destDiff;
-            console.log(y_destDiff);
+        const y_threthold = [200, 200];
+        if(ydiff + y_threthold[0] < 0) {
+            this.y -= ydiff + y_threthold[0];
+        } else if(ydiff - y_threthold[1] > 0) {
+            this.y -= ydiff - y_threthold[1];
         }
 
+        this.holdInGameStage();
+    },
+    //カメラをゲームステージの中に戻す
+    holdInGameStage: function() {
+        const stageHeight = this.stageManager.stageData.height;
+        const stageWidth = this.stageManager.stageData.width;
+
+        if (this.x > 0) this.x = 0;
+        if (this.x + stageWidth < this.sceneWidth) this.x =  this.sceneWidth - stageWidth;
+        if (this.y > 0) this.y = 0;
+        if (this.y + stageHeight < this.sceneHeight) this.y = this.sceneHeight - stageHeight;
     }
 });
