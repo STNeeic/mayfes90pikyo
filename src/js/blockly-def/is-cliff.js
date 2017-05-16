@@ -20,7 +20,7 @@ Blockly.Blocks['is_cliff'] =  {
                 }
             ],
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分の右隣りか左隣りに進もうとすると落ちるかどうか調べます",
             "helpUrl": ""
         });

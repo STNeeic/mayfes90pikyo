@@ -2,7 +2,7 @@
      init: function() {
          this.jsonInit({
              "message0": 'ジャンプする',
-             "colour": 200,
+             "colour": 210,
              "type": "Action",
              "previousStatement": "Action",
              "nextStatement": "Action",

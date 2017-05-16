@@ -21,7 +21,7 @@ Blockly.Blocks['go_l_or_r'] = {
             ],
             "previousStatement": "Action",
             "nextStatement": "Action",
-            "colour": 230,
+            "colour": 210,
             "tooltip": "鳥が右か左にうごきます",
             "helpUrl": ""
         });

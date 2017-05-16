@@ -12,7 +12,7 @@ Blockly.Blocks['log_logarea'] = {
             "previousStatement": "Action",
             "nextStatement": "Action",
             "tooltip": "指定した数や文字を画面に出力します",
-            "colour": 100
+            "colour": 160
         });
     }
 };

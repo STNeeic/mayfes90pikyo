@@ -4,7 +4,7 @@ Blockly.Blocks['is_on_any_marker'] = {
             "type": "Check",
             "message0": "マーカーのところにいる",
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分がマーカーのところにいるかどうか調べます",
             "helpUrl": ""
         });
@@ -50,7 +50,7 @@ Blockly.Blocks['is_on_marker'] = {
                 }
             ],
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分の右隣りか左隣りにブロックがあるか調べます",
             "helpUrl": ""
         });

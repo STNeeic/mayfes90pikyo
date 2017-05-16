@@ -32,7 +32,7 @@ Blockly.Blocks['go_l_or_r'] = {
             ],
             "previousStatement": "Action",
             "nextStatement": "Action",
-            "colour": 230,
+            "colour": 210,
             "tooltip": "鳥が右か左にうごきます",
             "helpUrl": ""
         });
@@ -67,7 +67,7 @@ Blockly.Blocks['is_block'] = {
                 }
             ],
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分の右隣りか左隣りにブロックがあるか調べます",
             "helpUrl": ""
         });
@@ -102,7 +102,7 @@ Blockly.Blocks['is_cliff'] =  {
                 }
             ],
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分の右隣りか左隣りに進もうとすると落ちるかどうか調べます",
             "helpUrl": ""
         });
@@ -120,7 +120,7 @@ Blockly.JavaScript['is_cliff'] = function(block){
      init: function() {
          this.jsonInit({
              "message0": 'ジャンプする',
-             "colour": 200,
+             "colour": 210,
              "type": "Action",
              "previousStatement": "Action",
              "nextStatement": "Action",
@@ -150,7 +150,7 @@ Blockly.Blocks['log_logarea'] = {
             "previousStatement": "Action",
             "nextStatement": "Action",
             "tooltip": "指定した数や文字を画面に出力します",
-            "colour": 100
+            "colour": 160
         });
     }
 };
@@ -167,7 +167,7 @@ Blockly.Blocks['is_on_any_marker'] = {
             "type": "Check",
             "message0": "マーカーのところにいる",
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分がマーカーのところにいるかどうか調べます",
             "helpUrl": ""
         });
@@ -213,7 +213,7 @@ Blockly.Blocks['is_on_marker'] = {
                 }
             ],
             "output": "Boolean",
-            "colour": 100,
+            "colour": 120,
             "tooltip": "自分の右隣りか左隣りにブロックがあるか調べます",
             "helpUrl": ""
         });
