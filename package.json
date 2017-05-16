@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/STNeeic/mayfes_pirorirarin.git"
+    "url": "git+https://github.com/STNeeic/mayfes90pikyo.git"
   },
   "keywords": [
     "mayfes",
@@ -20,9 +20,9 @@
   "author": "EEIC mayfes team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/STNeeic/mayfes_pirorirarin/issues"
+    "url": "https://github.com/STNeeic/mayfes90pikyo/issues"
   },
-  "homepage": "https://github.com/STNeeic/mayfes_pirorirarin#readme",
+  "homepage": "https://github.com/STNeeic/mayfes90pikyo#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
