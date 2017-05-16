@@ -2,13 +2,12 @@ Blockly.Blocks['myvariable_get'] = {
     init: function() {
         this.jsonInit({
             "type": "Action",
-            "message0": "おぼえていた数",
+            "message0": "おぼえていたもの",
             "colour": 330,
-            "output" : "Number",
             "tooltip": "覚えていたもの（数やBoolean）を 出力します",
             "helpUrl": ""
         });
-
+        this.setOutput(true);
     }
 };
 
@@ -26,7 +25,7 @@ Blockly.Blocks['myvariable_set'] = {
             "args0": [
                 {
                     "type": "input_value",
-                    "name": "VAR"
+                    "name": "VALUE"
                 }
             ],
             "colour": 330,
@@ -39,7 +38,7 @@ Blockly.Blocks['myvariable_set'] = {
 };
 
 Blockly.JavaScript['myvariable_set'] = function(block){
-    var input = Blockly.JavaScript.valueToCode(block, "VAR", Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+    var input = Blockly.JavaScript.valueToCode(block, "VALUE", Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
     console.log(input);
     var code = 'player.variable = ' + input + ";\n";
     return code;
