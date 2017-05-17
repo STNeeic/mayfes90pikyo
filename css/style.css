@@ -359,6 +359,10 @@ h1{
 }
 .contents-img{
     width: 75%;
+    border-radius: 400px;
+    border: solid 2px #fff;
+    box-shadow:0px 0px 10px #ccc,
+        inset 0px 0px 10px rgba(0, 0, 0, 0.8);
 }
 
 .contents-text{
@@ -430,7 +434,8 @@ h4{
 }
 
 .link-img{
-    height: 120px;
+    max-height: 120px;
+    width: auto;
     max-width: 100%;
 }
 
