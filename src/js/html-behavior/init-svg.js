@@ -1,5 +1,5 @@
- let blocklyArea = document.getElementById('blocklyArea');
- let blocklyDiv = document.getElementById('blocklyDiv');
+ var blocklyArea = document.getElementById('blocklyArea');
+ var blocklyDiv = document.getElementById('blocklyDiv');
  var workspace = Blockly.inject(blocklyDiv ,
 				                        {toolbox: document.getElementById('toolbox'),
                                  scrollbar: true,
