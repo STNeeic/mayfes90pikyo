@@ -162,7 +162,13 @@ phina.define('StageViewItem', {
                         const stageData = JSON.parse($(".stage-input textarea").val());
                         //ラベルをoriginal-stageに書き換え
                         stageData.label = label;
-                        this.scene.exit({stageData: stageData});
+                        if(this.checkStageValidation(stageData)) {
+                            this.scene.exit({stageData: stageData});
+                        } else {
+                            $("#logArea").removeClass("hide");
+                            $("#logArea > p").text("ステージにはゴールとプレイヤーが1つ必要です！");
+                            $(".stage-input").addClass("hide");
+                        }
                     } catch (e) {
                         console.log(e);
                         $("#logArea").removeClass("hide");
@@ -175,5 +181,16 @@ phina.define('StageViewItem', {
                     stageData: this.stageData
                 });
             }
+    },
+ checkStageValidation: function(stageData) {
+     let player = false;
+     let goal = false;
+        for(row of stageData.data) {
+            for(data of row) {
+                if(data == 2) goal = true;
+                if(data == 3) player = true;
+            }
+        }
+        return player && goal;
     }
 });
