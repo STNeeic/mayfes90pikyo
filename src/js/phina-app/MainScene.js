@@ -70,6 +70,8 @@ const TEST_STAGE = {
                  //変数の初期化
                  this.player.variable = 0;
                  this.cursors.hide();
+                 this.time = 0;
+                 this.score = 0;
              }
          });
 

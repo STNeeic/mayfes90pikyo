@@ -168,6 +168,23 @@ phina.define('Camera', {
     }
 });
 
+phina.define('Apple',{
+    //ゴールとなるアイテム．
+    superClass: 'Sprite',
+    firstTime: true,
+    init: function(){
+        this.superInit('cherry');
+        
+    },
+    reactTo: function(obj, scene){
+        if(this.hitTestElement(obj) == true && this.firstTime == true) {
+            //ゲームクリア!!
+            ResultBoard(scene).addChildTo(scene);
+            this.firstTime = false;
+        }
+    }
+});
+
 phina.define('Cursors',{
     superClass: 'DisplayElement',
     init: function(params){
@@ -377,6 +394,8 @@ const TEST_STAGE = {
                  //変数の初期化
                  this.player.variable = 0;
                  this.cursors.hide();
+                 this.time = 0;
+                 this.score = 0;
              }
          });
 
@@ -1253,8 +1272,8 @@ phina.define('StageViewItem', {
  checkStageValidation: function(stageData) {
      let player = false;
      let goal = false;
-        for(row of stageData.data) {
-            for(data of row) {
+        for(let row of stageData.data) {
+            for(let data of row) {
                 if(data == 2) goal = true;
                 if(data == 3) player = true;
             }
@@ -1354,7 +1373,8 @@ const ASSETS = {
          'marker': "./pictures/marker.png",
          'bang-balloon': "./pictures/bang_balloon.png",
          'exit-icon': "./pictures/exit_icon.png",
-         'needle': "./pictures/needle.png"
+         'needle': "./pictures/needle.png",
+         'cherry': "./pictures/Candy_expansion/cherry.png"
      },
  };
 

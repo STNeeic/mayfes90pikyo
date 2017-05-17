@@ -22,7 +22,8 @@ const ASSETS = {
          'marker': "./pictures/marker.png",
          'bang-balloon': "./pictures/bang_balloon.png",
          'exit-icon': "./pictures/exit_icon.png",
-         'needle': "./pictures/needle.png"
+         'needle': "./pictures/needle.png",
+         'cherry': "./pictures/Candy_expansion/cherry.png"
      },
  };
 

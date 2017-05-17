@@ -185,8 +185,8 @@ phina.define('StageViewItem', {
  checkStageValidation: function(stageData) {
      let player = false;
      let goal = false;
-        for(row of stageData.data) {
-            for(data of row) {
+        for(let row of stageData.data) {
+            for(let data of row) {
                 if(data == 2) goal = true;
                 if(data == 3) player = true;
             }
