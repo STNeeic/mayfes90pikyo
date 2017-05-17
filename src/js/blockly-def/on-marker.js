@@ -51,7 +51,7 @@ Blockly.Blocks['is_on_marker'] = {
             ],
             "output": "Boolean",
             "colour": 120,
-            "tooltip": "自分の右隣りか左隣りにブロックがあるか調べます",
+            "tooltip": "自分が特定色のマーカーのところにいるかどうかを調べます",
             "helpUrl": ""
         });
     }

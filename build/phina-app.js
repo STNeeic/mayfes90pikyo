@@ -462,7 +462,7 @@ const TEST_STAGE = {
 
          if(this.isValidPos(0, 1)) {
              this.cursors.topArrow.show();
-             this.cursors.toptArrow.setInteractive(true);
+             this.cursors.topArrow.setInteractive(true);
          } else {
              this.cursors.topArrow.hide();
              this.cursors.topArrow.setInteractive(false);
