@@ -361,8 +361,7 @@ h1{
     width: 75%;
     border-radius: 400px;
     border: solid 2px #fff;
-    box-shadow:0px 0px 10px #ccc,
-        inset 0px 0px 10px rgba(0, 0, 0, 0.8);
+    box-shadow:0px 0px 10px #ccc;
 }
 
 .contents-text{
