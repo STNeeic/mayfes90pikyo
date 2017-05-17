@@ -1095,6 +1095,7 @@ phina.define('StageManager', {
             }
         });
         this.player.position = this.player.startPos.clone();
+        this.player.setVelocity(0, 0);
         this.goal.firstTime = true;
     }
 });
