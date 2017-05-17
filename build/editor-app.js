@@ -91,6 +91,27 @@ phina.define('Camera', {
 
     });
 
+phina.define('Cherry',{
+    //ゴールとなるアイテム．
+    superClass: 'Sprite',
+    firstTime: true,
+    init: function(){
+        this.superInit('cherry');
+        
+    },
+    reactTo: function(obj, scene){
+        if(this.hitTestElement(obj) == true && this.firstTime == true) {
+            scene.score += 1;
+            this.firstTime = false;
+            this.hide();
+        }
+    },
+    retry: function() {
+        this.show();
+        this.firstTime = true;
+    }
+});
+
 phina.define('Cursors',{
     superClass: 'DisplayElement',
     init: function(params){
@@ -174,6 +195,7 @@ phina.define('ItemBuilder',{
             return Marker(this.colorId[num - 4]);
         case 9:
             return Needle();
+        case 10: return Cherry();
         default: return null;
         }
     }
@@ -213,7 +235,7 @@ phina.define('ItemSelector',{
  
         //set for eraser
         let eraser = Sprite('eraser', 64, 64);
-        eraser.position.set(num * coef_x + offs_x, scene.height - 50);
+        eraser.position.set((num + 1)* coef_x + offs_x, scene.height - 50);
         eraser.scaleX = eraser.scaleY = 1.5;
         eraser.setInteractive(true);
         eraser.on('pointend', () => this.state = 0);
@@ -708,7 +730,8 @@ phina.define('StageManager', {
          'eraser': './pictures/EditorIcons.png',
          'arrows': './pictures/EditorIcons.png',
          'marker': "./pictures/marker.png",
-         'needle': './pictures/needle.png'
+         'needle': './pictures/needle.png',
+         'cherry': "./pictures/Candy_expansion/Tiles/cherry.png"
      }
  };
 

@@ -183,7 +183,12 @@ phina.define('StageManager', {
 
     },
     retry: function(){
-        this.children.forEach(item => item.position = item.startPos.clone());
+        this.children.forEach(item => {
+            item.position = item.startPos.clone();
+            if(!!item.retry) {
+                item.retry();
+            }
+        });
         this.player.position = this.player.startPos.clone();
         this.goal.firstTime = true;
     }

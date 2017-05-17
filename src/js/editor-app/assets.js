@@ -7,7 +7,8 @@
          'eraser': './pictures/EditorIcons.png',
          'arrows': './pictures/EditorIcons.png',
          'marker': "./pictures/marker.png",
-         'needle': './pictures/needle.png'
+         'needle': './pictures/needle.png',
+         'cherry': "./pictures/Candy_expansion/Tiles/cherry.png"
      }
  };
 

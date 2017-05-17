@@ -11,10 +11,14 @@ phina.define('ResultBoard',{
         const right_line = 160; //次にいくの「く」の位置に揃うライン
 
         const board = Sprite('result-board').addChildTo(this);
-        const score = Label(scene.score + " 点").addChildTo(this);
-        score.setPosition(right_line, 0);
-        score.align = 'right';
-        score.fontSize = 36;
+        const score = DisplayElement({
+            width:420,
+            height:70
+        }).addChildTo(this);
+        score.setPosition(right_line - 20, 0);
+        for(let i = 0; i < scene.score; i++){
+            Cherry().addChildTo(score).setPosition(-i * 70,0);
+        }
         const time = this.timeToStr(scene.time);
         const timelabel = Label(time).addChildTo(this);
         timelabel.setPosition(right_line, -110);
@@ -60,6 +64,7 @@ phina.define('ResultBoard',{
     removeAll: function(){
         this.l_button.remove();
         this.r_button.remove();
+        this.children.forEach((e) => e.remove());
         this.remove();
     },
     next: function(e){

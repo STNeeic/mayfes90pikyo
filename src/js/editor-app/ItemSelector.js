@@ -32,7 +32,7 @@ phina.define('ItemSelector',{
  
         //set for eraser
         let eraser = Sprite('eraser', 64, 64);
-        eraser.position.set(num * coef_x + offs_x, scene.height - 50);
+        eraser.position.set((num + 1)* coef_x + offs_x, scene.height - 50);
         eraser.scaleX = eraser.scaleY = 1.5;
         eraser.setInteractive(true);
         eraser.on('pointend', () => this.state = 0);
