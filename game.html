@@ -30,18 +30,32 @@
     <category name="いどう" colour="210">
         <block type="jump"></block>
         <block type="go_l_or_r"></block>
+        <block type="go_l_or_r">
+            <field name="DIRECTION">LEFT</field>
+        </block>
     </category>
     <category name="けいさん" colour="230">
         <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
+        <block type="math_arithmetic">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
     </category>
     <category name="もじ" colour="160">
         <block type="text"></block>
     <block type="log_logarea"></block>
     </category>
     <category name="おぼえる" colour="330">
-    <block type="myvariable_get"></block>
     <block type="myvariable_set"></block>
+    <block type="myvariable_get"></block>
     </category>
 </xml>
 
