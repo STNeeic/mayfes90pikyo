@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+  <title>プログラミング教室</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/instructions.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript">
+    var windowWidth = $(window).width();
+    var windowHeight = $(window).height();
+    var flag = 1;// 1は閉じている状態
+    var mql = window.matchMedia('screen and (max-width: 800px)');
+    function close() {
+      $('ul.global-nav-list').slideUp(300);
+    }
+    function toggle() {
+      $('ul.global-nav-list').slideToggle(300);
+    }
+    function open() {
+        $('nav.CP-nav').slideDown(300);
+    }
+    function close2() {
+        if (mql.matches) {
+            $('li.at').addClass('slide-up').removeClass('slide-down');
+            $('ul.CP-nav-list').removeClass('through');
+            $('nav.CP-nav').css('z-index', 1);
+            flag = 1;
+        }else {
+            $('nav.CP-nav').slideUp(300);
+        }
+    }
+    function toggle2() {
+          if(flag === 1){$('li.at').addClass('slide-down').removeClass('slide-up'); $('ul.CP-nav-list').addClass('through');$('nav.CP-nav').css('z-index',3); flag = 2;}
+          else{$('ul.CP-nav-list').removeClass('through'); $('li.at').addClass('slide-up').removeClass('slide-down');$('nav.CP-nav').css('z-index',1);  flag = 1;}
+
+        }
+
+    $(function(){
+      $('a[href^="#"]').click(function(){
+        var speed = 300;
+        var href= $(this).attr("href");
+        var target = $(href === "#" || href === "" ? 'html' : href);
+        var position = target.offset().top;
+        $("html, body").animate({scrollTop:position}, speed, "swing");
+        return false;
+      });
+    });
+
+    function checkBreakPoint(mql) {
+        windowHeight = $(window).height();
+        if (mql.matches) {
+            // スマホ向け
+            $(function () {
+                $('section.top').css('height',windowHeight - 50 + 'px');
+                $('ul.global-nav-list').css('display',"none");
+                $('nav.CP-nav').css('display',"block").css('z-index', 1);
+                $('nav.global-nav').css('width',windowWidth).css('height',"");
+
+                $('li.at').addClass('slide-up').removeClass('slide-down');
+                $('ul.CP-nav-list').removeClass('through');
+                flag = 1;
+            });
+
+            $(function(){
+                $('li.CP-wrap').unbind('mouseenter',open);
+            });
+
+            $(function(){
+                $('li.no-wrap').unbind('mouseenter',close2);
+            });
+
+            $(function(){
+                $('header').unbind('mouseleave',close2);
+            });
+
+            $(function(){
+                $('div.menu-trigger').click(close2).click(toggle);
+            });
+
+            $(function () {
+                $('a.nav').click(close2).click(close);
+            });
+            $(function () {
+                $('a.header-link').click(close).click(close2);
+            });
+            $(function () {
+                $('div.tri').click(toggle2);
+            });
+        } else {
+            // PC向け
+
+            $(function () {
+                $('section.top').css('height',windowHeight - 75 + 'px');
+                $('nav.global-nav').css('width',"calc(100vw - 450px)").css('height',"55px");
+                $('nav.CP-nav').css('display',"none");
+                $('ul.global-nav-list').css('display',"inline-flex");
+            });
+
+            $(function(){
+                $('div.menu-trigger').unbind('click',toggle).unbind('click',close2);
+            });
+
+            $(function(){
+                $('a.nav').unbind('click',close).unbind('click',close2);
+            });
+
+            $(function(){
+                $('a.header-link').unbind('click',close).unbind('click',close2);
+            });
+            $(function () {
+                $('div.tri').unbind('click',toggle2);
+            });
+
+            $(function () {
+                $('li.CP-wrap').mouseenter(open);
+            });
+            $(function () {
+                $('li.no-wrap').mouseenter(close2);
+            });
+            $(function () {
+                $('header').mouseleave(close2);
+            });
+        }
+    }
+
+      // ブレイクポイントの瞬間に発火
+      mql.addListener(checkBreakPoint);
+
+      // 読み込み時に動作させる
+      checkBreakPoint(mql);
+
+  </script>
+
+
+</head>
+<body>
+  <header class="header">
+    <a href="#top" class="header-link">
+    <img class="header_img" src="./images/white_bulb.png" alt="eeic">
+    <div class="top-text">
+      <p class="up">EEIC 五月祭展示</p>
+      <p class="down">プログラミング教室</p>
+    </div>
+    </a>
+
+    <div class="menu-trigger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="global-nav">
+      <ul class="global-nav-list">
+        <li class="nav-item no-wrap"><a href="#about" class="nav">せつめい</a></li>
+        <li class="nav-item no-wrap"><a href="#contents" class="nav">あそぶ</a></li>
+        <li class="nav-item no-wrap at"><a href="#access" class="nav">行き方</a></li>
+        <li class="nav-item no-wrap"><a href="#links" class="nav">リンク</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section class="under-header" id="top"></section>
+  <section class="top">
+    <h1>あそびかた</h1>
+  </section>
+  <div class="wrapper">
+  <section class="factor" id="about">
+    <h2 class="heading">もくひょう</h2>
+    <p class="about-text　mobile-text">
+        ブロックを組み合わせてプログラムを組み、とりに星までの行き方を教えてあげてください。
+        <br>
+        早く星までたどり着いたり、とちゅうでさくらんぼを拾えたりするとより喜びます。
+    </p>
+            <h3>
+                あそびかた
+            </h3>
+            <div class="contents-wrapper reverse">
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_start.png" alt="タイトル画面">
+                    <div class="contents-text">
+                        初めて遊ぶなら「はじめから」をおしてください。
+                        <br>
+                        もう遊んだことがあったら「つづきから」をおしてください。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_select.png" alt="ステージ選択">
+                    <div class="contents-text">
+                        ステージを選んで「スタート」をおすとゲームが始まります。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_blockly.png" alt="プログラム作成">
+                    <div class="contents-text">
+                       みぎがわでブロックを組み立ててプログラムを作ります。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_gamestart.png" alt="ゲーム開始">
+                    <div class="contents-text">
+                        「スタート」をおすと、プログラムを読んでとりが動きます。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_star.png" alt="ゴール">
+                    <div class="contents-text">
+                        星のところにたどりつけるようにプログラムを組みましょう！
+                    </div>
+                </div>
+
+            </div>
+            <h3>
+                ブロックの組み立て方
+            </h3>
+            <div class="contents-wrapper">
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_blockly.png" alt="プログラムを作る場所">
+                    <div class="contents-text">
+                        右側の場所でブロックを組み立てます。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_flyout.png" alt="見本">
+                    <div class="contents-text">
+                        カテゴリーのところをクリックすると、
+                        ブロックの見本が出てきます。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_tooldrag.gif" alt="ブロックを取り出す">
+                    <div class="contents-text">
+                        見本をドラッグすると、そのブロックが取り出せます。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_toolconnect.gif" alt="ブロックをくっつける">
+                    <div class="contents-text">
+                        取り出したブロックは、凹んでるところを近づけるとくっつきます。
+                    </div>
+                </div>
+                <div class="contents-box">
+        <img class="contents-img" src="./pictures/inst/inst_runbelow.png" alt="とりを動かす">
+                    <div class="contents-text">
+                        「ずっとつづける」のブロックにくっついているブロックを読んで、とりは動きます。
+                    </div>
+                </div>
+
+            </div>
+  </section>
+  <section class="factor" id="contents">
+      <h2 class="heading">ブロックのせつめい</h2>
+      <h3 class="blocks ifs">
+          ばあいわけ
+      </h3>
+      <p>
+          「雨が降っているなら」かさをさす、「おなかがすいているなら」ごはんを食べる…といったように、あるときだけ何かをするために使うブロックたちです。
+      </p>
+      <div class="contents-wrapper">
+          <div class="contents-box">
+
+              <div class="contents-text">
+                  <h4>
+                      もし〜する（if文）
+                  </h4>
+                  「もし」のみぎにくっついているブロックに書かれていることと今のとりのじょうたいがあっているなら、「する」のところにくっついているブロックに書かれていることをとりが行います。
+              </div>
+          </div>
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>もし〜する　そうでないとき、</h4>
+                  「もし」のみぎにくっついているブロックに書かれている内容と今のとりのじょうたいがあっているなら、「する」のところにくっついているブロックに書かれていることをとりが行い、あっていないなら「そうでないとき、」にくっついているブロックに書かれていることをとりが行います。
+              </div>
+          </div>
+      </div>
+
+      <h3 class="blocks find">
+          しらべる
+      </h3>
+      <p>
+          いまとりがどこにいるのかをしらべることが出来るブロックたちです。
+      </p>
+      <div class="contents-wrapper">
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>
+                      （右がわ） に すすむと落ちる
+                  </h4>
+                  「右がわ」になっているときは、とりが右に1マスぶんすすんだときにじめんがあるかどうかを調べます。
+                  「左がわ」になっているときは、とりが左がわに1マスぶんすすんだときにじめんがあるかどうかを調べます。
+少しでもだんさがあれば「落ちる」と判断します。
+              </div>
+          </div>
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>
+                      （右）にブロックがある
+                  </h4>
+                  「右」になっているときは、とりから右に1マスぶん離れたところにブロックがあるかどうかを調べます。
+                  「左」になっているときは、とりから左に1マスぶん離れたところにブロックがあるかどうかを調べます。
+                  ちなみに、トゲやマーカーはブロックではありません。とりが上に乗ることが出来るものがブロックです。
+              </div>
+          </div>
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>
+                      マーカーのところにいる
+                  </h4>
+                  とりがマーカーがあるところにいるかどうか調べます。
+                  マーカーの色は調べることができません。どの色のマーカーのところにいても、「マーカーのところにいる」と判断します。
+              </div>
+          </div>
+          <div class="contents-box">
+              <div class="contents-text">
+              <h4>
+                  （水色）のマーカーのところにいる
+              </h4>
+              とりが「水色」のマーカーのところにいるかどうか調べます。
+              マーカーの色も調べることができます。例えば「みどり色」のマーカーのところにとりがいたら、『「水色」のマーカーのところ』にはいないと判断します。
+              </div>
+          </div>
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>
+                      「＝」、「<」、「>」…
+                  </h4>
+                  「=」や「<」などの記号（演算子と呼びます）の左と右に数字を入れます。記号が表している意味に応じて、左がわと右がわにある数が同じなのか、左のほうが大きいのか、右がわのほうが大きいのか…などのような2つの数字の関係を調べることができます。
+                  「=」は、二つの数字が同じであることを示しています。その反対の意味を表すのが「≠」で、二つの数字が違うことを示しています。
+                  「<」「>」は、記号の広がっているがわの数字が大きいことを示しています。例えば「1<2」「2>1」などはあっていると判断されます。
+                  「≤」「≥」の記号は「＝」と「<」「>」がくっついてできた記号です。2つの数字が同じであるか、記号の広がっているがわの数字が大きいことを示しています。例えば「1≤1」「1≤2」などは「あっている」と判断されます。
+              </div>
+          </div>
+      </div>
+
+      <h3 class="blocks ifs">
+          いどう
+      </h3>
+      <p>
+          とりをうごかすことが出来るブロックです。
+      </p>
+      <div class="contents-wrapper">
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>
+                      ジャンプする
+                  </h4>
+                 とりがジャンプします。ブロックの上にいるときしかジャンプはできません。ひよこなのでうまく飛べないのです。
+              </div>
+          </div>
+          <div class="contents-box">
+              <div class="contents-text">
+                  <h4>
+                      （右に）すすむ
+                  </h4>
+                  とりが右にすすみます。
+                  『「左に」すすむ』にすると、左にすすみます。
+              </div>
+          </div>
+          <h3 class="blocks math">
+              けいさん
+          </h3>
+          <p>
+              数字を表すブロックや、たし算ひき算などが出来るブロックたちです。
+          </p>
+          <div class="contents-wrapper">
+              <div class="contents-box">
+                  <div class="contents-text">
+                      <h4>
+                          0（数字ブロック）
+                      </h4>
+                     数字を表します。0のところをクリックすると、キーボードを使って好きな数字にかえることができます。
+                  </div>
+              </div>
+              <div class="contents-box">
+                  <div class="contents-text">
+                      <h4>
+                          「＋」「-」「×」「÷」
+                      </h4>
+                      たし算やひき算などをして、答えを左がわにくっついているブロックに伝えます。数字を入れる部分にさらに「＋」などのブロックを入れることもできます。
+                  </div>
+              </div>
+              <h3 class="blocks texts">
+                  もじ
+              </h3>
+              <p>
+                 もじを表すブロックと、もじを画面にうつすことが出来るブロックが入っています。
+              </p>
+              <div class="contents-wrapper">
+                  <div class="contents-box">
+                      <div class="contents-text">
+                          <h4>
+                             ””（もじブロック）
+                          </h4>
+                          もじをあらわすブロックです。""の間をクリックすると、キーボードを使って文字を自由に入れることができます。
+                      </div>
+                  </div>
+                  <div class="contents-box">
+                      <div class="contents-text">
+                          <h4>
+                              「　」を画面にうつす
+                          </h4>
+                          あながあいているところに入れたブロックが表す文字や数字を画面にうつします。
+                          ブロックを組み立てる場所の下あたりに出てきます。
+                      </div>
+                  </div>
+                  <h3 class="blocks vars">
+                      おぼえる
+                  </h3>
+                  <p>
+                      数字や文字をおぼえたり、思いだしたりするためのブロックが入っています。
+                  </p>
+                  <div class="contents-wrapper">
+                      <div class="contents-box">
+                          <div class="contents-text">
+                              <h4>
+                                  「　」をおぼえる
+                              </h4>
+                              あながあいているところに入れたブロックが表す文字や数字をおぼえます。
+                              新しく何かをおぼえると前におぼえていたことは忘れます。
+                          </div>
+                      </div>
+                      <div class="contents-box">
+                          <div class="contents-text">
+                              <h4>
+                                  おぼえているもの
+                              </h4>
+                              いまおぼえている文字や数字を左にくっついているブロックに伝えます。
+                          </div>
+                      </div>
+
+  </section>
+  <footer class="footer">
+    <p class="copyright">Copyright &copy; EEIC 五月祭展示<br class="mobile">「近未来体験2017」All rights reserved.</p>
+  </footer>
+    </div>
+</body>
+</html>
