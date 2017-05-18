@@ -4,7 +4,7 @@ import re
 import jaconv as ja
 import sys
 
-kana = re.compile('^[あ-んア-ン0-9a-zA-Zー〜、。「」『』！\u0028\u0029・]+$')
+kana = re.compile('^[あ-んア-ン0-9a-zA-Zー〜、!。_;:\[\],\.\?\$「」『』＋+-×÷！≠#≤=＝≥"\'</>\uFF09\uFF08\u0028\u0029\u201D…・]+$')
 args = sys.argv
 for str in sys.stdin:
     if "EOS" in str:
