@@ -35,10 +35,13 @@ body {
 
 .contents-text{
     flex-grow: 0;
+    line-height: 4rem;
+    margin-left: 20%;
 }
 
 .contents-img + .contents-text {
 	  width: 75%;
+    margin-left: 0;
 }
 .contents-img {
 	  width: 20%;
@@ -46,7 +49,7 @@ body {
 }
 
 .contents-text h4 {
-	  margin-bottom: 2rem;
+	  margin-bottom: 1rem;
 	  font-size: 1.7rem;
 }
 
