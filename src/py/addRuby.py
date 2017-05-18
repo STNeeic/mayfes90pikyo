@@ -12,7 +12,7 @@ class MyHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         tagname = self.get_starttag_text()
-        if tagname is not None and "script" in tagname:
+        if tagname is not None and ("script" in tagname or "title" in tagname):
             print(data)
         else:
             output = subprocess.getoutput("echo " + "\"" +data + "\" | " + "../sh/appendruby.sh")
