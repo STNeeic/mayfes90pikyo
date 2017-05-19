@@ -137,7 +137,7 @@ phina.define('StageManager', {
     },
     //ある特定の色のマーカー上にいるか
     isOnMarker: function(element, color) {
-        if(element.onMarker[Marker().colorId.indexOf(color)]) {
+        if(element.onMarker[Marker().colorId.indexOf(color)] == true) {
             if(element.className == "Player") element.understood();
             return true;
         }
@@ -159,7 +159,6 @@ phina.define('StageManager', {
         let near_items = this.children.sort((a, b) => {
                   return this.calcDistance(element, a) - this.calcDistance(element, b);
         });
-        const reactable_item_num = 4;
         const scene = this.scene;
 
 
@@ -183,7 +182,7 @@ phina.define('StageManager', {
                     continue;
                 }
                 if ((x < left || right <= x) || (y < top || bottom <= y)){
-                    if (4 <= data[x][y] || data[x][y] <= 8){
+                    if (4 <= data[x][y] && data[x][y] <= 8){
                         element.onMarker[data[x][y] - 4] = true;
                     }
                 }
@@ -204,8 +203,8 @@ phina.define('StageManager', {
         }
 
 
-        for(let i = 0; i < reactable_item_num; i++) {
-            near_items[i].reactTo(element, scene);
+        for(let item of near_items) {
+            item.reactTo(element, scene);
         }
 
     },
