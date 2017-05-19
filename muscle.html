@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+
+<html lang="ja">
+
+
+<head >
+
+
+<meta charset="UTF-8">
+
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+
+
+<title >
+プログラミング教室
+</title>
+
+  
+<link rel="stylesheet" href="./css/reset.css">
+
+
+<link rel="stylesheet" href="./css/style.css">
+
+
+<link rel="stylesheet" href="./css/instructions.css">
+
+
+
+<script src="Lib/jquery-3.2.1.min.js">
+</script>
+
+  
+<script type="text/javascript">
+
+    var windowWidth = $(window).width();
+    var windowHeight = $(window).height();
+    var flag = 1;// 1は閉じている状態
+    var mql = window.matchMedia('screen and (max-width: 800px)');
+    function close() {
+      $('ul.global-nav-list').slideUp(300);
+    }
+    function toggle() {
+      $('ul.global-nav-list').slideToggle(300);
+    }
+    function open() {
+        $('nav.CP-nav').slideDown(300);
+    }
+    function close2() {
+        if (mql.matches) {
+            $('li.at').addClass('slide-up').removeClass('slide-down');
+            $('ul.CP-nav-list').removeClass('through');
+            $('nav.CP-nav').css('z-index', 1);
+            flag = 1;
+        }else {
+            $('nav.CP-nav').slideUp(300);
+        }
+    }
+    function toggle2() {
+          if(flag === 1){$('li.at').addClass('slide-down').removeClass('slide-up'); $('ul.CP-nav-list').addClass('through');$('nav.CP-nav').css('z-index',3); flag = 2;}
+          else{$('ul.CP-nav-list').removeClass('through'); $('li.at').addClass('slide-up').removeClass('slide-down');$('nav.CP-nav').css('z-index',1);  flag = 1;}
+
+        }
+
+    $(function(){
+      $('a[href^="#"]').click(function(){
+        var speed = 300;
+        var href= $(this).attr("href");
+        var target = $(href === "#" || href === "" ? 'html' : href);
+        var position = target.offset().top;
+        $("html, body").animate({scrollTop:position}, speed, "swing");
+        return false;
+      });
+    });
+
+    function checkBreakPoint(mql) {
+        windowHeight = $(window).height();
+        if (mql.matches) {
+            // スマホ向け
+            $(function () {
+                $('section.top').css('height',windowHeight - 50 + 'px');
+                $('ul.global-nav-list').css('display',"none");
+                $('nav.CP-nav').css('display',"block").css('z-index', 1);
+                $('nav.global-nav').css('width',windowWidth).css('height',"");
+
+                $('li.at').addClass('slide-up').removeClass('slide-down');
+                $('ul.CP-nav-list').removeClass('through');
+                flag = 1;
+            });
+
+            $(function(){
+                $('li.CP-wrap').unbind('mouseenter',open);
+            });
+
+            $(function(){
+                $('li.no-wrap').unbind('mouseenter',close2);
+            });
+
+            $(function(){
+                $('header').unbind('mouseleave',close2);
+            });
+
+            $(function(){
+                $('div.menu-trigger').click(close2).click(toggle);
+            });
+
+            $(function () {
+                $('a.nav').click(close2).click(close);
+            });
+            $(function () {
+                $('a.header-link').click(close).click(close2);
+            });
+            $(function () {
+                $('div.tri').click(toggle2);
+            });
+        } else {
+            // PC向け
+
+            $(function () {
+                $('section.top').css('height',windowHeight - 75 + 'px');
+                $('nav.global-nav').css('width',"calc(100vw - 450px)").css('height',"55px");
+                $('nav.CP-nav').css('display',"none");
+                $('ul.global-nav-list').css('display',"inline-flex");
+            });
+
+            $(function(){
+                $('div.menu-trigger').unbind('click',toggle).unbind('click',close2);
+            });
+
+            $(function(){
+                $('a.nav').unbind('click',close).unbind('click',close2);
+            });
+
+            $(function(){
+                $('a.header-link').unbind('click',close).unbind('click',close2);
+            });
+            $(function () {
+                $('div.tri').unbind('click',toggle2);
+            });
+
+            $(function () {
+                $('li.CP-wrap').mouseenter(open);
+            });
+            $(function () {
+                $('li.no-wrap').mouseenter(close2);
+            });
+            $(function () {
+                $('header').mouseleave(close2);
+            });
+        }
+    }
+
+      // ブレイクポイントの瞬間に発火
+      mql.addListener(checkBreakPoint);
+
+      // 読み込み時に動作させる
+      checkBreakPoint(mql);
+
+  
+</script>
+
+
+
+
+</head>
+
+
+<body >
+
+
+<header class="header">
+
+
+<a href="./index.html" class="header-link">
+
+
+<img class="header_img" src="./images/white_bulb.png" alt="eeic">
+
+
+<div class="top-text">
+
+
+<p class="up">
+EEIC五月祭展示
+</p>
+
+
+<p class="down">
+プログラミング教室
+</p>
+
+
+</div>
+
+
+</a>
+
+
+
+<div class="menu-trigger">
+
+
+<span >
+</span>
+
+
+<span >
+</span>
+
+
+<span >
+</span>
+
+
+</div>
+
+
+<nav class="global-nav">
+
+
+<ul class="global-nav-list">
+
+
+<li class="nav-item no-wrap"><a href="#program" class="nav">プログラム</a></li>
+        <li class="nav-item no-wrap"><a href="#if" class="nav">ばあいわけ</a></li>
+
+
+</ul>
+
+
+</nav>
+
+
+</header>
+
+
+<section class="under-header" id="top">
+</section>
+
+
+<section class="top">
+
+
+<h1 >
+ちからをつける
+</h1>
+
+
+</section>
+
+
+<div class="wrapper">
+
+
+<section class="factor" id="program">
+
+
+<h2 class="heading">
+プログラムのうごきかた
+</h2>
+
+
+<div class="contents-wrapper reverse">
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/program0_muscle.png" alt="パソコン">
+
+
+<div class="contents-text">
+
+バソコンは、プログラムを<ruby>上<rp>（</rp><rt>うえ</rt><rp>）</rp></ruby>からじゅんばんにうごかします。
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/oneFrame_muscle.png" alt="新しい画面">
+
+
+<div class="contents-text">
+
+<ruby>全<rp>（</rp><rt>すべ</rt><rp>）</rp></ruby>てのブロックをうごかしたら、<ruby>新<rp>（</rp><rt>あたら</rt><rp>）</rp></ruby>しい<ruby>絵<rp>（</rp><rt>え</rt><rp>）</rp></ruby>ががめんにうつります。
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/sequence_muscle.png" alt="残像っぽい絵">
+
+
+<div class="contents-text">
+
+ものすごい<ruby>速<rp>（</rp><rt>はや</rt><rp>）</rp></ruby>さで<ruby>絵<rp>（</rp><rt>え</rt><rp>）</rp></ruby>をかえつづけることで、とりがうごいているようにみせているのです。
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/computingEachFrame_muscle.png" alt="プログラムを読んでるっぽいえ">
+
+
+<div class="contents-text">
+
+<ruby>絵<rp>（</rp><rt>え</rt><rp>）</rp></ruby>をかえるみじかい<ruby>時間<rp>（</rp><rt>じかん</rt><rp>）</rp></ruby>のあいだに、プログラムはかならず<ruby>実行<rp>（</rp><rt>じっこう</rt><rp>）</rp></ruby>されます。
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+<section class="factor" id="if">
+
+
+<h2 class="heading">
+
+ばあいわけのつかい<ruby>方<rp>（</rp><rt>かた</rt><rp>）</rp></ruby>
+
+</h2>
+
+
+<div class="contents-wrapper">
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/blocks_muscle.png" alt="blocks">
+
+
+<div class="contents-text">
+
+パソコンは、かならずすべてのブロックをうごかします。
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_0_muscle.png" alt="if0">
+
+
+<div class="contents-text">
+
+となりのじめんに<ruby>飛<rp>（</rp><rt>と</rt><rp>）</rp></ruby>びうつりたいとき…
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_1_muscle.png" alt="if1">
+
+
+<div class="contents-text">
+
+これではジャンプしたらやられてしまいます。
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_2_muscle.png" alt="if2">
+
+
+<div class="contents-text">
+
+みず<ruby>色<rp>（</rp><rt>いろ</rt><rp>）</rp></ruby>のマーカーのところにいるときだけジャンプするにはどうすればいいでしょうか?
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_3_muscle.png" alt="if3">
+
+
+<div class="contents-text">
+
+ばあいわけ、のブロックを<ruby>使<rp>（</rp><rt>つか</rt><rp>）</rp></ruby>うとうまくいくかもしれません。
+
+</div>
+
+
+</div>
+
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_4_muscle.png" alt="if4">
+
+
+<div class="contents-text">
+
+このブロックは「もし、」の<ruby>右<rp>（</rp><rt>みぎ</rt><rp>）</rp></ruby>がわについているブロックと<ruby>今<rp>（</rp><rt>いま</rt><rp>）</rp></ruby>のじょうたいがあっていたら、「する」のところについているブロックをうごかします。
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_5_muscle.png" alt="if5">
+
+
+<div class="contents-text">
+
+ということは、こんな<ruby>風<rp>（</rp><rt>かぜ</rt><rp>）</rp></ruby>にブロックを<ruby>組<rp>（</rp><rt>く</rt><rp>）</rp></ruby>むと…
+
+</div>
+
+
+</div>
+
+
+<div class="contents-box">
+
+
+<img class="contents-img" src="./pictures/muscle/if_6_muscle.png" alt="if6">
+
+
+<div class="contents-text">
+
+マーカーの<ruby>上<rp>（</rp><rt>うえ</rt><rp>）</rp></ruby>にいるときだけ、ジャンプすることができます。
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+<footer class="footer">
+
+
+<p class="copyright">
+Copyright © EEIC <ruby>五月<rp>（</rp><rt>ごがつ</rt><rp>）</rp></ruby><ruby>祭<rp>（</rp><rt>さい</rt><rp>）</rp></ruby><ruby>展示<rp>（</rp><rt>てんじ</rt><rp>）</rp></ruby>
+<br class="mobile">
+「<ruby>近<rp>（</rp><rt>きん</rt><rp>）</rp></ruby><ruby>未来<rp>（</rp><rt>みらい</rt><rp>）</rp></ruby><ruby>体験<rp>（</rp><rt>たいけん</rt><rp>）</rp></ruby>2017」All rights reserved.
+</p>
+
+
+</footer>
+
+
+</div>
+
+
+</body>
+
+
+</html>
+
+
