@@ -202,7 +202,7 @@ const TEST_STAGE = {
          }
 
          //markerの初期化処理
-         player.onMarker = "";
+         player.onMarker = [false, false, false, false, false];
 
          if(keyboard.getKeyDown('left')){
              this.cameraMove(1, 0);
@@ -237,4 +237,3 @@ const TEST_STAGE = {
          }
      }
  });
-

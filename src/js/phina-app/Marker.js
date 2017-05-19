@@ -16,7 +16,6 @@ phina.define('Marker', {
         if(!this.hitTestElement(obj)) return;
         if(obj.className != "Player") return;
 
-        obj.onMarker = this.color;
         this.frameIndex = this.getColorId() + 1;
         this.tweener.play().wait(500)
             .call(() => {
