@@ -129,7 +129,7 @@ phina.define('StageManager', {
     },
     //任意の色のマーカー上にいるか
     isOnAnyMarker: function(element) {
-        if(element.onMarker != ""){
+        if(element.onMarker.some(bool => bool)){
             if(element.className == "Player") element.understood();
             return true;
         };
@@ -137,7 +137,7 @@ phina.define('StageManager', {
     },
     //ある特定の色のマーカー上にいるか
     isOnMarker: function(element, color) {
-        if(element.onMarker == color) {
+        if(element.onMarker[Marker().colorId.indexOf(color)]) {
             if(element.className == "Player") element.understood();
             return true;
         }
@@ -162,17 +162,20 @@ phina.define('StageManager', {
         const reactable_item_num = 4;
         const scene = this.scene;
 
-        const left = (element.x - element.width / 2) / 70;
-        const right = (element.x + element.width / 2) / 70;
-        const top = (element.y - elemnt.height / 2) / 70;
-        const bottom = (element.y + element.height / 2) / 70;
+
+        const left = Math.floor((element.x - element.width / 2) / 70);
+        const right = Math.floor((element.x + element.width / 2) / 70);
+        const top = Math.floor((element.y - element.height / 2) / 70);
+        const bottom = Math.floor((element.y + element.height / 2) / 70);
 
         element.move();
 
-        const new_left = (element.x - element.width / 2) / 70;
-        const new_right = (element.x + element.width / 2) / 70;
-        const new_top = (element.y - elemnt.height / 2) / 70;
-        const new_bottom = (element.y + element.height / 2) / 70;
+        const new_left = Math.floor((element.x - element.width / 2) / 70);
+        const new_right = Math.floor((element.x + element.width / 2) / 70);
+        const new_top = Math.floor((element.y - element.height / 2) / 70);
+        const new_bottom = Math.floor((element.y + element.height / 2) / 70);
+
+        const data = this.stageData.data;
 
         for(let x = new_left; x < new_right; ++x){
             for (let y = new_top; y < new_bottom; ++y){
@@ -181,7 +184,7 @@ phina.define('StageManager', {
                 }
                 if ((x < left || right <= x) || (y < top || bottom <= y)){
                     if (4 <= data[x][y] || data[x][y] <= 8){
-                        element.onMarker[this.stageData.data[x][y] - 4] = true;
+                        element.onMarker[data[x][y] - 4] = true;
                     }
                 }
             }
