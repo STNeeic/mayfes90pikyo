@@ -164,9 +164,28 @@ phina.define('StageManager', {
         const top = Math.floor((element.y - element.height / 2) / 70);
         const bottom = Math.floor((element.y + element.height / 2) / 70);
 
+
+        //実際の座標の移動（加速度とかを考慮している）
         element.move();
 
 
+        //アニメーション関連の処理
+        if(!!element.fa || !!element.sprite.fa){
+            const fa = element.fa || element.sprite.fa;
+            if(!this.checkEarthing(element)) {
+                fa.state = "flying";
+            } else {
+                if(Math.abs(element.dx) > 0) {
+                    fa.state = "walking";
+                } else {
+                    fa.state = "stand";
+                }
+            }
+        }
+
+
+        //オブジェクトを近い順にsortしてreactToをする
+        //基本壁とトゲ
         let near_items = this.children.sort((a, b) => {
             return this.calcDistance(element, a) - this.calcDistance(element, b);
         });
@@ -193,19 +212,6 @@ phina.define('StageManager', {
                     }
                 }
             }
-        }
-
-        if(!!element.fa || !!element.sprite.fa){
-            const fa = element.fa || element.sprite.fa;
-                if(!this.checkEarthing(element)) {
-                    fa.state = "flying";
-                } else {
-                    if(Math.abs(element.dx) > 0) {
-                        fa.state = "walking";
-                    } else {
-                        fa.state = "stand";
-                    }
-                }
         }
 
 
