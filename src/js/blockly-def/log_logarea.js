@@ -2,7 +2,7 @@ Blockly.Blocks['log_logarea'] = {
     init: function() {
         this.jsonInit({
             "type": "Action",
-            "message0": "%1 を 画面にうつす",
+            "message0": "%1 を がめんにうつす",
             "args0": [
                 {
                     "type": "input_value",

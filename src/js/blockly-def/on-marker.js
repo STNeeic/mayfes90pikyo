@@ -27,7 +27,7 @@ Blockly.Blocks['is_on_marker'] = {
                     "name": "COLOR",
                     "options": [
                         [
-                            "水色",
+                            "みず色",
                             "skyblue"
                         ],
                         [
