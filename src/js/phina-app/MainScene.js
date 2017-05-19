@@ -112,6 +112,8 @@ const TEST_STAGE = {
          this.camera.follow();
          this.cursors.show();
          this.player.is_walk = false;
+         this.player.direction = 1;
+         this.player.sprite.scaleX = -2;
      },
      next: function() {
          //ボタンを戻す
