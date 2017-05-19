@@ -54,6 +54,8 @@ const TEST_STAGE = {
 
          this.player = this.stageManager.player;
          this.player.setGravity(0, 5);
+         this.player.direction = 1;
+         this.player.is_walk = false;
 
          const button = $("#button");
 
@@ -72,6 +74,7 @@ const TEST_STAGE = {
                  this.cursors.hide();
                  this.time = 0;
                  this.score = 0;
+                 this.player.is_walk = false;
              }
          });
 
@@ -108,6 +111,7 @@ const TEST_STAGE = {
          this.camera.position.set(0,0);
          this.camera.follow();
          this.cursors.show();
+         this.player.is_walk = false;
      },
      next: function() {
          //ボタンを戻す
@@ -221,6 +225,9 @@ const TEST_STAGE = {
              if(this.stageManager.checkEarthing(player) == true) {
                  player.dy = -70;
              }
+         }
+         if(player.is_walk == true) {
+             player.dx = 20 * player.direction;
          }
 
 
