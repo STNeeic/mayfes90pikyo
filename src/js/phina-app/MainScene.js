@@ -99,9 +99,14 @@ const TEST_STAGE = {
              .setPosition(this.gridX.span(2), this.gridY.span(1))
              .addChildTo(this)
              .setInteractive(true)
-             .on('click', () => this.exit());
+             .on('click', () => {
+                 this.retry();
+                 this.exit();});
 
          console.log("GAME START");
+
+         //ボタンなどの初期化のため
+         this.retry();
      },
      retry: function(){
          //ボタンを戻す

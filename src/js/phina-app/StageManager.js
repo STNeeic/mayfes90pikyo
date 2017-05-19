@@ -156,12 +156,9 @@ phina.define('StageManager', {
             //動かないもののはずなので抜ける
             return;
         }
-        let near_items = this.children.sort((a, b) => {
-                  return this.calcDistance(element, a) - this.calcDistance(element, b);
-        });
-        const scene = this.scene;
+       const scene = this.scene;
 
-
+//異動前の座標（70*70 マスにおける）
         const left = Math.floor((element.x - element.width / 2) / 70);
         const right = Math.floor((element.x + element.width / 2) / 70);
         const top = Math.floor((element.y - element.height / 2) / 70);
@@ -169,6 +166,15 @@ phina.define('StageManager', {
 
         element.move();
 
+
+        let near_items = this.children.sort((a, b) => {
+            return this.calcDistance(element, a) - this.calcDistance(element, b);
+        });
+        for(let item of near_items) {
+            item.reactTo(element, scene);
+        }
+
+        //移動後の座標
         const new_left = Math.floor((element.x - element.width / 2) / 70);
         const new_right = Math.floor((element.x + element.width / 2) / 70);
         const new_top = Math.floor((element.y - element.height / 2) / 70);
@@ -203,11 +209,7 @@ phina.define('StageManager', {
         }
 
 
-        for(let item of near_items) {
-            item.reactTo(element, scene);
-        }
-
-    },
+        },
     retry: function(){
         this.children.forEach(item => {
             item.position = item.startPos.clone();
