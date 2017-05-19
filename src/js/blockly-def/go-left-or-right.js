@@ -29,7 +29,7 @@ Blockly.Blocks['go_l_or_r'] = {
 };
 
 Blockly.JavaScript['go_l_or_r'] = function(block){
-    var direction = block.getFieldValue('DIRECTION') == 'LEFT' ? '-14' : '14';
+    var direction = block.getFieldValue('DIRECTION') == 'LEFT' ? '-20' : '20';
     var code = 'player.dx = ' + direction + ';\n';
     return code;
 };
