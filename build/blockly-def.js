@@ -40,7 +40,7 @@ Blockly.Blocks['go_l_or_r'] = {
 };
 
 Blockly.JavaScript['go_l_or_r'] = function(block){
-    var direction = block.getFieldValue('DIRECTION') == 'LEFT' ? '-20' : '20';
+    var direction = block.getFieldValue('DIRECTION') == 'LEFT' ? '-14' : '14';
     var code = 'player.dx = ' + direction + ';\n';
     return code;
 };
@@ -140,7 +140,7 @@ Blockly.Blocks['log_logarea'] = {
     init: function() {
         this.jsonInit({
             "type": "Action",
-            "message0": "%1 を 画面にうつす",
+            "message0": "%1 を がめんにうつす",
             "args0": [
                 {
                     "type": "input_value",
@@ -190,7 +190,7 @@ Blockly.Blocks['is_on_marker'] = {
                     "name": "COLOR",
                     "options": [
                         [
-                            "水色",
+                            "みず色",
                             "skyblue"
                         ],
                         [
