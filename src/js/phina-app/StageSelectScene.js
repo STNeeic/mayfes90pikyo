@@ -18,7 +18,7 @@ phina.define('StageSelectScene',{
         } else {
             progress = JSON.parse(localStorage.progress);
         }
-
+        //クリアしたステージを追加
         if(!!params.progress) {
             progress[params.progress.label] = params.progress.result;
             localStorage.progress = JSON.stringify(progress);
@@ -35,6 +35,10 @@ phina.define('StageSelectScene',{
             })
                 .setPosition(this.gridX.center() + this.width * index , this.gridY.center() + offsY)
                 .addChildTo(carousel);
+
+            if(!!stage.import){
+                carousel.impPos = index;
+            }
         });
 
         //カーソルの設置
@@ -50,7 +54,8 @@ phina.define('StageSelectScene',{
 
         carousel.pos = 0;
         //移動したときに配列の範囲外に出ないか調べる
-        carousel.isValidPos = direction => carousel.pos + direction >= 0 && carousel.pos + direction < carousel.children.length;
+        //オリジナルステージはデバッグ時のみ
+        carousel.isValidPos = direction => carousel.pos + direction >= 0 && (carousel.pos + direction < carousel.impPos || (carousel.debug && carousel.pos + direction < carousel.children.length));
         carousel.checkPosition = () => {
             if(carousel.isValidPos(-1)){
                 this.cursors.leftArrow.show();
@@ -90,6 +95,12 @@ phina.define('StageSelectScene',{
             if(carousel.isValidPos(1)){
                 this.goRight();
             }
+        }
+
+
+        //デバッグモードに移行する
+        if(keyboard.getKeyDown('d')) {
+            this.carousel.debug = true;
         }
 
     },
