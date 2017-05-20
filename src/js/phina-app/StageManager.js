@@ -203,7 +203,7 @@ phina.define('StageManager', {
 
         for(let x = new_left; x < new_right; ++x){
             for (let y = new_top; y < new_bottom; ++y){
-                if (x < 0 || y < 0){
+                if (x < 0 || y < 0 || x >= Math.floor(this.stageData.width / 70) || y >= Math.floor(this.stageData.height / 70)){
                     continue;
                 }
                 if ((x < left || right <= x) || (y < top || bottom <= y)){
