@@ -128,7 +128,8 @@ const TEST_STAGE = {
              this.exit(
                  {progress:
                   {label: label,
-                   result: true}});
+                   result: true}
+                  ,score: this.score});
          }
          else {
              this.exit();

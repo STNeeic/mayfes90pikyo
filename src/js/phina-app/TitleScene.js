@@ -24,6 +24,7 @@ phina.namespace(function() {
             .setPosition(0, -30)
         .on('pointend', function(){
             localStorage.progress = '{}';
+            localStorage.score = '{}';
 
             //workspaceを綺麗にする
             workspace.clear();

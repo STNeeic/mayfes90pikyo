@@ -24,6 +24,21 @@ phina.define('StageSelectScene',{
             localStorage.progress = JSON.stringify(progress);
         }
 
+        //スコアを取得
+        let score = {};
+        if(!localStorage.score){
+            score = {};
+            localStorage.score = JSON.stringify(progress);
+        } else {
+            score = JSON.parse(localStorage.score);
+        }
+        //スコアを追加
+        if(!!params.score) {
+            score[params.progress.label] = params.score;
+            localStorage.score = JSON.stringify(score);
+        }
+
+
                 //カルーセル形式のアイコンを作成
         let carousel = DisplayElement().addChildTo(this);
         this.carousel = carousel;
@@ -31,7 +46,8 @@ phina.define('StageSelectScene',{
             StageViewItem({
                 stageData: stage,
                 scene: this,
-                progress: !!stage.label ? progress[stage.label] : false
+                progress: !!stage.label ? progress[stage.label] : false,
+                score: !!stage.label ? score[stage.label] : 0
             })
                 .setPosition(this.gridX.center() + this.width * index , this.gridY.center() + offsY)
                 .addChildTo(carousel);
@@ -82,6 +98,8 @@ phina.define('StageSelectScene',{
             carousel.children[carousel.pos].exit();
         });
 
+        console.log(score);
+
     },
     update: function(app) {
         const keyboard = app.keyboard;
@@ -102,7 +120,6 @@ phina.define('StageSelectScene',{
         if(keyboard.getKeyDown('d')) {
             this.carousel.debug = true;
         }
-
     },
     goLeft: function() {
         this.carousel.tweener.moveBy(this.width, 0, 500, "easeInOutQuint")
@@ -157,7 +174,12 @@ phina.define('StageViewItem', {
             progress.setPosition(0, -(progress.height + this.height) / 2);
             progress.addChildTo(this);
         }
-
+        //スコアがあれば表示
+        for(let i = 0;i < params.score; i++) {
+            let score = Cherry();
+            score.setPosition(progress.width + i * score.width, -(progress.height + this.height) / 2);
+            score.addChildTo(this);
+        }
         //オリジナルのステージをロードするためのステージかどうかのフラグ
         this.import = this.stageData.import != null ? this.stageData.import : false;
         this.setInteractive(true);
