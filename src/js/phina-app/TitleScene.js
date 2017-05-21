@@ -24,6 +24,10 @@ phina.namespace(function() {
             .setPosition(0, -30)
         .on('pointend', function(){
             localStorage.progress = '{}';
+
+            //workspaceを綺麗にする
+            workspace.clear();
+            Blockly.Xml.domToWorkspace(document.getElementById('startBlock'), workspace);
             this.exit();
         }.bind(this));
 
@@ -35,7 +39,6 @@ phina.namespace(function() {
         }).addChildTo(this.bg)
             .setPosition(0, 250)
             .on('pointend', function(){
-                localStorage.progress = '{}';
                 this.exit();
             }.bind(this));
 
