@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Programming game with Blockly">
+    <meta name="keywords" content="Blockly,phina.js">
+    <meta name="author" content="EEIC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲーム・プログラミング教室</title>
+
+<script src="blockly-master/blockly_compressed.js"></script>
+<script src="build/ja.js"></script>
+<script src="Lib/blocks_compressed.js"></script>
+<script src="Lib/javascript_compressed.js"></script>
+<script src="phinajs/build/phina.js"></script>
+<script src="Lib/jquery-3.2.1.min.js"></script>
+
+<xml id="toolbox" style="display: none; trashcan: true">
+    <category name="ばあいわけ" colour="210">
+        <block type="controls_if"></block>
+        <block type="controls_ifelse"></block>
+    </category>
+    <category name="しらべる" colour="120">
+        <block type="is_cliff"></block>
+        <block type="is_block"></block>
+        <block type="is_on_any_marker"></block>
+        <block type="is_on_marker"></block>
+        <block type="logic_compare"></block>
+    </category>
+    <category name="いどう" colour="210">
+        <block type="jump"></block>
+        <block type="go_l_or_r"></block>
+        <block type="go_l_or_r">
+            <field name="DIRECTION">LEFT</field>
+        </block>
+        <block type="go_or_stop"></block>
+        <block type="go_or_stop">
+            <field name="FLAGS">STOP</field>
+        </block>
+    </category>
+    <category name="けいさん" colour="230">
+        <block type="math_number"></block>
+        <block type="math_arithmetic">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+    </category>
+    <category name="もじ" colour="160">
+        <block type="text"></block>
+    <block type="log_logarea"></block>
+    </category>
+    <category name="おぼえる" colour="330">
+    <block type="myvariable_set"></block>
+    <block type="myvariable_get"></block>
+    </category>
+</xml>
+
+<xml id="startBlock">
+    <block type="run_while" id="START" x="20" y="20" deletable="false" movable="false"></block>
+</xml>
+
+
+<link rel="stylesheet" href="css/reset.css">
+
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/app.css">
+<script src="build/blockly-def.js"></script>
+</head>
+
+
+<body>
+ <header class="header">
+    <a href="./index.html" class="header-link">
+    <img class="header_img" src="./images/white_bulb.png" alt="eeic">
+    <div class="top-text">
+      <p class="up">EEIC 五月祭展示</p>
+      <p class="down">プログラミング教室</p>
+    </div>
+    </a>
+
+    <!--menu-triggerをglobal-navから外す作戦あり-->
+    <div class="menu-trigger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="global-nav">
+      <ul class="global-nav-list">
+        <li class="nav-item"><a href="./index.html" class="nav">ホーム</a></li>
+        <li class="nav-item"><a href="./editor.html" class="nav">エディター</a></li>
+        <li class="nav-item"><a href="./instructions.html" class="nav">あそびかた</a></li>
+        <li class="nav-item hide"><a href="muscle.html" class="nav">力をつける</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <div id="contents" class="factor">
+        <div class="contents-wrapper">
+            <div id="phinaDiv">
+
+                <canvas id="phinaCanvas" class="">
+
+                </canvas>
+
+                <button type="button" id="button" class="button" value="stop">スタート</button>
+            </div>
+
+            <div class="blockly-side">
+            <div id="blocklyArea" class="">
+            </div>
+            <div id="logArea" class="hide">
+                <p>
+                </p>
+            </div>
+            </div>
+            </div>
+        </div>
+        <div id="blocklyDiv" style="position: absolute"></div>
+        <div class="stage-input hide">
+            <p>ここに<ruby>遊<rp>（</rp><rt>あそ</rt><rp>）</rp></ruby>びたいステージのデータを入れてください</p>
+            <textarea rows="15" cols="60" autofocus="true" placeholder="ステージエディターで作成したデータを入力してください"></textarea>
+            <button type="button" class="button" value="running"><ruby>読<rp>（</rp><rt>よ</rt><rp>）</rp></ruby>み<ruby>込<rp>（</rp><rt>こ</rt><rp>）</rp></ruby>む</button>
+        </div>
+<!-- Domを操作する必要がある処理はここに書く -->
+<script src="build/html-behavior.js"></script>
+<!-- phina.globalize()した後に書く処理はここに書く -->
+<script src="./build/phina-app.js"></script>
+</body>
+</html>

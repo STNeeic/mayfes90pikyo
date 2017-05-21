@@ -1,0 +1,103 @@
+body {
+    background-color: #cfcfcf;
+}
+.wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: white;
+    text-align: left;
+    box-shadow: 0 0 15px 0 #4262a0;
+}
+
+.footer {
+    background-color: #373433;
+    color: white;
+}
+
+
+.contents-wrapper{
+    flex-direction: column;
+}
+
+.contents-box {
+	  display: flex;
+    width: 100%;
+    flex-direction: row;
+	  justify-content: space-between;
+	  margin-bottom: 7rem;
+}
+.reverse .contents-box:nth-child(odd) {
+	  flex-direction: row-reverse;
+}
+.reverse .contents-box:nth-child(odd) .contents-text{
+    text-align: right;
+}
+
+.contents-text{
+    flex-grow: 0;
+    line-height: 4rem;
+    margin-left: 20%;
+}
+
+.contents-img + .contents-text {
+	  width: 75%;
+    margin-left: 0;
+}
+.contents-img {
+	  width: 20%;
+    border-radius: 0;
+}
+
+.contents-text h4 {
+	  margin-bottom: 1rem;
+	  font-size: 1.7rem;
+}
+
+.blocks {
+    border-left: 10px solid;
+    padding-left: 10px;
+}
+
+.ifs {
+    border-color: #5a7fa7;
+}
+
+.find {
+    border-color: #58a658;
+}
+
+.math {
+    border-color: #5a65a7;
+}
+
+.texts {
+    border-color: #58a68c;
+}
+
+.vars {
+    border-color: #a65a80;
+}
+
+@media screen and (max-width: 800px){
+	  .contents-box,
+	  .reverse .contents-box:nth-child(odd)  {
+		    flex-direction: column;
+	  }
+    .reverse .contents-box:nth-child(odd) .contents-text{
+        text-align: left;
+}
+
+	  .contents-wrapper .contents-text
+	  {
+		    width: 100%;
+		    padding: 3rem;
+	  }
+
+	  .contents-text h4 {
+		    text-align: center;
+	  }
+
+    .contents-img {
+        width: 50%;
+    }
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Programming game with Blockly">
+    <meta name="keywords" content="Blockly,phina.js">
+    <meta name="author" content="EEIC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="phinajs/build/phina.js"></script>
+<script src="Lib/jquery-3.2.1.min.js"></script>
+
+
+<link rel="stylesheet" href="Lib/reset.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/app.css">
+</head>
+
+
+<body>
+ <header class="header">
+    <a href="index.html" class="header-link">
+    <img class="header_img" src="./images/white_bulb.png" alt="eeic">
+    <div class="top-text">
+      <p class="up">EEIC 五月祭展示</p>
+      <p class="down">ステージエディター</p>
+    </div>
+    </a>
+
+    <!--menu-triggerをglobal-navから外す作戦あり-->
+    <div class="menu-trigger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="global-nav">
+      <ul class="global-nav-list">
+        <li class="nav-item"><a href="./index.html" class="nav">ホーム</a></li>
+        <li class="nav-item"><a href="./game.html" class="nav">ゲーム</a></li>
+        <li class="nav-item"><a href="./instructions.html" class="nav">あそびかた</a></li>
+        <li class="nav-item"><a href="./muscle.html" class="nav">力をつける</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <div id="contents" class="factor">
+        <div class="contents-wrapper">
+            <div id="phinaDiv">
+
+                <canvas id="phinaCanvas" class="">
+
+                </canvas>
+            </div>
+
+            </div>
+    </div>
+            <button type="button" class="button" id="import">IMPORT</button>
+            <button type="button" class="button" value="running" id="export">export</button>
+            <input type="text" size="25" id="title" maxlength="15" placeholder="タイトルを書いてください">
+            <input type="text" size="15" id="label" placeholder="img label">
+            <textarea rows="2" cols="20" id="description" maxlength="30" placeholder="説明文を入れてください"></textarea>
+            <textarea rows="10" cols="100" id="JSONarea" placeholder="IMPORTとEXPORTはここで行います"></textarea>
+            <!-- Domを操作する必要がある処理はここに書く -->
+<!-- phina.globalize()した後に書く処理はここに書く -->
+<script src="./build/editor-app.js"></script>
+</body>
+</html>

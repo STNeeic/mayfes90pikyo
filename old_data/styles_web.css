@@ -1,0 +1,510 @@
+@charset "UTF-8";
+
+/*所々要素中でコメントアウトしてるのはサイトには書いてあったけどWebstormがエラー吐いたやつです。*/
+
+/*##############################*/
+/*html*/
+/*##############################*/
+
+html {
+    font-size: 62.5%;
+    height: 100%;
+}
+
+body{
+    text-align: center;
+    font-size: 1.4rem;
+    font-family: "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;
+    line-height: 1.6;
+    min-height: 565px;
+    height: 100%;
+}
+body p{
+    margin-top: 20px;
+}
+
+body a{
+    color: black;
+}
+
+/*##############################*/
+/*common*/
+/*##############################*/
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.clearfix::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+
+.mobile{
+    display: none;
+}
+
+/*##############################*/
+/*header*/
+/*##############################*/
+
+.header{
+    height: 75px;
+    width: 100%;
+    position: fixed;
+    background: white;
+
+
+    /*border-bottom: 1px solid gray;*/
+    z-index: 1;
+    padding: 13px 70px 5px 90px;
+    align-items: center;
+    box-shadow: 0 0 15px 0 #4262a0;
+}
+
+.header_img{
+    float: left;
+    height:50px;
+    padding-right: 10px;
+}
+
+.top-text{
+    letter-spacing: 1px;
+    float: left;
+
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: flex-start; /* 縦方向中央揃え（Safari用） */
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.top-text p{
+    margin-top: 0;
+}
+
+.down{
+    font-size: 2.4rem;
+    line-height: 1;
+}
+
+.global-nav-list{
+    display: flex;
+    flex-direction: row;
+}
+
+.global-nav{
+    text-align: center;
+    display: -webkit-inline-flex; /* Safari */
+    display: inline-flex;
+    float: right;
+}
+
+.global-nav .nav-item{
+    padding: 0 10px;
+}
+
+.global-nav .nav-item a{
+    letter-spacing: 1px;
+    line-height: 55px;
+    height: 55px;
+    display: inline-block;
+    padding: 0 10px;
+    position: relative;
+    transition: .3s;
+}
+@media (min-width: 768px) {
+    .global-nav .nav-item a::after {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        content: '';
+        width: 0;
+        height: 1px;
+        background-color: black;
+        transition: .3s;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+
+    .global-nav .nav-item a:hover::after {
+        width: 100%;
+    }
+}
+/*##############################*/
+/*top*/
+/*##############################*/
+
+.top{
+    background: url("../images/top.jpg") center;
+    background-size: cover;
+    color: white;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+    align-items: center; /* 縦方向中央揃え */
+    -webkit-justify-content: center; /* 横方向中央揃え（Safari用） */
+    justify-content: center; /* 横方向中央揃え */
+    flex-direction: column;
+}
+.top:before{
+    content: '';
+    background: inherit;/*.topで設定した背景画像を継承する*/
+    -webkit-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    position: absolute; /*ブラー効果で画像の端がボヤけた分だけ位置を調整*/
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    z-index: -1;/*重なり順序を一番下にしておく*/
+}
+
+.top-img{
+    height: 92px;
+}
+.top-text{
+    font-weight: bold;
+}
+
+.eeic{
+    letter-spacing: 13px;
+    font-size: 3.2rem;
+    margin-top: 5px;
+}
+.top1{
+    font-size: 2.5rem;
+}
+h1{
+    font-size: 8rem;
+    letter-spacing: 12px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/*##############################*/
+/*about contents footer -> factor*/
+/*##############################*/
+
+.factor {
+    font-size: 1.6rem;
+    border-bottom: 1px solid gray;
+    padding: 105px 50px 50px 50px;
+    margin-top: -75px;
+}
+
+.heading{
+    font-size: 3rem;
+    letter-spacing: 2px;
+    display: inline-block;
+    margin: 25px 0 15px;
+    padding-bottom: 8px;
+    position: relative;
+}
+.heading::before,
+.heading::after{
+    content: '';
+    border-bottom: 2px solid #333;
+    right: 0;
+    bottom:0;
+    left: 0;
+    position: absolute;
+}
+
+
+/*##############################*/
+/*about*/
+/*##############################*/
+
+.about-text{
+    margin-bottom: 20px;
+}
+
+/*##############################*/
+/*contents*/
+/*##############################*/
+
+
+.contents-wrapper{
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 30px;
+
+    -webkit-flex-direction: row; /* Safari */
+    flex-direction:         row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+.contents-box{
+    width: 27%;
+}
+.contents-img{
+    width: 75%;
+}
+
+.contents-text{
+    /*width: 100%;*/
+    text-align: justify;
+    /*text-justify: distribute;*/
+}
+h3{
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    margin-top: 30px;
+}
+
+
+/*##############################*/
+/*access*/
+/*##############################*/
+
+.access-box{
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+
+    flex-direction: row;
+    justify-content: center;
+
+}
+.access-text{
+    text-align: left;
+    margin: 0 20px;
+    padding-top: 20px;
+}
+
+/*##############################*/
+/*footer*/
+/*##############################*/
+
+.footer{
+    height: 60px;
+}
+.copyright{
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 60px;
+    margin-top: 0;
+}
+
+
+
+
+
+
+
+/*##############################*/
+/*For SmartPhone*/
+/*##############################*/
+
+@media (max-width: 768px) {
+
+    body{
+        text-align: center;
+        font-size: 1.4rem;
+        font-family: "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;
+        line-height: 1.6;
+        min-height: 565px;
+        height: 100%;
+    }
+
+
+    .heading{
+        font-size: 3rem;
+        letter-spacing: 2px;
+        display: inline-block;
+        margin: 15px 0 15px;
+        padding-bottom: 8px;
+        position: relative;
+    }
+    .factor {
+        font-size: 1.6rem;
+        border-bottom: 1px solid gray;
+        padding: 105px 10px 30px 10px;
+        margin-top: -75px;
+    }
+
+    .mobile{
+        display: inline;
+        text-align: center;
+    }
+
+    /*##############################*/
+    /*header*/
+    /*##############################*/
+    .header{
+        height: 75px;
+        padding: 10px 10px 10px 10px;
+    }
+    .header_img{
+        height: 85%;
+        padding-right: 5px;
+    }
+
+    .menu-trigger{
+        border-left: 1px solid #cccccc;
+        height: 56px;
+        width: 56px;
+        padding: 8px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        float: right;
+    }
+    .menu-trigger span{
+        display: block;
+        width: 100%;
+        background-color: #cccccc;
+        height: 4px;
+    }
+
+
+    .global-nav{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap-reverse;
+
+        width: 100%;
+        margin-top: 9px;
+        margin-left: -10px;
+
+        z-index: -1;
+    }
+
+    .global-nav-list{
+        float: right;
+        display: none;
+        height: 200px;
+        width: 100%;
+
+
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-item{
+        text-align: center;
+        display: block;
+        height: 60px;
+        width: 100%;
+        border-bottom: 1px solid gray;
+        border-left: 1px solid gray;
+        border-right: 1px solid gray;
+        background-color: white;
+    }
+
+    .global-nav .nav-item a{
+        letter-spacing: 1px;
+        line-height: 60px;
+        height: 60px;
+        width: 100%;
+        display: inline-block;
+        padding: 0;
+    }
+
+
+    /*##############################*/
+    /*top*/
+    /*##############################*/
+
+    .top{
+        padding: 0 10px;
+    }
+
+    .top1{
+        font-size: 2rem;
+    }
+    h1{
+        font-size: 5rem;
+    }
+    @media (max-width: 320px) {
+        h1{
+            font-size: 4rem;
+        }
+    }
+
+    /*##############################*/
+    /*contents*/
+    /*##############################*/
+
+
+    .contents-wrapper{
+        display: -webkit-flex;
+        display: flex;
+        width: 100%;
+        margin-top: 40px;
+        margin-bottom: 30px;
+
+        -webkit-flex-direction: column; /* Safari */
+        flex-direction:         column;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+    }
+    .contents-box{
+        width: 100%;
+        margin-bottom: 40px;
+    }
+    .contents-img{
+        width: 75%;
+    }
+
+    .contents-text{
+        width: 100%;
+    }
+    h3{
+        font-size: 2.2rem;
+        letter-spacing: 3px;
+        margin-top: 30px;
+    }
+
+    /*##############################*/
+    /*access*/
+    /*##############################*/
+
+    .access-box{
+        display: -webkit-flex;
+        display: flex;
+        width: 100%;
+
+        flex-direction: column;
+        justify-content: center;
+
+    }
+    .map{
+        width: 100%;
+    }
+    .access-text{
+        text-align: center;
+    }
+
+    /*##############################*/
+    /*footer*/
+    /*##############################*/
+
+    .footer{
+        height: 60px;
+    }
+    .copyright{
+        text-align: center;
+        letter-spacing: 1px;
+        line-height: 2;
+        padding: 5px 10px;
+    }
+}
