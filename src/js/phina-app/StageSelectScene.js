@@ -147,6 +147,8 @@ phina.define('StageViewItem', {
         let img = !!this.stageData.label ? Sprite(this.stageData.label).addChildTo(this) : null;
         if(img != null){
             img.setPosition(0, -50);
+            img.width = 330;
+            img.height = 330;
         }
 
         //ステージをクリアしていたら星がくるくる回るようにする
