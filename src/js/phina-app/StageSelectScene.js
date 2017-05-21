@@ -24,6 +24,7 @@ phina.define('StageSelectScene',{
             localStorage.progress = JSON.stringify(progress);
         }
 
+
         //スコアを取得
         let score = {};
         if(!localStorage.score){
@@ -42,6 +43,10 @@ phina.define('StageSelectScene',{
                 //カルーセル形式のアイコンを作成
         let carousel = DisplayElement().addChildTo(this);
         this.carousel = carousel;
+
+        //次に進むステージを調べるため
+        let nextstage = 0;
+
         STAGE_DATA.forEach((stage, index) => {
             StageViewItem({
                 stageData: stage,
@@ -54,6 +59,11 @@ phina.define('StageSelectScene',{
 
             if(!!stage.import){
                 carousel.impPos = index;
+            }
+
+            //次に進むやつ
+            if(!!params.progress && stage.label == params.progress.label){
+                nextstage = index + 1;
             }
         });
 
@@ -89,6 +99,11 @@ phina.define('StageSelectScene',{
                 this.cursors.rightArrow.setInteractive(false);
             }
         };
+
+        //移動処理
+        for(let j = 0; j < nextstage; j++){
+            if(carousel.isValidPos(1)) this.goRight();
+        }
 
         carousel.checkPosition();
 
