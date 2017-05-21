@@ -13,6 +13,10 @@ phina.define('Goal',{
             //ゲームクリア!!
             ResultBoard(scene).addChildTo(scene);
             this.firstTime = false;
+            this.hide();
         }
+    },
+    retry: function() {
+        this.show();
     }
 });
