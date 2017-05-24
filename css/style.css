@@ -55,7 +55,7 @@ body p{
     background: #ffc33c;
     color: white;
 
-    z-index: 2;
+    z-index: 100000;
     padding: 13px 70px 5px 90px;
     align-items: center;
     box-shadow: 0 0 15px 0 #4262a0;
@@ -106,7 +106,7 @@ body p{
         float: right;
         justify-content: flex-end;
         width: calc(100vw  - 450px);
-        z-index: 2;
+        z-index: 100000;
     }
 
     .global-nav .nav-item{
@@ -568,7 +568,7 @@ h4{
         position: fixed;
         left:0;
         top: 50px;
-        z-index: 2;
+        z-index: 100000;
 
         box-shadow: 0 5px 5px rgba(66, 98, 160,0.4);
     }
